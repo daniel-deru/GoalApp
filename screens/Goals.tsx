@@ -1,9 +1,25 @@
 import React from 'react'
-import { SafeAreaView, Text, TouchableHighlight, StyleSheet } from "react-native"
+import { 
+  SafeAreaView, 
+  Text, 
+  TouchableHighlight, 
+  StyleSheet 
+} from "react-native"
+
+import { 
+  NavigationScreenProp, 
+  NavigationState, 
+  NavigationParams 
+} from "react-navigation"
+
 import Icon from 'react-native-vector-icons/FontAwesome'
 import globalStyles from '../globalStyles'
 
-const Goals: React.FC = (): JSX.Element => {
+interface Props {
+  navigation: NavigationScreenProp<NavigationParams, NavigationState> 
+}
+
+const Goals: React.FC<Props> = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
         <Text style={styles.text} >Start Adding Goals</Text>
