@@ -20,10 +20,14 @@ interface Props {
 }
 
 const Goals: React.FC<Props> = ({ navigation }) => {
+
+  const openAddGoal = (): void => {
+    navigation.navigate("Add Goal")
+  }
   return (
     <SafeAreaView style={styles.container}>
         <Text style={styles.text} >Start Adding Goals</Text>
-        <TouchableHighlight style={styles.button}>
+        <TouchableHighlight style={styles.button} onPress={openAddGoal}>
             <Icon style={{textAlign: "center"}} name="plus" size={30} color="white"/>
         </TouchableHighlight>
     </SafeAreaView>

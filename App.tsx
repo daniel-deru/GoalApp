@@ -12,7 +12,12 @@ const Drawer = createDrawerNavigator()
 export default function App() {
   return (
     <NavigationContainer>
-      <Drawer.Navigator>
+      <Drawer.Navigator
+        screenOptions={{
+          headerShown: false,
+          drawerPosition: "right"
+        }}
+      >
         <Drawer.Screen 
           name='Home' 
           component={HomeStack}
