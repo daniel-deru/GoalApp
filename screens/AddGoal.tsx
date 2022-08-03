@@ -1,9 +1,20 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { StyleSheet, Text, TouchableHighlight, TextInput, SafeAreaView, View } from "react-native"
 import SelectDropdown from 'react-native-select-dropdown'
 import { Formik } from "formik"
+import { NavigationScreenProp, NavigationParams, NavigationState  } from "react-navigation"
 
-const AddGoal: React.FC = (): JSX.Element => {
+
+interface Props {
+    navigation: NavigationScreenProp<NavigationParams, NavigationState> 
+  }
+
+const AddGoal: React.FC<Props> = ({ navigation }): JSX.Element => {
+
+
+    useEffect(() => {
+        // navigation.setOptions({title: "Add Goal"})
+    }, [])
   return (
     <SafeAreaView>
         <Formik

@@ -10,9 +10,10 @@ const Stack = createNativeStackNavigator()
 const HomeStack: React.FC = (): JSX.Element => {
   return (
     <Stack.Navigator
-      // screenOptions={{
-      //   headerTitle: () => <Header />
-      // }}
+      screenOptions={{
+        // headerShown: false,
+        header: ({navigation}) => <Header title='Home' navigation={navigation} showBackButton={false}/>
+      }}
     >
         <Stack.Screen
             name='Home Stack'

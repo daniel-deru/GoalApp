@@ -8,14 +8,33 @@ import Header from '../components/Header'
 const Stack = createNativeStackNavigator()
 
 const GoalStack: React.FC = (): JSX.Element => {
+
+  const headerTitle = (title: string, navigation: any, backButton: boolean = false): JSX.Element =>{
+    return <Header 
+              title={title} 
+              showBackButton={backButton} 
+              navigation={navigation}
+            />
+  }
+
   return (
     <Stack.Navigator 
-        // screenOptions={{
-        //   headerTitle: () => <Header />
-        // }}
+      screenOptions={{
+        header: ({navigation}) => headerTitle("Goals", navigation),
+      }}
     >
-        <Stack.Screen name='Goals Stack' component={Goals}/>
-        <Stack.Screen name='Add Goal' component={AddGoal}/>
+        <Stack.Screen 
+          name='Goals Stack' 
+          component={Goals}
+        />
+        <Stack.Screen 
+          name='Add Goal' 
+          component={AddGoal} 
+          options={{
+            // headerShown: true,
+            header: ({navigation}) => headerTitle("Add Goal", navigation, true)
+          }}
+        />
     </Stack.Navigator>
   )
 }

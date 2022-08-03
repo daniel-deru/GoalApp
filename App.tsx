@@ -6,6 +6,7 @@ import { createDrawerNavigator } from "@react-navigation/drawer"
 
 import HomeStack from './stacks/HomeStack';
 import GoalStack from './stacks/GoalStack';
+import Header from './components/Header';
 
 const Drawer = createDrawerNavigator()
 
@@ -15,8 +16,15 @@ export default function App() {
       <Drawer.Navigator
         screenOptions={{
           headerShown: false,
-          drawerPosition: "right"
+          drawerPosition: "right",
+          header: ({navigation}) => <Header title='Home' navigation={navigation} showBackButton={false}/>
+
         }}
+        // screenOptions={({ navigation }) => ({
+        //   headerTitle: (
+        //     <Header />
+        //   ),
+        // })}
       >
         <Drawer.Screen 
           name='Home' 
