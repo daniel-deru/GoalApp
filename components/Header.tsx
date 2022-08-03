@@ -1,20 +1,40 @@
 import React from 'react'
 import { View, Text, TouchableHighlight, StyleSheet } from "react-native"
 import Icon from 'react-native-vector-icons/FontAwesome'
-import { NavigationScreenProp, NavigationParams, NavigationState  } from "react-navigation"
+import { NativeStackNavigationProp } from "@react-navigation/native-stack"
+import { DrawerNavigationProp } from "@react-navigation/drawer"
+import { CompositeNavigationProp } from "@react-navigation/core"
 
+type StackParamList = {
+  Goals: undefined,
+  AddGoal: undefined
+}
+
+type DrawerParamList = {
+  HomeStack: undefined,
+  GoalStack: undefined
+}
+
+type NavigationProps = CompositeNavigationProp<
+  DrawerNavigationProp<DrawerParamList>, 
+  NativeStackNavigationProp<StackParamList>
+  >
+  
 interface Props {
   title: string,
-  navigation: any
-  // navigation: NavigationScreenProp<NavigationParams, NavigationState>
-  // navigation: NavigationScreenProp<NavigationState>
+  navigation: NavigationProps,
   showBackButton: boolean,
 }
 
-const Header: React.FC<Props> = ({ title, navigation, showBackButton }): JSX.Element => {
+const Header: React.FC<Props> = ({ 
+  title, 
+  navigation, 
+  showBackButton 
+}): JSX.Element => {
 
-  const goBack = (): boolean => navigation.goBack()
-  const openDrawer = () => navigation.openDrawer()
+  const goBack = (): void => navigation.goBack()
+  const openDrawer = (): void => navigation.openDrawer()
+
   return (
     <View style={styles.header}>
         <View>

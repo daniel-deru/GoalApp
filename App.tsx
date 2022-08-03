@@ -17,7 +17,7 @@ export default function App() {
         screenOptions={{
           headerShown: false,
           drawerPosition: "right",
-          header: ({navigation}) => <Header title='Home' navigation={navigation} showBackButton={false}/>
+          // header: ({navigation}) => <Header title='Home' navigation={navigation} showBackButton={false}/>
 
         }}
         // screenOptions={({ navigation }) => ({
