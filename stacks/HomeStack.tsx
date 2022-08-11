@@ -8,11 +8,18 @@ import Header from '../components/Header'
 const Stack = createNativeStackNavigator()
 
 const HomeStack: React.FC = (): JSX.Element => {
+
+  const headerTitle = (title: string, navigation: any, backButton: boolean = false): JSX.Element =>{
+    return <Header 
+              title={title} 
+              showBackButton={backButton} 
+              navigation={navigation}
+            />
+  }
   return (
     <Stack.Navigator
       screenOptions={{
-        // headerShown: false,
-        header: ({navigation}) => <Header title='Home' navigation={navigation} showBackButton={false}/>
+        header: ({navigation}) => headerTitle("Home", navigation, false)
       }}
     >
         <Stack.Screen

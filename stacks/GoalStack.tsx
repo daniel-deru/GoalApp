@@ -31,7 +31,6 @@ const GoalStack: React.FC = (): JSX.Element => {
           name='Add Goal' 
           component={AddGoal} 
           options={{
-            // headerShown: true,
             header: ({navigation}) => headerTitle("Add Goal", navigation, true)
           }}
         />

@@ -16,15 +16,8 @@ export default function App() {
       <Drawer.Navigator
         screenOptions={{
           headerShown: false,
-          drawerPosition: "right",
-          // header: ({navigation}) => <Header title='Home' navigation={navigation} showBackButton={false}/>
-
+          drawerPosition: "right"
         }}
-        // screenOptions={({ navigation }) => ({
-        //   headerTitle: (
-        //     <Header />
-        //   ),
-        // })}
       >
         <Drawer.Screen 
           name='Home' 
