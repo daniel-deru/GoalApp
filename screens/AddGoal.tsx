@@ -1,17 +1,41 @@
-import React, { useEffect } from 'react'
-import { StyleSheet, Text, TouchableHighlight, TextInput, SafeAreaView, View, ScrollView } from "react-native"
-import SelectDropdown from 'react-native-select-dropdown'
+import React, { useEffect, useState } from 'react'
+import { 
+    StyleSheet, 
+    Text, 
+    TouchableHighlight, 
+    TextInput, 
+    SafeAreaView, 
+    View, 
+    ScrollView,
+} from "react-native"
 import { Dropdown } from "react-native-element-dropdown"
 import { Formik } from "formik"
-import { NavigationScreenProp, NavigationParams, NavigationState  } from "react-navigation"
+import { 
+    NavigationScreenProp, 
+    NavigationParams, 
+    NavigationState  
+} from "react-navigation"
+import { generateYears, DateFieldInterface, months, getDays } from "../utils/forms/dates"
 
 import globalStyles from "../globalStyles"
 
 interface Props {
     navigation: NavigationScreenProp<NavigationParams, NavigationState> 
-  }
+}
+
+const years: DateFieldInterface[] = generateYears()
+
+//   https://reactnativeexample.com/a-react-native-dropdown-component-easy-to-customize-for-both-ios-and-android/
 
 const AddGoal: React.FC<Props> = ({ navigation }): JSX.Element => {
+    const [year, setYear] = useState<number>(new Date().getFullYear())
+    const [month, setMonth] = useState<number>(new Date().getMonth()+1)
+    const [day, setDay] = useState<number>(new Date().getDate())
+    const [days, setDays] = useState<DateFieldInterface[]>(getDays(year, month))
+
+    useEffect(() => {
+        setDays(getDays(year, month))
+    }, [year, month])
 
   return (
     <SafeAreaView style={styles.mainContainer}>
@@ -19,9 +43,9 @@ const AddGoal: React.FC<Props> = ({ navigation }): JSX.Element => {
             <Formik
                 initialValues={{
                     name: "",
-                    day: "",
-                    month: "",
-                    year: "",
+                    day: day,
+                    month: month,
+                    year: year,
                     difficulty: "",
                     reward: "",
                     description: ""
@@ -32,63 +56,66 @@ const AddGoal: React.FC<Props> = ({ navigation }): JSX.Element => {
                     <View>
                         <View style={styles.fieldContainer}>
                             <Text style={styles.textHeader}>Goal Name</Text>
-                            <TextInput style={styles.input}/>
+                            <TextInput 
+                                style={styles.input} 
+                                value={values.name}
+                                onChangeText={handleChange('name')}
+                                onBlur={handleBlur('name')}
+                            />
                         </View>
                         <View style={styles.fieldContainer}>
                             <Text style={styles.textHeader}>Deadline</Text>
                             <View style={styles.dateContainer}>
-                                <View style={styles.dateItemContainer}>
-                                    <Text>Day</Text>
-                                    <Dropdown
-                                        style={styles.input}
-                                        placeholderStyle={styles.fieldTextSmall}
-                                        data={[]}
-                                        labelField="label"
-                                        valueField='value'
-                                        placeholder='Select Day'
-                                        onChange={() => {}}
-                                    />
+                            <View style={styles.dateItemContainer}>
+                                <Text>Year</Text>
+                                <Dropdown
+                                    style={[styles.input]}
+                                    placeholderStyle={styles.fieldTextSmall}
+                                    data={years}
+                                    labelField="label"
+                                    valueField='value'
+                                    placeholder='Select Year'
+                                    onChange={(item) => setYear(item.value)}
+                                    value={values.year}
+                                />
                                 </View>
                                 <View style={styles.dateItemContainer}>
                                     <Text>Month</Text>
                                     <Dropdown
                                         style={styles.input}
                                         placeholderStyle={styles.fieldTextSmall}
-                                        data={[]}
+                                        data={months}
                                         labelField="label"
                                         valueField='value'
                                         placeholder='Select Month'
-                                        onChange={() => {}}
+                                        onChange={(item) => setMonth(item.value)}
+                                        value={values.month}
                                     />
                                 </View>
                                 <View style={styles.dateItemContainer}>
-                                    <Text>Year</Text>
+                                    <Text>Day</Text>
                                     <Dropdown
-                                        style={[styles.input]}
+                                        value={values.day}
+                                        style={styles.input}
                                         placeholderStyle={styles.fieldTextSmall}
-                                        data={[]}
+                                        data={days}
                                         labelField="label"
                                         valueField='value'
-                                        placeholder='Select Year'
-                                        onChange={() => {}}
+                                        placeholder='Select Day'
+                                        onChange={(item) => setDay(item.value)}
                                     />
                                 </View>
+
                             </View>
                         </View>
                         <View style={styles.fieldContainer}>
-                            <Text style={styles.textHeader}>Difficulty</Text>
-                            <Dropdown
-                                style={styles.input}
-                                data={[]}
-                                labelField="label"
-                                valueField='value'
-                                placeholder='Select Difficulty'
-                                onChange={() => {}}
-                            />
-                        </View>
-                        <View style={styles.fieldContainer}>
                             <Text style={styles.textHeader}>Reward</Text>
-                            <TextInput style={styles.input}/>
+                            <TextInput 
+                                style={styles.input} 
+                                value={values.reward}
+                                onChangeText={handleChange('reward')}
+                                onBlur={handleBlur('reward')}
+                            />
                         </View>
                         <View style={[styles.fieldContainer]}>
                             <Text style={styles.textHeader}>Description</Text>
@@ -96,10 +123,13 @@ const AddGoal: React.FC<Props> = ({ navigation }): JSX.Element => {
                                 style={[styles.input, {textAlignVertical: "top"}]} 
                                 multiline={true}
                                 numberOfLines={7}
+                                value={values.description}
+                                onChangeText={handleChange('description')}
+                                onBlur={handleBlur('description')}
                                 />
                         </View>
                         <View>
-                            <TouchableHighlight style={styles.submit}>
+                            <TouchableHighlight style={styles.submit} onPress={(e: any) => handleSubmit(e)}>
                                 <Text style={styles.buttonText}>Submit</Text>
                             </TouchableHighlight>
                         </View>
