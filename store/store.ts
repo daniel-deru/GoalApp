@@ -1,12 +1,15 @@
-import {combineReducers, configureStore} from "@reduxjs/toolkit"
-import userListSlice from "./slices/userListSlice"
+import {combineReducers, configureStore, getDefaultMiddleware} from "@reduxjs/toolkit"
+import goalSlice from "./slices/goalSlice"
 
 const reducer = combineReducers({
-    userList: userListSlice
+    goals: goalSlice
 })
 
 const store = configureStore({
-    reducer
+    reducer,
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+        serializableCheck: false
+    })
 })
 
 export type RootState = ReturnType<typeof reducer>

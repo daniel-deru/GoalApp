@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { 
   SafeAreaView,
   View,
@@ -15,20 +15,24 @@ import {
 
 import Icon from 'react-native-vector-icons/FontAwesome'
 import globalStyles from '../globalStyles'
+import { useAppSelector } from "../store/hooks"
+
+import List from "../components/List"
 
 interface Props {
-  navigation: NavigationScreenProp<NavigationParams, NavigationState> 
+  navigation: NavigationScreenProp<NavigationState, NavigationParams> 
 }
 
 const Goals: React.FC<Props> = ({ navigation }) => {
 
-  const openAddGoal = (): void => {
-    navigation.navigate("Add Goal")
-  }
+  const goals = useAppSelector(state => state.goals)
+
   return (
     <SafeAreaView style={styles.container}>
-        <Text style={styles.text} >Start Adding Goals</Text>
-        <TouchableHighlight style={styles.button} onPress={openAddGoal}>
+        {goals.length <= 0 && <Text style={styles.text} >Start Adding Goals</Text>}
+        {goals.length > 0 && <List goals={goals} navigation={navigation}/>}
+        
+        <TouchableHighlight style={styles.button} onPress={() => navigation.navigate("Add Goal")}>
             <Icon style={{textAlign: "center"}} name="plus" size={30} color="white"/>
         </TouchableHighlight>
     </SafeAreaView>

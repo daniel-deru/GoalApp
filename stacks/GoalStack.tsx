@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack"
 
 import Goals from '../screens/Goals'
 import AddGoal from '../screens/AddGoal'
+import GoalScreen from '../screens/Goal'
 import Header from '../components/Header'
 
 const Stack = createNativeStackNavigator()
@@ -32,6 +33,14 @@ const GoalStack: React.FC = (): JSX.Element => {
           component={AddGoal} 
           options={{
             header: ({navigation}) => headerTitle("Add Goal", navigation, true)
+          }}
+        />
+
+        <Stack.Screen 
+          name='Goal Stack'
+          component={GoalScreen}
+          options={{
+            header: ({navigation}) => headerTitle("Goal",navigation, true)
           }}
         />
     </Stack.Navigator>

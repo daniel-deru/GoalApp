@@ -19,6 +19,10 @@ import { generateYears, DateFieldInterface, months, getDays } from "../utils/for
 
 import globalStyles from "../globalStyles"
 
+import {useAppDispatch} from "../store/hooks"
+import { setNewGoal } from "../store/slices/goalSlice"
+import { StatusEnums } from "../utils/properties/status"
+
 interface Props {
     navigation: NavigationScreenProp<NavigationParams, NavigationState> 
 }
@@ -32,6 +36,23 @@ const AddGoal: React.FC<Props> = ({ navigation }): JSX.Element => {
     const [month, setMonth] = useState<number>(new Date().getMonth()+1)
     const [day, setDay] = useState<number>(new Date().getDate())
     const [days, setDays] = useState<DateFieldInterface[]>(getDays(year, month))
+
+    const dispatch = useAppDispatch()
+
+    const addGoal = (values: any) => {
+        const {year, month, day, name, description, reward} = values
+        const deadline: Date = new Date(year, month, day)
+
+        const goal = {
+            name,
+            description,
+            reward,
+            deadline,
+            status: StatusEnums.ACTIVE
+        }
+        dispatch(setNewGoal(goal))
+        navigation.goBack()
+    }
 
     useEffect(() => {
         setDays(getDays(year, month))
@@ -50,7 +71,7 @@ const AddGoal: React.FC<Props> = ({ navigation }): JSX.Element => {
                     reward: "",
                     description: ""
                 }}
-                onSubmit={values => console.log(values)}
+                onSubmit={addGoal}
             >
                 {({ handleBlur, handleSubmit, handleChange, values}) => (
                     <View>
