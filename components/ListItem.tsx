@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { View, Text, StyleSheet, TouchableHighlight, TouchableWithoutFeedback } from "react-native"
+import { View, Text, StyleSheet, TouchableWithoutFeedback } from "react-native"
 import { GoalInterface } from '../store/slices/goalSlice'
 import globalStyles from "../globalStyles"
 import statusses, { StatusItem, StatusInterface } from "../utils/properties/status"
@@ -30,11 +30,11 @@ const ListItem: React.FC<Props> = ({ goal, navigation }): JSX.Element => {
     }
     return (
         <TouchableWithoutFeedback onPress={showScreen}>
-            <View style={[styles.container]}>
-                <View style={difficultyStyle()}></View>
-                <Text>{goal.name}</Text>
-                <Text>{new Date(goal.deadline).toLocaleDateString()}</Text>
-            </View>
+                  <View style={[styles.container]}>
+                      <View style={difficultyStyle()}></View>
+                      <Text>{goal.name}</Text>
+                      <Text>{new Date(goal.deadline).toLocaleDateString()}</Text>
+                  </View>
         </TouchableWithoutFeedback>
     )
 }
