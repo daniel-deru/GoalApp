@@ -3,7 +3,7 @@ import { StatusEnums } from "../../utils/properties/status"
 
 export interface GoalInterface {
     name: string,
-    deadline: Date,
+    deadline: number,
     reward: string,
     description: string,
     status: StatusEnums

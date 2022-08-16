@@ -37,7 +37,7 @@ const GoalStack: React.FC = (): JSX.Element => {
         />
 
         <Stack.Screen 
-          name='Goal Stack'
+          name='Goal'
           component={GoalScreen}
           options={{
             header: ({navigation}) => headerTitle("Goal",navigation, true)

@@ -41,7 +41,7 @@ const AddGoal: React.FC<Props> = ({ navigation }): JSX.Element => {
 
     const addGoal = (values: any) => {
         const {year, month, day, name, description, reward} = values
-        const deadline: Date = new Date(year, month, day)
+        const deadline: number = new Date(year, month, day).getDate()
 
         const goal = {
             name,

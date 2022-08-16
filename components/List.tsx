@@ -34,7 +34,7 @@ const List: React.FC<Props> = ({goals, navigation}): JSX.Element => {
   }
 
 const showScreen = (goal: GoalInterface): void => {
-    navigation.navigate("Goal Stack", goal)
+    navigation.navigate("Goal", goal)
 }
 
   return (

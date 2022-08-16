@@ -1,6 +1,7 @@
-import React from 'react'
-import { Text, View, StyleSheet } from "react-native"
+import React, { useEffect, useState} from 'react'
+import { Text, View, StyleSheet, ScrollView, TouchableOpacity } from "react-native"
 import { GoalInterface } from "../store/slices/goalSlice"
+import  Icon  from 'react-native-vector-icons/AntDesign'
 import { 
   NavigationScreenProp, 
   NavigationState, 
@@ -8,6 +9,7 @@ import {
 } from "react-navigation"
 
 import {RouteProp} from "@react-navigation/native"
+import globalStyles from '../globalStyles'
 
 interface Props {
     goal: GoalInterface,
@@ -16,16 +18,85 @@ interface Props {
 }
 
 const Goal: React.FC<Props> = ({ goal, navigation, route }): JSX.Element => {
-  console.log(route.params)
-  return (
-    <View>
-        <Text>Hello</Text>
-    </View>
-  )
+    const [goalItem, setGoalItem] = useState<GoalInterface>(route.params)
+
+    return (
+      <ScrollView style={styles.container}>
+          <View>
+              <TouchableOpacity onPress={() => navigation.navigate("Add Goal", goal)}>
+                <Icon
+                  name='edit'
+                  size={35}
+                  style={styles.icon}
+                />
+              </TouchableOpacity>
+          </View>
+          <View style={styles.item}>
+            <Text style={styles.heading}>Goal Name</Text>
+            <Text>{goalItem.name}</Text>
+          </View>
+          <View style={styles.item}>
+            <Text style={styles.heading}>Status</Text>
+            <Text>{goalItem.status}</Text>
+          </View>
+          <View style={styles.item}>
+            <Text style={styles.heading}>Deadline</Text>
+            <Text>
+              {new Date(goalItem.deadline).toDateString()}
+            </Text>
+          </View>
+          <View style={styles.item}>
+            <Text style={styles.heading}>Difficulty</Text>
+            <Text>{goalItem.name}</Text>
+          </View>
+          <View style={styles.item}>
+            <Text style={styles.heading}>Reward</Text>
+            <Text>{goalItem.reward}</Text>
+          </View>
+          <View style={styles.item}>
+            <Text style={styles.heading}>Description</Text>
+            <Text>{goalItem.description}</Text>
+          </View>
+          <TouchableOpacity style={[styles.touchable, styles.showTasksButton, styles.item]}>
+            <Text style={styles.buttonText}>Show Tasks</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={[styles.touchable, styles.cancelTaskButton,  styles.item]}>
+            <Text style={styles.buttonText}>Cancel Goal</Text>
+          </TouchableOpacity>
+      </ScrollView>
+    )
 }
 
 const styles = StyleSheet.create({
-
+  container: {
+    margin: 20
+  },
+  icon: {
+    color: globalStyles.colors.main,
+    textAlign: 'right'
+  },
+  heading: {
+    fontSize: 20,
+    fontWeight: "500"
+  },
+  item: {
+    marginTop: 20
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 20,
+    textAlign: 'center'
+  },
+  touchable: {
+    padding: 15,
+    borderRadius: 5
+  },
+  showTasksButton: {
+    backgroundColor: globalStyles.colors.main,
+  },
+  cancelTaskButton: {
+    backgroundColor: globalStyles.colors.overdue
+  }
 })
 
 export default Goal
