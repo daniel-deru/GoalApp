@@ -15,23 +15,28 @@ import {
     NavigationParams, 
     NavigationState  
 } from "react-navigation"
+import { RouteProp } from "@react-navigation/native"
 import { generateYears, DateFieldInterface, months, getDays } from "../utils/forms/dates"
-
+import { GoalInterface } from '../store/slices/goalSlice'
 import globalStyles from "../globalStyles"
-
+// import { isGoal } from '../utils/types/checkInterfaces'
 import {useAppDispatch} from "../store/hooks"
 import { setNewGoal } from "../store/slices/goalSlice"
 import { StatusEnums } from "../utils/properties/status"
 
+import { isGoal } from "../utils/types/checkInterfaces"
+
 interface Props {
-    navigation: NavigationScreenProp<NavigationParams, NavigationState> 
+    navigation: NavigationScreenProp<NavigationParams, NavigationState> ,
+    route: RouteProp<{params: GoalInterface}, 'params'>
 }
 
 const years: DateFieldInterface[] = generateYears()
 
 //   https://reactnativeexample.com/a-react-native-dropdown-component-easy-to-customize-for-both-ios-and-android/
 
-const AddGoal: React.FC<Props> = ({ navigation }): JSX.Element => {
+const AddGoal: React.FC<Props> = ({ navigation, route }): JSX.Element => {
+    const [goal, setGoal] = useState<GoalInterface | null>()
     const [year, setYear] = useState<number>(new Date().getFullYear())
     const [month, setMonth] = useState<number>(new Date().getMonth()+1)
     const [day, setDay] = useState<number>(new Date().getDate())
@@ -41,14 +46,15 @@ const AddGoal: React.FC<Props> = ({ navigation }): JSX.Element => {
 
     const addGoal = (values: any) => {
         const {year, month, day, name, description, reward} = values
-        const deadline: number = new Date(year, month, day).getDate()
+        const deadline: number = new Date(year, month, day).getTime()
 
-        const goal = {
+        const goal: GoalInterface = {
             name,
             description,
             reward,
             deadline,
-            status: StatusEnums.ACTIVE
+            status: StatusEnums.ACTIVE,
+            type: 'GoalInterface'
         }
         dispatch(setNewGoal(goal))
         navigation.goBack()
@@ -56,6 +62,10 @@ const AddGoal: React.FC<Props> = ({ navigation }): JSX.Element => {
 
     useEffect(() => {
         setDays(getDays(year, month))
+        if(route.params) setGoal(route.params)
+        // console.log(typeof route.params)
+        console.log('This is the param')
+        console.log(route.params)
     }, [year, month])
 
   return (
@@ -151,7 +161,7 @@ const AddGoal: React.FC<Props> = ({ navigation }): JSX.Element => {
                         </View>
                         <View>
                             <TouchableHighlight style={styles.submit} onPress={(e: any) => handleSubmit(e)}>
-                                <Text style={styles.buttonText}>Submit</Text>
+                                <Text style={styles.buttonText}>{goal ? "Update": "Save"}</Text>
                             </TouchableHighlight>
                         </View>
                     </View>

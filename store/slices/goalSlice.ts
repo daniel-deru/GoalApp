@@ -6,7 +6,8 @@ export interface GoalInterface {
     deadline: number,
     reward: string,
     description: string,
-    status: StatusEnums
+    status: StatusEnums,
+    type: 'GoalInterface'
 }
 
 const initialState: GoalInterface[] = []

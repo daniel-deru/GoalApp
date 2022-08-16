@@ -23,7 +23,7 @@ const Goal: React.FC<Props> = ({ goal, navigation, route }): JSX.Element => {
     return (
       <ScrollView style={styles.container}>
           <View>
-              <TouchableOpacity onPress={() => navigation.navigate("Add Goal", goal)}>
+              <TouchableOpacity onPress={() => navigation.navigate("Add Goal", goalItem)}>
                 <Icon
                   name='edit'
                   size={35}
