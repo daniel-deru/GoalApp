@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
+
 import { 
     StyleSheet, 
     Text, 
@@ -8,44 +9,45 @@ import {
     View, 
     ScrollView,
 } from "react-native"
+
 import { Dropdown } from "react-native-element-dropdown"
 import { Formik } from "formik"
-import { 
-    NavigationScreenProp, 
-    NavigationParams, 
-    NavigationState  
-} from "react-navigation"
+import { NavigationScreenProp, NavigationParams, NavigationState } from "react-navigation"
 import { RouteProp } from "@react-navigation/native"
 import { generateYears, DateFieldInterface, months, getDays } from "../utils/forms/dates"
 import { GoalInterface } from '../store/slices/goalSlice'
 import globalStyles from "../globalStyles"
-// import { isGoal } from '../utils/types/checkInterfaces'
 import {useAppDispatch} from "../store/hooks"
 import { setNewGoal } from "../store/slices/goalSlice"
 import { StatusEnums } from "../utils/properties/status"
-
-import { isGoal } from "../utils/types/checkInterfaces"
+import { difficultyEnum } from "../utils/properties/difficulty"
 
 interface Props {
     navigation: NavigationScreenProp<NavigationParams, NavigationState> ,
     route: RouteProp<{params: GoalInterface}, 'params'>
 }
 
+interface FormInterface {
+    name: string,
+    day: number,
+    month: number,
+    year: number,
+    difficulty: difficultyEnum,
+    reward: string,
+    description: string
+}
+
+// Get all the years from current year + 10 years
 const years: DateFieldInterface[] = generateYears()
 
-//   https://reactnativeexample.com/a-react-native-dropdown-component-easy-to-customize-for-both-ios-and-android/
-
 const AddGoal: React.FC<Props> = ({ navigation, route }): JSX.Element => {
-    const [goal, setGoal] = useState<GoalInterface | null>()
-    const [year, setYear] = useState<number>(new Date().getFullYear())
-    const [month, setMonth] = useState<number>(new Date().getMonth()+1)
-    const [day, setDay] = useState<number>(new Date().getDate())
-    const [days, setDays] = useState<DateFieldInterface[]>(getDays(year, month))
+    const [goal, setGoal] = useState<GoalInterface | null>(route.params)
+    const [days, setDays] = useState<DateFieldInterface[]>([])
 
     const dispatch = useAppDispatch()
 
-    const addGoal = (values: any) => {
-        const {year, month, day, name, description, reward} = values
+    const submitGoal = (values: any) => {
+        const {year, month, day, name, description, reward, difficulty} = values
         const deadline: number = new Date(year, month, day).getTime()
 
         const goal: GoalInterface = {
@@ -54,34 +56,53 @@ const AddGoal: React.FC<Props> = ({ navigation, route }): JSX.Element => {
             reward,
             deadline,
             status: StatusEnums.ACTIVE,
+            difficulty,
             type: 'GoalInterface'
         }
         dispatch(setNewGoal(goal))
         navigation.goBack()
     }
 
+    const setData = (): FormInterface => {
+        const date: Date = new Date()
+        let  initialData: FormInterface = {
+            name: "",
+            day: date.getDate(),
+            month: date.getMonth(),
+            year: date.getFullYear(),
+            difficulty: difficultyEnum.easy,
+            reward: "",
+            description: ""
+        }
+
+        if(goal){
+            initialData.name = goal.name
+            initialData.description = goal.description
+            initialData.reward = goal.reward
+            initialData.difficulty = goal.difficulty
+            initialData.day = new Date(goal.deadline).getDay()
+            initialData.month = new Date(goal.deadline).getMonth()
+            initialData.year = new Date(goal.deadline).getFullYear()
+        }
+
+        return initialData
+    }
+
+    const setDaysCallback = useCallback(() => {
+        const date: Date = new Date()
+        setDays(getDays(date.getFullYear(), date.getMonth()))
+    }, [])
+
     useEffect(() => {
-        setDays(getDays(year, month))
-        if(route.params) setGoal(route.params)
-        // console.log(typeof route.params)
-        console.log('This is the param')
-        console.log(route.params)
-    }, [year, month])
+        setDaysCallback()
+    }, [setDaysCallback])
 
   return (
     <SafeAreaView style={styles.mainContainer}>
         <ScrollView>
             <Formik
-                initialValues={{
-                    name: "",
-                    day: day,
-                    month: month,
-                    year: year,
-                    difficulty: "",
-                    reward: "",
-                    description: ""
-                }}
-                onSubmit={addGoal}
+                initialValues={setData()}
+                onSubmit={submitGoal}
             >
                 {({ handleBlur, handleSubmit, handleChange, values}) => (
                     <View>
@@ -106,7 +127,7 @@ const AddGoal: React.FC<Props> = ({ navigation, route }): JSX.Element => {
                                     labelField="label"
                                     valueField='value'
                                     placeholder='Select Year'
-                                    onChange={(item) => setYear(item.value)}
+                                    onChange={(item) => item.value}
                                     value={values.year}
                                 />
                                 </View>
@@ -119,7 +140,7 @@ const AddGoal: React.FC<Props> = ({ navigation, route }): JSX.Element => {
                                         labelField="label"
                                         valueField='value'
                                         placeholder='Select Month'
-                                        onChange={(item) => setMonth(item.value)}
+                                        onChange={(item) => item.value}
                                         value={values.month}
                                     />
                                 </View>
@@ -133,7 +154,7 @@ const AddGoal: React.FC<Props> = ({ navigation, route }): JSX.Element => {
                                         labelField="label"
                                         valueField='value'
                                         placeholder='Select Day'
-                                        onChange={(item) => setDay(item.value)}
+                                        onChange={(item) => item.value}
                                     />
                                 </View>
 

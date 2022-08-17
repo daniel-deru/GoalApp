@@ -1,5 +1,6 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit"
 import { StatusEnums } from "../../utils/properties/status"
+import { difficultyEnum } from "../../utils/properties/difficulty"
 
 export interface GoalInterface {
     name: string,
@@ -7,6 +8,7 @@ export interface GoalInterface {
     reward: string,
     description: string,
     status: StatusEnums,
+    difficulty: difficultyEnum,
     type: 'GoalInterface'
 }
 
