@@ -12,6 +12,7 @@ import {
 
 import { Dropdown } from "react-native-element-dropdown"
 import { Formik } from "formik"
+import {v4 as uuidv4 } from "uuid"
 import { NavigationScreenProp, NavigationParams, NavigationState } from "react-navigation"
 import { RouteProp } from "@react-navigation/native"
 import { generateYears, DateFieldInterface, months, getDays } from "../utils/forms/dates"
@@ -37,39 +38,50 @@ interface FormInterface {
     description: string
 }
 
+interface DateInterface {
+    day: number,
+    month: number,
+    year: number
+}
+
 // Get all the years from current year + 10 years
 const years: DateFieldInterface[] = generateYears()
 
 const AddGoal: React.FC<Props> = ({ navigation, route }): JSX.Element => {
     const [goal, setGoal] = useState<GoalInterface | null>(route.params)
     const [days, setDays] = useState<DateFieldInterface[]>([])
+    const [currentDate, setCurrentDate] = useState<Date>(new Date())
+    const [date, setDate] = useState<DateInterface>({
+        day: currentDate.getDay(),
+        month: currentDate.getMonth()+1,
+        year: currentDate.getFullYear()
+    })
 
     const dispatch = useAppDispatch()
 
     const submitGoal = (values: any) => {
-        const {year, month, day, name, description, reward, difficulty} = values
-        const deadline: number = new Date(year, month, day).getTime()
-
+        const {name, description, reward, difficulty} = values
+        const deadline: number = new Date(date.year, date.month-1, date.day).getTime()
         const goal: GoalInterface = {
+            id: uuidv4(),
             name,
             description,
             reward,
             deadline,
             status: StatusEnums.ACTIVE,
             difficulty,
-            type: 'GoalInterface'
+            type: 'GoalInterface',
         }
         dispatch(setNewGoal(goal))
         navigation.goBack()
     }
 
     const setData = (): FormInterface => {
-        const date: Date = new Date()
         let  initialData: FormInterface = {
             name: "",
-            day: date.getDate(),
-            month: date.getMonth(),
-            year: date.getFullYear(),
+            day: currentDate.getDate(),
+            month: currentDate.getMonth()+1,
+            year: currentDate.getFullYear(),
             difficulty: difficultyEnum.easy,
             reward: "",
             description: ""
@@ -80,8 +92,8 @@ const AddGoal: React.FC<Props> = ({ navigation, route }): JSX.Element => {
             initialData.description = goal.description
             initialData.reward = goal.reward
             initialData.difficulty = goal.difficulty
-            initialData.day = new Date(goal.deadline).getDay()
-            initialData.month = new Date(goal.deadline).getMonth()
+            initialData.day = new Date(goal.deadline).getDate()
+            initialData.month = new Date(goal.deadline).getMonth()+1
             initialData.year = new Date(goal.deadline).getFullYear()
         }
 
@@ -89,9 +101,8 @@ const AddGoal: React.FC<Props> = ({ navigation, route }): JSX.Element => {
     }
 
     const setDaysCallback = useCallback(() => {
-        const date: Date = new Date()
-        setDays(getDays(date.getFullYear(), date.getMonth()))
-    }, [])
+        setDays(getDays(date.year, date.month))
+    }, [date])
 
     useEffect(() => {
         setDaysCallback()
@@ -127,7 +138,7 @@ const AddGoal: React.FC<Props> = ({ navigation, route }): JSX.Element => {
                                     labelField="label"
                                     valueField='value'
                                     placeholder='Select Year'
-                                    onChange={(item) => item.value}
+                                    onChange={item => setDate(prevDate => ({...prevDate, year: item.value}))}
                                     value={values.year}
                                 />
                                 </View>
@@ -140,7 +151,7 @@ const AddGoal: React.FC<Props> = ({ navigation, route }): JSX.Element => {
                                         labelField="label"
                                         valueField='value'
                                         placeholder='Select Month'
-                                        onChange={(item) => item.value}
+                                        onChange={item => setDate(prevDate => ({...prevDate, month: item.value}))}
                                         value={values.month}
                                     />
                                 </View>
@@ -154,7 +165,7 @@ const AddGoal: React.FC<Props> = ({ navigation, route }): JSX.Element => {
                                         labelField="label"
                                         valueField='value'
                                         placeholder='Select Day'
-                                        onChange={(item) => item.value}
+                                        onChange={item => setDate(prevDate => ({...prevDate, day: item.value}))}
                                     />
                                 </View>
 
