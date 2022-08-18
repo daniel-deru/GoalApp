@@ -6,9 +6,10 @@ import { DrawerNavigationProp } from "@react-navigation/drawer"
 import { CompositeNavigationProp } from "@react-navigation/core"
 import globalStyle from '../globalStyles'
 
-type StackParamList = {
+export type StackParamList = {
   Goals: undefined,
-  AddGoal: undefined
+  AddGoal: undefined,
+  GoalScreen: undefined
 }
 
 type DrawerParamList = {

@@ -20,11 +20,16 @@ const goalSlice = createSlice({
     name: "goals",
     initialState,
     reducers: {
-        setNewGoal: (state: GoalInterface[], action: PayloadAction<GoalInterface>) => {
+        setNewGoal: (state: GoalInterface[], action: PayloadAction<GoalInterface>): Array<GoalInterface> => {
             return state = [...state, action.payload]
+        },
+        updateGoal: (state: GoalInterface[], action: PayloadAction<GoalInterface>): Array<GoalInterface> => {
+            const updatedGoal: GoalInterface = action.payload
+            const otherGoals = state.filter(goal => goal.id === updatedGoal.id)
+            return [...otherGoals, updatedGoal]
         }
     }
 })
 
-export const { setNewGoal } = goalSlice.actions
+export const { setNewGoal, updateGoal } = goalSlice.actions
 export default goalSlice.reducer

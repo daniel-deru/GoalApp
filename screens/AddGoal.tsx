@@ -12,16 +12,18 @@ import {
 
 import { Dropdown } from "react-native-element-dropdown"
 import { Formik } from "formik"
+import 'react-native-get-random-values'
 import {v4 as uuidv4 } from "uuid"
 import { NavigationScreenProp, NavigationParams, NavigationState } from "react-navigation"
-import { RouteProp } from "@react-navigation/native"
+import { RouteProp, useNavigation } from "@react-navigation/native"
+import { StackNavigationProp } from "@react-navigation/stack"
 import { generateYears, DateFieldInterface, months, getDays } from "../utils/forms/dates"
-import { GoalInterface } from '../store/slices/goalSlice'
+import { GoalInterface, setNewGoal, updateGoal } from '../store/slices/goalSlice'
 import globalStyles from "../globalStyles"
 import {useAppDispatch} from "../store/hooks"
-import { setNewGoal } from "../store/slices/goalSlice"
 import { StatusEnums } from "../utils/properties/status"
 import { difficultyEnum } from "../utils/properties/difficulty"
+import type {StackParamList} from "../components/Header"
 
 interface Props {
     navigation: NavigationScreenProp<NavigationParams, NavigationState> ,
@@ -58,6 +60,7 @@ const AddGoal: React.FC<Props> = ({ navigation, route }): JSX.Element => {
     })
 
     const dispatch = useAppDispatch()
+    const navigator = useNavigation<StackNavigationProp<StackParamList>>()
 
     const submitGoal = (values: any) => {
         const {name, description, reward, difficulty} = values
@@ -72,8 +75,17 @@ const AddGoal: React.FC<Props> = ({ navigation, route }): JSX.Element => {
             difficulty,
             type: 'GoalInterface',
         }
-        dispatch(setNewGoal(goal))
-        navigation.goBack()
+
+        if(goal.id){
+            dispatch(updateGoal(goal)) 
+            // navigation.goBack("Goals Stack")
+            navigator.pop(2)
+            // navigation.pop()
+        } 
+        else{
+            dispatch(setNewGoal(goal))
+            navigation.goBack()
+        }  
     }
 
     const setData = (): FormInterface => {
