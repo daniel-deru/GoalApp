@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { 
     StyleSheet, 
@@ -8,22 +8,23 @@ import {
     SafeAreaView, 
     View, 
     ScrollView,
+    TouchableOpacity
+    
 } from "react-native"
 
-import { Dropdown } from "react-native-element-dropdown"
 import { Formik } from "formik"
 import 'react-native-get-random-values'
 import {v4 as uuidv4 } from "uuid"
 import { NavigationScreenProp, NavigationParams, NavigationState } from "react-navigation"
 import { RouteProp, useNavigation } from "@react-navigation/native"
 import { StackNavigationProp } from "@react-navigation/stack"
-import { generateYears, DateFieldInterface, months, getDays } from "../utils/forms/dates"
 import { GoalInterface, setNewGoal, updateGoal } from '../store/slices/goalSlice'
 import globalStyles from "../globalStyles"
 import {useAppDispatch} from "../store/hooks"
 import { StatusEnums } from "../utils/properties/status"
 import { difficultyEnum } from "../utils/properties/difficulty"
 import type {StackParamList} from "../components/Header"
+import DateModal from "../components/DateModal"
 
 interface Props {
     navigation: NavigationScreenProp<NavigationParams, NavigationState> ,
@@ -32,40 +33,23 @@ interface Props {
 
 interface FormInterface {
     name: string,
-    day: number,
-    month: number,
-    year: number,
     difficulty: difficultyEnum,
     reward: string,
     description: string
 }
 
-interface DateInterface {
-    day: number,
-    month: number,
-    year: number
-}
-
-// Get all the years from current year + 10 years
-const years: DateFieldInterface[] = generateYears()
 
 const AddGoal: React.FC<Props> = ({ navigation, route }): JSX.Element => {
     const [goal, setGoal] = useState<GoalInterface | null>(route.params)
-    const [days, setDays] = useState<DateFieldInterface[]>([])
     const [currentDate, setCurrentDate] = useState<Date>(new Date())
-    const [date, setDate] = useState<DateInterface>({
-        day: currentDate.getDay(),
-        month: currentDate.getMonth()+1,
-        year: currentDate.getFullYear()
-    })
+    const [dateVisibility, setDateVisibility] = useState<boolean>(false)
 
     const dispatch = useAppDispatch()
-    const navigator = useNavigation<StackNavigationProp<StackParamList>>()
 
     const submitGoal = (values: any) => {
         const {name, description, reward, difficulty} = values
-        const deadline: number = new Date(date.year, date.month-1, date.day).getTime()
-        const goal: GoalInterface = {
+        const deadline: number = currentDate.getTime()
+        const newGoal: GoalInterface = {
             id: uuidv4(),
             name,
             description,
@@ -75,15 +59,14 @@ const AddGoal: React.FC<Props> = ({ navigation, route }): JSX.Element => {
             difficulty,
             type: 'GoalInterface',
         }
-
-        if(goal.id){
-            dispatch(updateGoal(goal)) 
-            // navigation.goBack("Goals Stack")
-            navigator.pop(2)
-            // navigation.pop()
-        } 
+        // if there is a goal update the goal
+        if(goal){
+            dispatch(updateGoal(newGoal)) 
+            navigation.navigate("Goal", newGoal)
+        }
+        // If no goal create a new goal
         else{
-            dispatch(setNewGoal(goal))
+            dispatch(setNewGoal(newGoal))
             navigation.goBack()
         }  
     }
@@ -91,9 +74,6 @@ const AddGoal: React.FC<Props> = ({ navigation, route }): JSX.Element => {
     const setData = (): FormInterface => {
         let  initialData: FormInterface = {
             name: "",
-            day: currentDate.getDate(),
-            month: currentDate.getMonth()+1,
-            year: currentDate.getFullYear(),
             difficulty: difficultyEnum.easy,
             reward: "",
             description: ""
@@ -104,24 +84,24 @@ const AddGoal: React.FC<Props> = ({ navigation, route }): JSX.Element => {
             initialData.description = goal.description
             initialData.reward = goal.reward
             initialData.difficulty = goal.difficulty
-            initialData.day = new Date(goal.deadline).getDate()
-            initialData.month = new Date(goal.deadline).getMonth()+1
-            initialData.year = new Date(goal.deadline).getFullYear()
         }
 
         return initialData
     }
 
-    const setDaysCallback = useCallback(() => {
-        setDays(getDays(date.year, date.month))
-    }, [date])
-
     useEffect(() => {
-        setDaysCallback()
-    }, [setDaysCallback])
+        setGoal(route.params)
+        if(route.params) setCurrentDate(new Date(route.params.deadline))
+    }, [route.params])
 
   return (
     <SafeAreaView style={styles.mainContainer}>
+        <DateModal 
+            visibility={dateVisibility} 
+            setVisibility={setDateVisibility}
+            setDate={setCurrentDate}
+            date={currentDate}
+        />
         <ScrollView>
             <Formik
                 initialValues={setData()}
@@ -140,48 +120,10 @@ const AddGoal: React.FC<Props> = ({ navigation, route }): JSX.Element => {
                         </View>
                         <View style={styles.fieldContainer}>
                             <Text style={styles.textHeader}>Deadline</Text>
-                            <View style={styles.dateContainer}>
-                            <View style={styles.dateItemContainer}>
-                                <Text>Year</Text>
-                                <Dropdown
-                                    style={[styles.input]}
-                                    placeholderStyle={styles.fieldTextSmall}
-                                    data={years}
-                                    labelField="label"
-                                    valueField='value'
-                                    placeholder='Select Year'
-                                    onChange={item => setDate(prevDate => ({...prevDate, year: item.value}))}
-                                    value={values.year}
-                                />
-                                </View>
-                                <View style={styles.dateItemContainer}>
-                                    <Text>Month</Text>
-                                    <Dropdown
-                                        style={styles.input}
-                                        placeholderStyle={styles.fieldTextSmall}
-                                        data={months}
-                                        labelField="label"
-                                        valueField='value'
-                                        placeholder='Select Month'
-                                        onChange={item => setDate(prevDate => ({...prevDate, month: item.value}))}
-                                        value={values.month}
-                                    />
-                                </View>
-                                <View style={styles.dateItemContainer}>
-                                    <Text>Day</Text>
-                                    <Dropdown
-                                        value={values.day}
-                                        style={styles.input}
-                                        placeholderStyle={styles.fieldTextSmall}
-                                        data={days}
-                                        labelField="label"
-                                        valueField='value'
-                                        placeholder='Select Day'
-                                        onChange={item => setDate(prevDate => ({...prevDate, day: item.value}))}
-                                    />
-                                </View>
-
-                            </View>
+                            <Text style={[styles.dateInput]}>{currentDate.toDateString()}</Text>
+                            <TouchableOpacity style={styles.dateButton} onPress={() => setDateVisibility(true)}>
+                                <Text style={styles.dateText}>Set Deadline</Text>
+                            </TouchableOpacity>
                         </View>
                         <View style={styles.fieldContainer}>
                             <Text style={styles.textHeader}>Reward</Text>
@@ -258,6 +200,20 @@ const styles = StyleSheet.create({
     },
     fieldTextSmall: {
         fontSize: 12
+    },
+    dateButton: {
+        backgroundColor: globalStyles.colors.main,
+        borderRadius: 10,
+        padding: 10
+    },
+    dateText: {
+        fontSize: 24,
+        color: "white",
+        textAlign: "center"
+    },
+    dateInput: {
+        padding: 10,
+        fontSize: 16,
     }
 })
 export default AddGoal

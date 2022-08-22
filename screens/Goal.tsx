@@ -20,6 +20,10 @@ interface Props {
 const Goal: React.FC<Props> = ({ goal, navigation, route }): JSX.Element => {
     const [goalItem, setGoalItem] = useState<GoalInterface>(route.params)
 
+    useEffect(() => {
+      setGoalItem(route.params)
+    }, [route.params])
+
     return (
       <ScrollView style={styles.container}>
           <View>
