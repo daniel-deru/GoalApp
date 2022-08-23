@@ -16,6 +16,13 @@ export interface StatusInterface<T> {
     overdue: T
 }
 
+export enum TaskEnum {
+    COMPLETE = 'complete',
+    INCOMPLETE = 'incomplete',
+    OVERDUE = 'overdue',
+    ACTIVE = 'active'
+}
+
 
 const statusses: StatusInterface<StatusItem> = {
     complete: {
@@ -31,11 +38,5 @@ const statusses: StatusInterface<StatusItem> = {
         color: "#D20000"
     }
 }
-
-// export const getStatus = (currentStatus: string) => {
-//     for (let status in statusses){
-//         if (status === currentStatus) return statusses[status]
-//     }
-// }
 
 export default statusses

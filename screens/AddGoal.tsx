@@ -1,29 +1,22 @@
 import React, { useEffect, useState } from 'react'
 
 import { 
-    StyleSheet, 
-    Text, 
-    TouchableHighlight, 
-    TextInput, 
-    SafeAreaView, 
-    View, 
-    ScrollView,
-    TouchableOpacity
-    
+    StyleSheet,         Text, 
+    TouchableHighlight, TextInput, 
+    SafeAreaView,       View, 
+    ScrollView,         TouchableOpacity  
 } from "react-native"
 
 import { Formik } from "formik"
 import 'react-native-get-random-values'
 import {v4 as uuidv4 } from "uuid"
 import { NavigationScreenProp, NavigationParams, NavigationState } from "react-navigation"
-import { RouteProp, useNavigation } from "@react-navigation/native"
-import { StackNavigationProp } from "@react-navigation/stack"
+import { RouteProp } from "@react-navigation/native"
 import { GoalInterface, setNewGoal, updateGoal } from '../store/slices/goalSlice'
 import globalStyles from "../globalStyles"
 import {useAppDispatch} from "../store/hooks"
 import { StatusEnums } from "../utils/properties/status"
 import { difficultyEnum } from "../utils/properties/difficulty"
-import type {StackParamList} from "../components/Header"
 import DateModal from "../components/DateModal"
 
 interface Props {
@@ -46,7 +39,7 @@ const AddGoal: React.FC<Props> = ({ navigation, route }): JSX.Element => {
 
     const dispatch = useAppDispatch()
 
-    const submitGoal = (values: any) => {
+    const submitGoal = (values: FormInterface) => {
         const {name, description, reward, difficulty} = values
         const deadline: number = currentDate.getTime()
         const newGoal: GoalInterface = {

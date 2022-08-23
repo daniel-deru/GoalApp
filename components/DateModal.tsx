@@ -23,17 +23,16 @@ interface Props {
 const DateModal: React.FC<Props> = ({visibility, setVisibility, setDate, date}) => {
     const [days, setDays] = useState<DateFieldInterface[]>([])
     const [year, setYear] = useState<number>(date.getFullYear())
-    const [month, setMonth] = useState<number>(date.getMonth())
+    const [month, setMonth] = useState<number>(date.getMonth()+1)
     const [day, setDay] = useState<number>(date.getDate())
 
     const submitDate = (): void => {
         setDate(new Date(year, month-1, day))
         setVisibility(false)
     }
-
     useEffect(() => {
         setDays(getDays(year, month))
-    }, [month, year])
+    }, [month, year, date])
     return (
         <Modal visible={visibility}>
             <View style={styles.fieldContainer}>
@@ -46,7 +45,7 @@ const DateModal: React.FC<Props> = ({visibility, setVisibility, setDate, date}) 
                     style={[styles.input]}
                     placeholderStyle={styles.fieldTextSmall}
                     onChange={item => setYear(item.value)}
-                    value={year}
+                    // value={year}
                 />
             </View>
             <View style={styles.fieldContainer}>
@@ -59,7 +58,7 @@ const DateModal: React.FC<Props> = ({visibility, setVisibility, setDate, date}) 
                     style={[styles.input]}
                     placeholderStyle={styles.fieldTextSmall}
                     onChange={item => setMonth(item.value)}
-                    value={month}
+                    // value={month}
                 />
             </View>
             <View style={styles.fieldContainer}>
@@ -72,12 +71,18 @@ const DateModal: React.FC<Props> = ({visibility, setVisibility, setDate, date}) 
                     style={[styles.input]}
                     placeholderStyle={styles.fieldTextSmall}
                     onChange={item => setDay(item.value)}
-                    value={day}
+                    // value={day}
                 />
             </View>
             <View style={styles.fieldContainer}>
                 <TouchableOpacity style={styles.dateButton} onPress={submitDate}>
                     <Text style={styles.dateText}>Done</Text>
+                </TouchableOpacity>
+                <TouchableOpacity 
+                    style={[styles.dateButton, {backgroundColor: globalStyles.colors.overdue}]} 
+                    onPress={() => setVisibility(false)}
+                >
+                    <Text style={[styles.dateText]}>Cancel</Text>
                 </TouchableOpacity>
             </View>
         </Modal>
@@ -105,7 +110,8 @@ const styles = StyleSheet.create({
     dateButton: {
         backgroundColor: globalStyles.colors.main,
         borderRadius: 10,
-        padding: 10
+        padding: 10,
+        marginTop: 10
     },
     dateText: {
         fontSize: 24,
