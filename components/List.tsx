@@ -8,7 +8,6 @@ import {
   ViewStyle
 } from "react-native"
 import { GoalInterface } from '../store/slices/goalSlice'
-import ListItem from "./ListItem"
 import statusses, {StatusItem, StatusInterface} from "../utils/properties/status"
 import globalStyles from '../globalStyles'
 

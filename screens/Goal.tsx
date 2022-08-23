@@ -12,13 +12,18 @@ import {RouteProp} from "@react-navigation/native"
 import globalStyles from '../globalStyles'
 
 interface Props {
-    goal: GoalInterface,
     navigation: NavigationScreenProp<NavigationState, NavigationParams>,
     route: RouteProp<{params: GoalInterface}, 'params'>
 }
 
-const Goal: React.FC<Props> = ({ goal, navigation, route }): JSX.Element => {
+const Goal: React.FC<Props> = ({ navigation, route }): JSX.Element => {
     const [goalItem, setGoalItem] = useState<GoalInterface>(route.params)
+
+    const showTasks = (): boolean => {
+      console.log("Up, up away")
+      navigation.navigate("Tasks", {goal_id: goalItem.id})
+      return true
+    }
 
     useEffect(() => {
       setGoalItem(route.params)
@@ -61,7 +66,10 @@ const Goal: React.FC<Props> = ({ goal, navigation, route }): JSX.Element => {
             <Text style={styles.heading}>Description</Text>
             <Text>{goalItem.description}</Text>
           </View>
-          <TouchableOpacity style={[styles.touchable, styles.showTasksButton, styles.item]}>
+          <TouchableOpacity 
+            style={[styles.touchable, styles.showTasksButton, styles.item]}
+            onPress={showTasks}
+          >
             <Text style={styles.buttonText}>Show Tasks</Text>
           </TouchableOpacity>
           <TouchableOpacity style={[styles.touchable, styles.cancelTaskButton,  styles.item]}>

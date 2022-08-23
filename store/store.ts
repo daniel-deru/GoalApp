@@ -1,8 +1,10 @@
-import {combineReducers, configureStore, getDefaultMiddleware} from "@reduxjs/toolkit"
+import {combineReducers, configureStore} from "@reduxjs/toolkit"
 import goalSlice from "./slices/goalSlice"
+import taskSlice from "./slices/taskSlice"
 
 const reducer = combineReducers({
-    goals: goalSlice
+    goals: goalSlice,
+    tasks: taskSlice
 })
 
 const store = configureStore({

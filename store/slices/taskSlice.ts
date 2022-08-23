@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction} from "@reduxjs/toolkit"
 import { TaskEnum } from "../../utils/properties/status"
 
-interface Task {
+export interface Task {
     id: string,
     name: string,
     goal_id: string,
@@ -17,7 +17,13 @@ const taskSlice = createSlice({
     name: "tasks",
     initialState,
     reducers: {
-
+        setNewTask: (state: Task[], action: PayloadAction<Task>): Array<Task> => {
+            return [...state, action.payload]
+        },
+        updateTask: (state: Task[], action: PayloadAction<Task>): Array<Task> => {
+            const otherTasks: Task[] = state.filter(task => task.id === action.payload.id)
+            return [...otherTasks, action.payload]
+        }
     }
 })
 
