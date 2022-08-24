@@ -32,8 +32,16 @@ const Tasks: React.FC<Props> = ({navigation, route}): JSX.Element => {
     <SafeAreaView style={styles.container}>
         {tasks.length < 1 && <Text style={styles.fillerText}>Start Adding Tasks</Text>}
         
-        <TouchableOpacity style={styles.addButton}>
-          <Icon style={{textAlign: "center"}} name="plus" size={30} color="white"/>
+        <TouchableOpacity 
+          style={styles.addButton}
+          onPress={() => navigation.navigate("Task")}
+        > 
+          <Icon 
+            style={{textAlign: "center"}} 
+            name="plus" 
+            size={30} 
+            color="white"
+          />
         </TouchableOpacity>
         
     </SafeAreaView>
