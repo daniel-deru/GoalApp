@@ -6,6 +6,7 @@ import { difficultyEnum } from "../utils/properties/difficulty"
 import globalStyles from "../globalStyles"
 import DateModal from "../components/DateModal"
 import { difficulties, FormDifficulty } from "../utils/forms/difficulty"
+import { createDuration, Duration } from "../utils/forms/duration"
 
 interface FormData {
     name: string,
@@ -13,6 +14,10 @@ interface FormData {
     difficulty: difficultyEnum,
     duration: number
 }
+
+const days: Duration[] = createDuration(6)
+const hours: Duration[] = createDuration(23)
+const minutes: Duration[] = createDuration(59)
 const Task = () => {
     const [visibility, setVisibility] = useState<boolean>(false)
     const [date, setDate] = useState<Date>(new Date())
@@ -56,41 +61,51 @@ const Task = () => {
                         </View>
                         <View style={styles.fieldContainer}>
                             <Text style={styles.fieldHeader}>Date</Text>
-                            <TouchableOpacity style={styles.button} onPress={() => setVisibility(true)}>
-                                <Text style={styles.buttonText}>Set Date</Text>
-                            </TouchableOpacity>
+                            <View>
+                                <Text>{date.toDateString()}</Text>
+                                <TouchableOpacity style={styles.button} onPress={() => setVisibility(true)}>
+                                    <Text style={styles.buttonText}>Set Date</Text>
+                                </TouchableOpacity>
+                            </View>
+
                         </View>
                         <View style={styles.fieldContainer}>
                             <Text style={styles.fieldHeader}>Duration</Text>
                             <View style={styles.durationContainer}>
                                 <View style={styles.durationItem}>
+                                    <Text>Days</Text>
                                     <Dropdown 
-                                        data={[]}
-                                        onChange={() => console.log("Hi")}
+                                        data={days}
+                                        onChange={(item: Duration) => handleChange(item.value)}
                                         labelField="label"
                                         valueField='value'
                                         style={styles.input}
                                         placeholder="Days"
+                                        value={days[0].value}
                                     />
                                 </View>
                                 <View style={styles.durationItem}>
+                                    <Text>Hours</Text>
                                     <Dropdown 
-                                        data={[]}
-                                        onChange={() => console.log("Hi")}
+                                        data={hours}
+                                        onChange={(item: Duration) => handleChange(item.value)}
                                         labelField="label"
                                         valueField='value'
                                         style={styles.input}
                                         placeholder="Hours"
+                                        value={hours[1].value}
                                     />
                                 </View>
                                 <View style={styles.durationItem}>
+                                    <Text>Minutes</Text>
                                     <Dropdown 
-                                        data={[]}
-                                        onChange={() => console.log("Hi")}
+                                        data={minutes}
+                                        onChange={(item: Duration) => handleChange(item.value)}
                                         labelField="label"
                                         valueField='value'
                                         style={styles.input}
                                         placeholder="Minutes"
+                                        value={minutes[0].value}
                                     />
                                 </View>
                             </View>

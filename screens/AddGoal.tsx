@@ -4,7 +4,8 @@ import {
     StyleSheet,         Text, 
     TouchableHighlight, TextInput, 
     SafeAreaView,       View, 
-    ScrollView,         TouchableOpacity  
+    ScrollView,         TouchableOpacity,
+    Alert
 } from "react-native"
 
 import { Formik } from "formik"
@@ -39,9 +40,16 @@ const AddGoal: React.FC<Props> = ({ navigation, route }): JSX.Element => {
 
     const dispatch = useAppDispatch()
 
-    const submitGoal = (values: FormInterface) => {
+    const submitGoal = (values: FormInterface): void => {
         const {name, description, reward, difficulty} = values
         const deadline: number = currentDate.getTime()
+        const current = Date.now()
+        // The number of miliseconds in a day to ensure a date before the current day cannot be chosen
+        const unixDay: number = 86400 * 1000
+        // Make sure a date before the current day cannot be entered
+        if(deadline + unixDay <= current){
+           return Alert.alert("Invalid Date", "Deadline cannot be before today.")
+        }
         const newGoal: GoalInterface = {
             id: uuidv4(),
             name,
