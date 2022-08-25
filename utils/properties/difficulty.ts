@@ -3,3 +3,9 @@ export enum difficultyEnum {
     normal = 'normal',
     hard = 'hard'
 }
+
+export interface Difficulty<T> {
+    easy: T,
+    normal: T,
+    hard: T
+}
