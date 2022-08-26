@@ -4,7 +4,8 @@ import {
     Text,
     Modal,
     TouchableOpacity,
-    StyleSheet
+    StyleSheet,
+    Alert
 } from "react-native"
 import { Dropdown } from 'react-native-element-dropdown'
 import globalStyles from '../globalStyles'
@@ -27,7 +28,12 @@ const DateModal: React.FC<Props> = ({visibility, setVisibility, setDate, date}) 
     const [day, setDay] = useState<number>(date.getDate())
 
     const submitDate = (): void => {
-        setDate(new Date(year, month-1, day))
+        const inputDate: Date = new Date(year, month-1, day)
+        const currentDate: number = Date.now()
+        // Create a five minute difference for consistency when comparing two unix timestamps
+        const fiveMinDiff = 5 * 60 * 1000
+        if(inputDate.getTime() + fiveMinDiff <= currentDate) return Alert.alert("Invalid Date Selected", "Cannot select date before today")
+        setDate(inputDate)
         setVisibility(false)
     }
     useEffect(() => {

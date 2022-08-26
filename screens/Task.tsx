@@ -22,8 +22,8 @@ const Task = () => {
     const [visibility, setVisibility] = useState<boolean>(false)
     const [date, setDate] = useState<Date>(new Date())
 
-    const submit = () => {
-
+    const submit = (values: FormData) => {
+        console.log(values)
     }
 
     const createInitialValues = () => {
