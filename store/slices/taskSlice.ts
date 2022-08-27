@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction} from "@reduxjs/toolkit"
 import { TaskEnum } from "../../utils/properties/status"
+import { difficultyEnum } from "../../utils/properties/difficulty"
 
 export interface Task {
     id: string,
@@ -8,7 +9,8 @@ export interface Task {
     duration: number,
     date: number,
     status: TaskEnum,
-    description: string
+    description: string,
+    difficulty: difficultyEnum
 }
 
 const initialState: Array<Task> = []
@@ -27,4 +29,5 @@ const taskSlice = createSlice({
     }
 })
 
+export const {setNewTask, updateTask} = taskSlice.actions
 export default taskSlice.reducer

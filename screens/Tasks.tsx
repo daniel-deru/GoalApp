@@ -34,7 +34,7 @@ const Tasks: React.FC<Props> = ({navigation, route}): JSX.Element => {
         
         <TouchableOpacity 
           style={styles.addButton}
-          onPress={() => navigation.navigate("Task")}
+          onPress={() => navigation.navigate("Task", {goal_id: goalId})}
         > 
           <Icon 
             style={{textAlign: "center"}} 
