@@ -8,8 +8,8 @@ import {
     Alert
 } from "react-native"
 import { Dropdown } from 'react-native-element-dropdown'
-import globalStyles from '../globalStyles'
-import { generateYears, DateFieldInterface, months, getDays } from "../utils/forms/dates"
+import globalStyles from '../../globalStyles'
+import { generateYears, DateFieldInterface, months, getDays } from "../../utils/forms/dates"
 
 // Get all the years from current year + 10 years
 const years: DateFieldInterface[] = generateYears()

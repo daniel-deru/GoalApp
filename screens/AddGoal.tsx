@@ -18,7 +18,7 @@ import globalStyles from "../globalStyles"
 import {useAppDispatch} from "../store/hooks"
 import { StatusEnums } from "../utils/properties/status"
 import { difficultyEnum } from "../utils/properties/difficulty"
-import DateModal from "../components/DateModal"
+import DateModal from "../components/form_parts/DateModal"
 
 interface Props {
     navigation: NavigationScreenProp<NavigationParams, NavigationState> ,

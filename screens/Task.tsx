@@ -4,16 +4,18 @@ import { Formik } from "formik"
 import { Dropdown } from 'react-native-element-dropdown'
 import { difficultyEnum } from "../utils/properties/difficulty"
 import globalStyles from "../globalStyles"
-import DateModal from "../components/DateModal"
+import DateModal from "../components/form_parts/DateModal"
 import { difficulties, FormDifficulty } from "../utils/forms/difficulty"
 import { createDuration, Duration } from "../utils/forms/duration"
-import {useAppDispatch, useAppSelector} from "../store/hooks"
+import {useAppDispatch } from "../store/hooks"
 import { setNewTask, Task as TaskInterface } from "../store/slices/taskSlice"
 import 'react-native-get-random-values'
 import { v4 as uuidv4 } from "uuid"
 import { TaskEnum } from "../utils/properties/status"
 import {NavigationScreenProp, NavigationState, NavigationParams } from "react-navigation"
 import {RouteProp} from "@react-navigation/native"
+import NameField from "../components/form_parts/NameField"
+import DescriptionField from "../components/form_parts/DescriptionField"
 
 interface FormData {
     name: string,
@@ -109,14 +111,7 @@ const Task: React.FC<Props> = ({route, navigation}): JSX.Element => {
                 >
                     {({handleChange, handleSubmit, values}) => (
                         <View>
-                            <View style={styles.fieldContainer}>
-                                <Text style={styles.fieldHeader}>Name</Text>
-                                <TextInput 
-                                    style={styles.input}
-                                    onChangeText={handleChange("name")}
-                                    value={values.name}
-                                />
-                            </View>
+                            <NameField value={values.name} handleChange={handleChange}/>
                             <View style={styles.fieldContainer}>
                                 <Text style={styles.fieldHeader}>Date</Text>
                                 <View>
@@ -125,7 +120,6 @@ const Task: React.FC<Props> = ({route, navigation}): JSX.Element => {
                                         <Text style={styles.buttonText}>Set Date</Text>
                                     </TouchableOpacity>
                                 </View>
-
                             </View>
                             <View style={styles.fieldContainer}>
                                 <Text style={styles.fieldHeader}>Duration</Text>
@@ -180,15 +174,7 @@ const Task: React.FC<Props> = ({route, navigation}): JSX.Element => {
                                     value={difficulties[0].value}
                                 />
                             </View>
-                            <View style={styles.fieldContainer}>
-                                <Text style={styles.fieldHeader}>Description</Text>
-                                <TextInput 
-                                    style={[styles.input, {textAlignVertical: "top"}]}
-                                    multiline={true}
-                                    numberOfLines={7}
-                                    onChangeText={handleChange("description")}
-                                />
-                            </View>
+                            <DescriptionField value={values.description} handleChange={handleChange("description")}/>
                             <View>
                                 <TouchableOpacity style={[styles.button, {marginBottom: 20}]} onPress={(e: any) => handleSubmit(e)}>
                                     <Text style={styles.buttonText}>Save</Text>

@@ -23,7 +23,7 @@ const TaskStack: React.FC = (): JSX.Element => {
       }}
     >
         <Stack.Screen
-            name='Tasks'
+            name='Tasks Screen'
             component={Tasks}
         />
         <Stack.Screen 
