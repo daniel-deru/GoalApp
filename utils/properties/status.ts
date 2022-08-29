@@ -23,7 +23,6 @@ export enum TaskEnum {
     ACTIVE = 'active'
 }
 
-
 const statusses: StatusInterface<StatusItem> = {
     complete: {
         name: COMPLETE,
@@ -36,6 +35,18 @@ const statusses: StatusInterface<StatusItem> = {
     overdue: {
         name: OVERDUE,
         color: "#D20000"
+    }
+}
+
+export interface TaskStatusInterface extends StatusInterface<StatusItem> {
+    incomplete: StatusItem
+}
+
+export const taskStatusses = {
+    ...statusses,
+    incomplete: {
+        name: TaskEnum.INCOMPLETE,
+        color: "#A3A3A3"
     }
 }
 

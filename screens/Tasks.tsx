@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { View, StyleSheet, ScrollView, Text, TouchableOpacity, SafeAreaView } from "react-native"
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import {NavigationScreenProp, NavigationState, NavigationParams } from "react-navigation"
@@ -7,6 +7,7 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 import {type RootState} from "../store/store"
 import { Task } from "../store/slices/taskSlice"
 import globalStyles from "../globalStyles"
+import TaskList from "../components/TaskList"
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState, NavigationParams>,
@@ -15,13 +16,16 @@ interface Props {
 
 const Tasks: React.FC<Props> = ({navigation, route}): JSX.Element => {
 
-  const [goalId, setGoalId] = useState<string>(route.params.goal_id)
+  const [goalId, setGoalId] = useState<string | null>(route.params?.goal_id)
   const [tasks, setTasks] = useState<Task[]>([])
 
   const allTasks: Task[] = useAppSelector((state: RootState): Array<Task> => state.tasks)
-
+  console.log(navigation)
   const getCurrentGoalTasks = (): void => {
-    const currentTasks: Task[] = allTasks.filter((task: Task) => task.goal_id !== goalId)
+    const currentTasks: Task[] = allTasks.filter((task: Task) => {
+      return goalId ? goalId === task.goal_id : true
+    })
+    
     setTasks(currentTasks)
   }
 
@@ -31,7 +35,7 @@ const Tasks: React.FC<Props> = ({navigation, route}): JSX.Element => {
   return (
     <SafeAreaView style={styles.container}>
         {tasks.length < 1 && <Text style={styles.fillerText}>Start Adding Tasks</Text>}
-        
+        {tasks.length >= 1 && <TaskList tasks={tasks} navigation={navigation}/>}
         <TouchableOpacity 
           style={styles.addButton}
           onPress={() => navigation.navigate("Task", {goal_id: goalId})}

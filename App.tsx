@@ -5,6 +5,7 @@ import { createDrawerNavigator } from "@react-navigation/drawer"
 
 import HomeStack from './stacks/HomeStack'
 import GoalStack from './stacks/GoalStack'
+import TaskStack from "./stacks/TaskStack";
 
 import store from "./store/store"
 import { Provider } from "react-redux"
@@ -21,16 +22,9 @@ export default function App() {
             drawerPosition: "right"
           }}
         >
-          <Drawer.Screen 
-            name='Home' 
-            component={HomeStack}
-            
-          />
-
-          <Drawer.Screen 
-            name='Goals'
-            component={GoalStack}
-          />
+          <Drawer.Screen name='Home' component={HomeStack} />
+          <Drawer.Screen name='Goals' component={GoalStack} />
+          <Drawer.Screen name="Tasks" component={TaskStack}/>
         </Drawer.Navigator>
       </NavigationContainer>
     </Provider>

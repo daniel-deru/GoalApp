@@ -20,7 +20,6 @@ const Goal: React.FC<Props> = ({ navigation, route }): JSX.Element => {
     const [goalItem, setGoalItem] = useState<GoalInterface>(route.params)
 
     const showTasks = (): boolean => {
-      console.log("Up, up away")
       navigation.navigate("Tasks", {goal_id: goalItem.id})
       return true
     }

@@ -52,7 +52,6 @@ const Task: React.FC<Props> = ({route, navigation}): JSX.Element => {
     })
 
     const dispatch = useAppDispatch()
-    // console.log(route.params.goal_id)
 
     const getSeconds = (duration: DurationFormInterface): number => {
 
@@ -191,7 +190,7 @@ const Task: React.FC<Props> = ({route, navigation}): JSX.Element => {
                                 />
                             </View>
                             <View>
-                                <TouchableOpacity style={styles.button} onPress={(e: any) => handleSubmit(e)}>
+                                <TouchableOpacity style={[styles.button, {marginBottom: 20}]} onPress={(e: any) => handleSubmit(e)}>
                                     <Text style={styles.buttonText}>Save</Text>
                                 </TouchableOpacity>
                             </View>
