@@ -20,18 +20,18 @@ const Tasks: React.FC<Props> = ({navigation, route}): JSX.Element => {
   const [tasks, setTasks] = useState<Task[]>([])
 
   const allTasks: Task[] = useAppSelector((state: RootState): Array<Task> => state.tasks)
-  console.log(navigation)
   const getCurrentGoalTasks = (): void => {
     const currentTasks: Task[] = allTasks.filter((task: Task) => {
       return goalId ? goalId === task.goal_id : true
     })
+    console.log(currentTasks)
     
     setTasks(currentTasks)
   }
 
   useEffect(() => {
     getCurrentGoalTasks()
-  }, [goalId])
+  }, [goalId, allTasks])
   return (
     <SafeAreaView style={styles.container}>
         {tasks.length < 1 && <Text style={styles.fillerText}>Start Adding Tasks</Text>}

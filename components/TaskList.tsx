@@ -34,7 +34,7 @@ const TaskList: React.FC<Props> = ({tasks, navigation}): JSX.Element => {
   }
 
 const showScreen = (task: Task): void => {
-    // navigation.navigate("Goal", goal)
+    navigation.navigate("View Task", task)
 }
 
   return (
