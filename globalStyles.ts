@@ -9,7 +9,7 @@ interface GlobalStyle {
         overdue: string
     },
     buttons: {
-        fullWidth: () => object
+        fullWidth: (color: string) => object
     },
     text: {
         button: object
