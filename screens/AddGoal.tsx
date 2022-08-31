@@ -107,7 +107,7 @@ const AddGoal: React.FC<Props> = ({ navigation, route }): JSX.Element => {
                         <View style={styles.fieldContainer}>
                             <Text style={styles.textHeader}>Goal Name</Text>
                             <TextInput 
-                                style={styles.input} 
+                                style={globalStyles.inputs.textInput} 
                                 value={values.name}
                                 onChangeText={handleChange('name')}
                                 onBlur={handleBlur('name')}
@@ -116,14 +116,14 @@ const AddGoal: React.FC<Props> = ({ navigation, route }): JSX.Element => {
                         <View style={styles.fieldContainer}>
                             <Text style={styles.textHeader}>Deadline</Text>
                             <Text style={[styles.dateInput]}>{currentDate.toDateString()}</Text>
-                            <TouchableOpacity style={styles.dateButton} onPress={() => setDateVisibility(true)}>
-                                <Text style={styles.dateText}>Set Deadline</Text>
+                            <TouchableOpacity style={globalStyles.buttons.fullWidth()} onPress={() => setDateVisibility(true)}>
+                                <Text style={globalStyles.text.button}>Set Deadline</Text>
                             </TouchableOpacity>
                         </View>
                         <View style={styles.fieldContainer}>
                             <Text style={styles.textHeader}>Reward</Text>
                             <TextInput 
-                                style={styles.input} 
+                                style={globalStyles.inputs.textInput} 
                                 value={values.reward}
                                 onChangeText={handleChange('reward')}
                                 onBlur={handleBlur('reward')}
@@ -132,7 +132,7 @@ const AddGoal: React.FC<Props> = ({ navigation, route }): JSX.Element => {
                         <View style={[styles.fieldContainer]}>
                             <Text style={styles.textHeader}>Description</Text>
                             <TextInput 
-                                style={[styles.input, {textAlignVertical: "top"}]} 
+                                style={[globalStyles.inputs.textInput, {textAlignVertical: "top"}]} 
                                 multiline={true}
                                 numberOfLines={7}
                                 value={values.description}
@@ -141,8 +141,8 @@ const AddGoal: React.FC<Props> = ({ navigation, route }): JSX.Element => {
                                 />
                         </View>
                         <View>
-                            <TouchableHighlight style={styles.submit} onPress={(e: any) => handleSubmit(e)}>
-                                <Text style={styles.buttonText}>{goal ? "Update": "Save"}</Text>
+                            <TouchableHighlight style={globalStyles.buttons.fullWidth()} onPress={(e: any) => handleSubmit(e)}>
+                                <Text style={globalStyles.text.button}>{goal ? "Update": "Save"}</Text>
                             </TouchableHighlight>
                         </View>
                     </View>
@@ -157,20 +157,8 @@ const AddGoal: React.FC<Props> = ({ navigation, route }): JSX.Element => {
 const styles = StyleSheet.create({
     mainContainer: {
         padding: 10,
-        backgroundColor: "white"
-    },
-    input: {
-        backgroundColor: globalStyles.colors.mainFaded,
-        padding: 10,
-        fontSize: 16,
-        borderRadius: 7
-    },
-    dateContainer: {
-        flexDirection: "row",
-        justifyContent: "space-between"
-    },
-    dateItemContainer: {
-        width: "30%"
+        backgroundColor: "white",
+        height: "100%"
     },
     fieldContainer: {
         padding: 10,
@@ -180,31 +168,8 @@ const styles = StyleSheet.create({
         paddingBottom: 5,
         fontSize: 20
     },
-    submit: {
-        textAlign: "center",
-        backgroundColor: globalStyles.colors.main,
-        color: "white",
-        margin: 10,
-        padding: 10,
-        borderRadius: 10
-    },
-    buttonText: {
-        color: 'white', 
-        textAlign: "center",
-        fontSize: 30
-    },
     fieldTextSmall: {
         fontSize: 12
-    },
-    dateButton: {
-        backgroundColor: globalStyles.colors.main,
-        borderRadius: 10,
-        padding: 10
-    },
-    dateText: {
-        fontSize: 24,
-        color: "white",
-        textAlign: "center"
     },
     dateInput: {
         padding: 10,

@@ -16,6 +16,7 @@ import {NavigationScreenProp, NavigationState, NavigationParams } from "react-na
 import {RouteProp} from "@react-navigation/native"
 import NameField from "../components/form_parts/NameField"
 import DescriptionField from "../components/form_parts/DescriptionField"
+import globalStyle from '../globalStyles'
 
 interface FormData {
     name: string,
@@ -116,8 +117,8 @@ const Task: React.FC<Props> = ({route, navigation}): JSX.Element => {
                                 <Text style={styles.fieldHeader}>Date</Text>
                                 <View>
                                     <Text>{date.toDateString()}</Text>
-                                    <TouchableOpacity style={styles.button} onPress={() => setVisibility(true)}>
-                                        <Text style={styles.buttonText}>Set Date</Text>
+                                    <TouchableOpacity style={globalStyles.buttons.fullWidth()} onPress={() => setVisibility(true)}>
+                                        <Text style={globalStyles.text.button}>Set Date</Text>
                                     </TouchableOpacity>
                                 </View>
                             </View>
@@ -131,7 +132,7 @@ const Task: React.FC<Props> = ({route, navigation}): JSX.Element => {
                                             onChange={(item: Duration) => changeDuration(DurationEnum.days, item.value)}
                                             labelField="label"
                                             valueField='value'
-                                            style={styles.input}
+                                            style={globalStyle.inputs.textInput}
                                             placeholder="Days"
                                             value={duration.days}
                                         />
@@ -143,7 +144,7 @@ const Task: React.FC<Props> = ({route, navigation}): JSX.Element => {
                                             onChange={(item: Duration) => changeDuration(DurationEnum.hours, item.value)}
                                             labelField="label"
                                             valueField='value'
-                                            style={styles.input}
+                                            style={globalStyle.inputs.textInput}
                                             placeholder="Hours"
                                             value={duration.hours}
                                         />
@@ -155,7 +156,7 @@ const Task: React.FC<Props> = ({route, navigation}): JSX.Element => {
                                             onChange={(item: Duration) => changeDuration(DurationEnum.minutes, item.value)}
                                             labelField="label"
                                             valueField='value'
-                                            style={styles.input}
+                                            style={globalStyle.inputs.textInput}
                                             placeholder="Minutes"
                                             value={duration.minutes}
                                         />
@@ -169,15 +170,15 @@ const Task: React.FC<Props> = ({route, navigation}): JSX.Element => {
                                     onChange={(item: FormDifficulty) => setDifficulty(item.value)}
                                     labelField="label"
                                     valueField='value'
-                                    style={styles.input}
+                                    style={globalStyle.inputs.textInput}
                                     placeholder="Select Difficulty"
                                     value={difficulties[0].value}
                                 />
                             </View>
-                            <DescriptionField value={values.description} handleChange={handleChange("description")}/>
+                            <DescriptionField value={values.description} handleChange={handleChange}/>
                             <View>
-                                <TouchableOpacity style={[styles.button, {marginBottom: 20}]} onPress={(e: any) => handleSubmit(e)}>
-                                    <Text style={styles.buttonText}>Save</Text>
+                                <TouchableOpacity style={[globalStyles.buttons.fullWidth(), {marginBottom: 20}]} onPress={(e: any) => handleSubmit(e)}>
+                                    <Text style={globalStyles.text.button}>Save</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -198,26 +199,9 @@ const styles = StyleSheet.create({
     fieldContainer: {
         marginTop: 10
     },
-    input: {
-        backgroundColor: globalStyles.colors.mainFaded,
-        fontSize: 16,
-        padding: 10,
-        borderRadius: 5
-    },
     fieldHeader: {
         fontSize: 20,
         marginBottom: 5
-    },
-    button: {
-        backgroundColor: globalStyles.colors.main,
-        padding: 10,
-        borderRadius: 5,
-        marginTop: 10
-    },
-    buttonText: {
-        color: "white",
-        textAlign: "center",
-        fontSize: 16
     },
     durationContainer: {
         flexDirection: "row",
