@@ -17,27 +17,16 @@ import {RouteProp} from "@react-navigation/native"
 import NameField from "../components/form_parts/NameField"
 import DescriptionField from "../components/form_parts/DescriptionField"
 import globalStyle from '../globalStyles'
+import {DurationEnum, DurationFormInterface, getDuration} from "../utils/helpers/duration"
 
 interface FormData {
     name: string,
     description: string
 }
 
-enum DurationEnum {
-    days = "days",
-    hours = "hours",
-    minutes = "minutes"
-}
-
-interface DurationFormInterface {
-    [DurationEnum.days]: number,
-    [DurationEnum.hours]: number,
-    [DurationEnum.minutes]: number
-}
-
 interface Props {
     navigation: NavigationScreenProp<NavigationState, NavigationParams>,
-    route: RouteProp<{params: {goal_id: string}}, 'params'>
+    route: RouteProp<{params: TaskInterface | undefined}, 'params'>
 }
 
 const days: Duration[] = createDuration(6)
@@ -45,6 +34,8 @@ const hours: Duration[] = createDuration(23)
 const minutes: Duration[] = createDuration(59)
 
 const Task: React.FC<Props> = ({route, navigation}): JSX.Element => {
+
+    const [task, setTask] = useState<TaskInterface | undefined>(route.params)
     const [visibility, setVisibility] = useState<boolean>(false)
     const [date, setDate] = useState<Date>(new Date())
     const [difficulty, setDifficulty] = useState<difficultyEnum>(difficultyEnum.easy)
@@ -56,6 +47,10 @@ const Task: React.FC<Props> = ({route, navigation}): JSX.Element => {
 
     const dispatch = useAppDispatch()
 
+    const initialDate = (): Date => task ? new Date(task.date) : new Date()
+    const initialDifficulty = (): difficultyEnum => task ? task.difficulty : difficultyEnum.easy
+    const initialDuration = (): DurationFormInterface => task ? getDuration(task.duration) : duration
+    
     const getSeconds = (duration: DurationFormInterface): number => {
 
         const secondsInDay = 60 * 60 * 24 * duration.days
@@ -68,19 +63,23 @@ const Task: React.FC<Props> = ({route, navigation}): JSX.Element => {
     const submit = (values: FormData) => {
         const seconds: number = getSeconds(duration)
         const { name, description } = values
-        const task: TaskInterface = {
+        const submitTask: TaskInterface = {
             id: uuidv4(),
             name,
             difficulty,                
             description,
             duration: seconds,
-            goal_id: route.params.goal_id,
+            goal_id: task?.goal_id || "",
             date: date.getTime(),
             status: TaskEnum.INCOMPLETE,
         }
-        dispatch(setNewTask(task))
-
-        navigation.goBack()
+        if(!task){
+            dispatch(setNewTask(submitTask))
+            navigation.goBack()
+        }
+        else {
+            // Update the task
+        }
 
     }
 
@@ -95,7 +94,18 @@ const Task: React.FC<Props> = ({route, navigation}): JSX.Element => {
         setDuration(prevDuration => ({...prevDuration, [key]: value}))
     }
 
-    const createInitialValues = () => ({ name: "", description: ""})
+    const createInitialValues = () => {
+       return { 
+            name: task?.name || "", 
+            description: task?.description || ""
+        }
+    }
+
+    useEffect(() => {
+        setDate(initialDate())
+        setDuration(initialDuration())
+        setDifficulty(initialDifficulty())
+    }, [task])
 
     return (
         <SafeAreaView>
