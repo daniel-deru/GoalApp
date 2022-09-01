@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, ScrollView, Text, TouchableOpacity, StyleSheet} from 'react-native'
 import { NavigationScreenProp, NavigationState, NavigationParams } from "react-navigation"
 import {RouteProp} from "@react-navigation/native"
@@ -47,8 +47,12 @@ const TaskView: React.FC<Props> = ({ navigation, route }) => {
     }
 
     const editCurrentTask = () => {
-
+        navigation.navigate("Task", task)
     }
+
+    useEffect(() => {
+        setTask(route.params)
+    }, [route.params])
 
     return (
         <ScrollView style={styles.container}>

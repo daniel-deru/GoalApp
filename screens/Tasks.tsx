@@ -24,7 +24,6 @@ const Tasks: React.FC<Props> = ({navigation, route}): JSX.Element => {
     const currentTasks: Task[] = allTasks.filter((task: Task) => {
       return goalId ? goalId === task.goal_id : true
     })
-    console.log(currentTasks)
     
     setTasks(currentTasks)
   }
@@ -38,7 +37,7 @@ const Tasks: React.FC<Props> = ({navigation, route}): JSX.Element => {
         {tasks.length >= 1 && <TaskList tasks={tasks} navigation={navigation}/>}
         <TouchableOpacity 
           style={styles.addButton}
-          onPress={() => navigation.navigate("Task", {goal_id: goalId})}
+          onPress={() => navigation.navigate("Task")}
         > 
           <Icon 
             style={{textAlign: "center"}} 

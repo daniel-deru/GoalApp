@@ -8,7 +8,7 @@ import DateModal from "../components/form_parts/DateModal"
 import { difficulties, FormDifficulty } from "../utils/forms/difficulty"
 import { createDuration, Duration } from "../utils/forms/duration"
 import {useAppDispatch } from "../store/hooks"
-import { setNewTask, Task as TaskInterface } from "../store/slices/taskSlice"
+import { setNewTask, updateTask, Task as TaskInterface } from "../store/slices/taskSlice"
 import 'react-native-get-random-values'
 import { v4 as uuidv4 } from "uuid"
 import { TaskEnum } from "../utils/properties/status"
@@ -46,7 +46,6 @@ const Task: React.FC<Props> = ({route, navigation}): JSX.Element => {
     })
 
     const dispatch = useAppDispatch()
-
     const initialDate = (): Date => task ? new Date(task.date) : new Date()
     const initialDifficulty = (): difficultyEnum => task ? task.difficulty : difficultyEnum.easy
     const initialDuration = (): DurationFormInterface => task ? getDuration(task.duration) : duration
@@ -64,7 +63,7 @@ const Task: React.FC<Props> = ({route, navigation}): JSX.Element => {
         const seconds: number = getSeconds(duration)
         const { name, description } = values
         const submitTask: TaskInterface = {
-            id: uuidv4(),
+            id: task?.id || uuidv4(),
             name,
             difficulty,                
             description,
@@ -78,7 +77,8 @@ const Task: React.FC<Props> = ({route, navigation}): JSX.Element => {
             navigation.goBack()
         }
         else {
-            // Update the task
+            dispatch(updateTask(submitTask))
+            navigation.navigate("View Task", submitTask)
         }
 
     }
@@ -105,7 +105,7 @@ const Task: React.FC<Props> = ({route, navigation}): JSX.Element => {
         setDate(initialDate())
         setDuration(initialDuration())
         setDifficulty(initialDifficulty())
-    }, [task])
+    }, [])
 
     return (
         <SafeAreaView>
