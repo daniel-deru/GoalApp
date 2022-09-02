@@ -185,6 +185,18 @@ const Task: React.FC<Props> = ({route, navigation}): JSX.Element => {
                                     value={difficulties[0].value}
                                 />
                             </View>
+                            <View style={styles.fieldContainer}>
+                                <Text style={styles.fieldHeader}>Goal</Text>
+                                <Dropdown 
+                                    data={difficulties}
+                                    onChange={(item: FormDifficulty) => setDifficulty(item.value)}
+                                    labelField="label"
+                                    valueField='value'
+                                    style={globalStyle.inputs.textInput}
+                                    placeholder="Select Difficulty"
+                                    value={difficulties[0].value}
+                                />
+                            </View>
                             <DescriptionField value={values.description} handleChange={handleChange}/>
                             <View>
                                 <TouchableOpacity style={[globalStyles.buttons.fullWidth(), {marginBottom: 20}]} onPress={(e: any) => handleSubmit(e)}>
@@ -220,6 +232,12 @@ const styles = StyleSheet.create({
     durationItem: {
         width: "30%",
         margin: 5
+    },
+    textInput: {
+        backgroundColor:  globalStyle.colors.mainFaded,
+        fontSize: 16,
+        padding: 10,
+        borderRadius: 7
     }
 
 })

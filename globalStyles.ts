@@ -46,7 +46,7 @@ const globalStyle: GlobalStyle = {
     },
     inputs: {
         textInput: {
-            backgroundColor: (color: string = globalStyle.colors.mainFaded) => color,
+            backgroundColor: "#0774C310",
             fontSize: 16,
             padding: 10,
             borderRadius: 7
