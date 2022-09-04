@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   Text, 
   View, 
@@ -10,20 +10,19 @@ import {
 import { GoalInterface } from '../store/slices/goalSlice'
 import statusses, {StatusItem, StatusInterface, taskStatusses} from "../utils/properties/status"
 import globalStyles from '../globalStyles'
-
-import { 
-    NavigationScreenProp, 
-    NavigationState, 
-    NavigationParams 
-  } from "react-navigation"
+import { NavigationScreenProp, NavigationState, NavigationParams } from "react-navigation"
 import { Task } from "../store/slices/taskSlice"
+import { RouteProp } from "@react-navigation/native"
 
 interface Props {
     tasks: Task[],
-    navigation: NavigationScreenProp<NavigationState, NavigationParams>
+    navigation: NavigationScreenProp<NavigationState, NavigationParams>,
+    goal: string | null
 }
 
-const TaskList: React.FC<Props> = ({tasks, navigation}): JSX.Element => {
+const TaskList: React.FC<Props> = ({tasks, navigation, goal}): JSX.Element => {
+
+  const [currentTasks, setCurrentTasks] = useState<Array<Task>>(tasks)
 
   const difficultyStyle = (task: Task): StyleProp<ViewStyle> => {
     const status: StatusItem = taskStatusses[task.status as keyof StatusInterface<StatusItem>]
@@ -33,13 +32,24 @@ const TaskList: React.FC<Props> = ({tasks, navigation}): JSX.Element => {
     }
   }
 
-const showScreen = (task: Task): void => {
-    navigation.navigate("View Task", task)
-}
+  const showScreen = (task: Task): void => {
+      navigation.navigate("View Task", task)
+  }
+
+  const filterTasks = (): void => {
+    if(!goal) return
+
+    const filteredTasks = currentTasks.filter((task: Task) => task.goal_id === goal)
+    setCurrentTasks(filteredTasks)
+  }
+
+  useEffect(() => {
+    filterTasks()
+  }, [goal])
 
   return (
         <View>
-            {tasks.map((task, index) => (
+            {currentTasks.map((task, index) => (
                 <TouchableWithoutFeedback onPress={() => showScreen(task)} key={index}>
                   <View style={[styles.container]}>
                       <View style={difficultyStyle(task)}></View>

@@ -34,7 +34,7 @@ const Tasks: React.FC<Props> = ({navigation, route}): JSX.Element => {
   return (
     <SafeAreaView style={styles.container}>
         {tasks.length < 1 && <Text style={styles.fillerText}>Start Adding Tasks</Text>}
-        {tasks.length >= 1 && <TaskList tasks={tasks} navigation={navigation}/>}
+        {tasks.length >= 1 && <TaskList tasks={tasks} navigation={navigation} goal={goalId}/>}
         <TouchableOpacity 
           style={styles.addButton}
           onPress={() => navigation.navigate("Task")}

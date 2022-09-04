@@ -5,7 +5,7 @@ import { difficultyEnum } from "../../utils/properties/difficulty"
 export interface Task {
     id: string,
     name: string,
-    goal_id: string,
+    goal_id: string | undefined,
     duration: number,
     date: number,
     status: TaskEnum,

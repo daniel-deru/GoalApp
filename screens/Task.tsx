@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from 'react'
+import React, { useState, useEffect, useRef} from 'react'
 import { ScrollView, View, Text, TouchableOpacity, TextInput, StyleSheet, Alert, SafeAreaView } from "react-native"
 import { Formik } from "formik"
 import { Dropdown } from 'react-native-element-dropdown'
@@ -7,8 +7,9 @@ import globalStyles from "../globalStyles"
 import DateModal from "../components/form_parts/DateModal"
 import { difficulties, FormDifficulty } from "../utils/forms/difficulty"
 import { createDuration, Duration } from "../utils/forms/duration"
-import {useAppDispatch } from "../store/hooks"
+import {useAppDispatch, useAppSelector } from "../store/hooks"
 import { setNewTask, updateTask, Task as TaskInterface } from "../store/slices/taskSlice"
+import { GoalInterface } from "../store/slices/goalSlice"
 import 'react-native-get-random-values'
 import { v4 as uuidv4 } from "uuid"
 import { TaskEnum } from "../utils/properties/status"
@@ -39,16 +40,25 @@ const Task: React.FC<Props> = ({route, navigation}): JSX.Element => {
     const [visibility, setVisibility] = useState<boolean>(false)
     const [date, setDate] = useState<Date>(new Date())
     const [difficulty, setDifficulty] = useState<difficultyEnum>(difficultyEnum.easy)
+    const [goal, setGoal] = useState<GoalInterface | undefined | null>()
     const [duration, setDuration] = useState<DurationFormInterface>({
         days: days[0].value,
         hours: hours[1].value,
         minutes: minutes[0].value
     })
 
+    const goals = useAppSelector((state) => state.goals)
+
     const dispatch = useAppDispatch()
     const initialDate = (): Date => task ? new Date(task.date) : new Date()
     const initialDifficulty = (): difficultyEnum => task ? task.difficulty : difficultyEnum.easy
     const initialDuration = (): DurationFormInterface => task ? getDuration(task.duration) : duration
+    const initialGoal = () => {
+        if(!task) return null
+        const currentGoal = goals.filter((goal: GoalInterface) => goal.id === task.goal_id)
+        if(currentGoal.length < 1) return null
+        return currentGoal[0]
+    }
     
     const getSeconds = (duration: DurationFormInterface): number => {
 
@@ -61,6 +71,7 @@ const Task: React.FC<Props> = ({route, navigation}): JSX.Element => {
 
     const submit = (values: FormData) => {
         const seconds: number = getSeconds(duration)
+        // console.log(seconds)
         const { name, description } = values
         const submitTask: TaskInterface = {
             id: task?.id || uuidv4(),
@@ -68,7 +79,7 @@ const Task: React.FC<Props> = ({route, navigation}): JSX.Element => {
             difficulty,                
             description,
             duration: seconds,
-            goal_id: task?.goal_id || "",
+            goal_id: goal?.id || "",
             date: date.getTime(),
             status: TaskEnum.INCOMPLETE,
         }
@@ -105,6 +116,7 @@ const Task: React.FC<Props> = ({route, navigation}): JSX.Element => {
         setDate(initialDate())
         setDuration(initialDuration())
         setDifficulty(initialDifficulty())
+        setGoal(initialGoal())
     }, [])
 
     return (
@@ -182,19 +194,19 @@ const Task: React.FC<Props> = ({route, navigation}): JSX.Element => {
                                     valueField='value'
                                     style={globalStyle.inputs.textInput}
                                     placeholder="Select Difficulty"
-                                    value={difficulties[0].value}
+                                    value={difficulty}
                                 />
                             </View>
                             <View style={styles.fieldContainer}>
                                 <Text style={styles.fieldHeader}>Goal</Text>
                                 <Dropdown 
-                                    data={difficulties}
-                                    onChange={(item: FormDifficulty) => setDifficulty(item.value)}
-                                    labelField="label"
-                                    valueField='value'
+                                    data={goals}
+                                    onChange={(item: GoalInterface) => setGoal(item)}
+                                    labelField="name"
+                                    valueField='id'
                                     style={globalStyle.inputs.textInput}
-                                    placeholder="Select Difficulty"
-                                    value={difficulties[0].value}
+                                    placeholder="Select Goal"
+                                    value={goal ? goal.id : null}
                                 />
                             </View>
                             <DescriptionField value={values.description} handleChange={handleChange}/>

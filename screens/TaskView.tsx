@@ -6,6 +6,7 @@ import {useAppDispatch, useAppSelector} from "../store/hooks"
 import {Task, deleteTask} from "../store/slices/taskSlice"
 import globalStyles from "../globalStyles"
 import { DurationFormInterface, getDuration} from "../utils/helpers/duration"
+import { GoalInterface } from '../store/slices/goalSlice'
 
 interface Props {
     navigation: NavigationScreenProp<NavigationState, NavigationParams>,
@@ -14,6 +15,8 @@ interface Props {
 
 const TaskView: React.FC<Props> = ({ navigation, route }) => {
     const [task, setTask] = useState<Task>(route.params)
+    const [goal, setGoal] = useState<GoalInterface | undefined | null>()
+    const goals = useAppSelector((state) => state.goals)
 
     const dispatch = useAppDispatch()
 
@@ -50,8 +53,15 @@ const TaskView: React.FC<Props> = ({ navigation, route }) => {
         navigation.navigate("Task", task)
     }
 
+    const getGoal = () => {
+        const currentGoal = goals.filter((goal: GoalInterface) => goal.id === task.goal_id)
+        if(currentGoal.length < 1) return null
+        return currentGoal[0]
+    }
+
     useEffect(() => {
         setTask(route.params)
+        setGoal(getGoal())
     }, [route.params])
 
     return (
@@ -75,6 +85,10 @@ const TaskView: React.FC<Props> = ({ navigation, route }) => {
             <View style={styles.itemContainer}>
                 <Text style={styles.heading}>Difficulty</Text>
                 <Text style={styles.itemText}>{task.difficulty}</Text>
+            </View>
+            <View style={styles.itemContainer}>
+                <Text style={styles.heading}>Goal</Text>
+                <Text style={styles.itemText}>{goal ? goal.name : "No Goal Set"}</Text>
             </View>
             <View style={styles.itemContainer}>
                 <Text style={styles.heading}>Description</Text>

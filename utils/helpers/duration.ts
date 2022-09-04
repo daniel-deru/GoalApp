@@ -17,7 +17,7 @@ export const getDuration = (duration: number): DurationFormInterface => {
 
     return {
         [DurationEnum.days]: Math.floor(days),
-        [DurationEnum.hours]: Math.floor(hours),
-        [DurationEnum.minutes]: Math.floor(minutes)
+        [DurationEnum.hours]: Math.round(hours),
+        [DurationEnum.minutes]: Math.round(minutes)
     }
 }
