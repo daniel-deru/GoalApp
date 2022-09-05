@@ -33,19 +33,18 @@ const TaskList: React.FC<Props> = ({tasks, navigation, goal}): JSX.Element => {
   }
 
   const showScreen = (task: Task): void => {
-      navigation.navigate("View Task", task)
+      navigation.navigate("View Task", {task})
   }
 
   const filterTasks = (): void => {
-    if(!goal) return
-
-    const filteredTasks = currentTasks.filter((task: Task) => task.goal_id === goal)
+    if(!goal) return setCurrentTasks(tasks)
+    const filteredTasks = tasks.filter((task: Task) => task.goal_id === goal)
     setCurrentTasks(filteredTasks)
   }
-
+  
   useEffect(() => {
     filterTasks()
-  }, [goal])
+  }, [goal, tasks])
 
   return (
         <View>

@@ -11,7 +11,7 @@ import TaskList from "../components/TaskList"
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState, NavigationParams>,
-  route: RouteProp<{params: {goal_id: string}}, 'params'>
+  route: RouteProp<{params: {goal_id: string | null}}, 'params'>
 }
 
 const Tasks: React.FC<Props> = ({navigation, route}): JSX.Element => {
@@ -24,10 +24,10 @@ const Tasks: React.FC<Props> = ({navigation, route}): JSX.Element => {
     const currentTasks: Task[] = allTasks.filter((task: Task) => {
       return goalId ? goalId === task.goal_id : true
     })
-    
     setTasks(currentTasks)
   }
-
+  console.log("these are the tasks")
+  console.log(tasks)
   useEffect(() => {
     getCurrentGoalTasks()
   }, [goalId, allTasks])
@@ -37,7 +37,7 @@ const Tasks: React.FC<Props> = ({navigation, route}): JSX.Element => {
         {tasks.length >= 1 && <TaskList tasks={tasks} navigation={navigation} goal={goalId}/>}
         <TouchableOpacity 
           style={styles.addButton}
-          onPress={() => navigation.navigate("Task")}
+          onPress={() => navigation.navigate("Task", {goal: goalId})}
         > 
           <Icon 
             style={{textAlign: "center"}} 

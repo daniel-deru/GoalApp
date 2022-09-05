@@ -27,7 +27,7 @@ interface FormData {
 
 interface Props {
     navigation: NavigationScreenProp<NavigationState, NavigationParams>,
-    route: RouteProp<{params: TaskInterface | undefined}, 'params'>
+    route: RouteProp<{params: {task: TaskInterface | undefined, goal: string | undefined}}, 'params'>
 }
 
 const days: Duration[] = createDuration(6)
@@ -36,7 +36,7 @@ const minutes: Duration[] = createDuration(59)
 
 const Task: React.FC<Props> = ({route, navigation}): JSX.Element => {
 
-    const [task, setTask] = useState<TaskInterface | undefined>(route.params)
+    const [task, setTask] = useState<TaskInterface | undefined>(route.params.task)
     const [visibility, setVisibility] = useState<boolean>(false)
     const [date, setDate] = useState<Date>(new Date())
     const [difficulty, setDifficulty] = useState<difficultyEnum>(difficultyEnum.easy)
@@ -54,10 +54,15 @@ const Task: React.FC<Props> = ({route, navigation}): JSX.Element => {
     const initialDifficulty = (): difficultyEnum => task ? task.difficulty : difficultyEnum.easy
     const initialDuration = (): DurationFormInterface => task ? getDuration(task.duration) : duration
     const initialGoal = () => {
-        if(!task) return null
-        const currentGoal = goals.filter((goal: GoalInterface) => goal.id === task.goal_id)
-        if(currentGoal.length < 1) return null
-        return currentGoal[0]
+        let goal = null
+
+        const currentGoal = goals.filter((goal: GoalInterface) => {
+            return task ? task.goal_id === goal.id : goal.id === route.params.goal
+        })
+        
+        if(currentGoal.length > 0) goal = currentGoal[0]
+
+        return goal
     }
     
     const getSeconds = (duration: DurationFormInterface): number => {
