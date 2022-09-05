@@ -12,10 +12,15 @@ interface GlobalStyle {
         fullWidth: (color?: string) => object
     },
     text: {
-        button: object
+        button: object,
+        heading: object,
+        item: object
     },
     inputs: {
         textInput: object
+    },
+    view: {
+        container: object
     }
 }
 
@@ -31,9 +36,11 @@ const globalStyle: GlobalStyle = {
         fullWidth: (color: string = globalStyle.colors.main) => {
             return {
                 backgroundColor: color,
-                padding: 10,
+                paddingHorizontal: 10,
+                paddingVertical: 15,
                 borderRadius: 5,
-                marginTop: 10
+                marginTop: 10,
+
             }
         }
     },
@@ -42,6 +49,13 @@ const globalStyle: GlobalStyle = {
             color: "white",
             textAlign: "center",
             fontSize: 16
+        },
+        heading: {
+            fontWeight: "500",
+            fontSize: 24
+        },
+        item: {
+            fontSize: 20
         }
     },
     inputs: {
@@ -51,6 +65,11 @@ const globalStyle: GlobalStyle = {
             padding: 10,
             borderRadius: 7
         }
+    },
+    view: {
+        container: {
+            marginTop: 10
+        },
     }
 }
 

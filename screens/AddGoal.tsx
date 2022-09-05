@@ -2,10 +2,9 @@ import React, { useEffect, useState } from 'react'
 
 import { 
     StyleSheet,         Text, 
-    TouchableHighlight, TextInput, 
+    TextInput, 
     SafeAreaView,       View, 
     ScrollView,         TouchableOpacity,
-    Alert
 } from "react-native"
 
 import { Formik } from "formik"
@@ -51,7 +50,7 @@ const AddGoal: React.FC<Props> = ({ navigation, route }): JSX.Element => {
             reward,
             deadline,
             status: StatusEnums.ACTIVE,
-            difficulty,
+            difficulty: difficultyEnum.easy,
             type: 'GoalInterface',
         }
         // if there is a goal update the goal
@@ -141,9 +140,9 @@ const AddGoal: React.FC<Props> = ({ navigation, route }): JSX.Element => {
                                 />
                         </View>
                         <View>
-                            <TouchableHighlight style={globalStyles.buttons.fullWidth()} onPress={(e: any) => handleSubmit(e)}>
+                            <TouchableOpacity style={globalStyles.buttons.fullWidth()} onPress={(e: any) => handleSubmit(e)}>
                                 <Text style={globalStyles.text.button}>{goal ? "Update": "Save"}</Text>
-                            </TouchableHighlight>
+                            </TouchableOpacity>
                         </View>
                     </View>
                 )}
@@ -166,7 +165,7 @@ const styles = StyleSheet.create({
     },
     textHeader: {
         paddingBottom: 5,
-        fontSize: 20
+        fontSize: 20,
     },
     fieldTextSmall: {
         fontSize: 12

@@ -10,11 +10,11 @@ import { GoalInterface } from '../store/slices/goalSlice'
 
 interface Props {
     navigation: NavigationScreenProp<NavigationState, NavigationParams>,
-    route: RouteProp<{params: Task}, 'params'>
+    route: RouteProp<{params: {task: Task}}, 'params'>
 }
 
 const TaskView: React.FC<Props> = ({ navigation, route }) => {
-    const [task, setTask] = useState<Task>(route.params)
+    const [task, setTask] = useState<Task>(route.params.task)
     const [goal, setGoal] = useState<GoalInterface | undefined | null>()
     const goals = useAppSelector((state) => state.goals)
 
@@ -60,46 +60,46 @@ const TaskView: React.FC<Props> = ({ navigation, route }) => {
     }
 
     useEffect(() => {
-        setTask(route.params)
+        setTask(route.params.task)
         setGoal(getGoal())
     }, [route.params])
 
     return (
         <ScrollView style={styles.container}>
-            <View style={styles.itemContainer}>
-                <Text style={styles.heading}>Name</Text>
-                <Text style={styles.itemText}>{task.name}</Text>
+            <View style={globalStyles.view.container}>
+                <Text style={globalStyles.text.heading}>Name</Text>
+                <Text style={globalStyles.text.item}>{task.name}</Text>
             </View>
-            <View style={styles.itemContainer}>
-                <Text style={styles.heading}>Date</Text>
-                <Text style={styles.itemText}>{new Date(task.date).toDateString()}</Text>
+            <View style={globalStyles.view.container}>
+                <Text style={globalStyles.text.heading}>Date</Text>
+                <Text style={globalStyles.text.item}>{new Date(task.date).toDateString()}</Text>
             </View>
-            <View style={styles.itemContainer}>
-                <Text style={styles.heading}>Duration</Text>
-                <Text style={styles.itemText}>{displayDuration(task.duration)}</Text>
+            <View style={globalStyles.view.container}>
+                <Text style={globalStyles.text.heading}>Duration</Text>
+                <Text style={globalStyles.text.item}>{displayDuration(task.duration)}</Text>
             </View>
-            <View style={styles.itemContainer}>
-                <Text style={styles.heading}>Status</Text>
-                <Text style={styles.itemText}>{task.status}</Text>
+            <View style={globalStyles.view.container}>
+                <Text style={globalStyles.text.heading}>Status</Text>
+                <Text style={globalStyles.text.item}>{task.status}</Text>
             </View>
-            <View style={styles.itemContainer}>
-                <Text style={styles.heading}>Difficulty</Text>
-                <Text style={styles.itemText}>{task.difficulty}</Text>
+            <View style={globalStyles.view.container}>
+                <Text style={globalStyles.text.heading}>Difficulty</Text>
+                <Text style={globalStyles.text.item}>{task.difficulty}</Text>
             </View>
-            <View style={styles.itemContainer}>
-                <Text style={styles.heading}>Goal</Text>
-                <Text style={styles.itemText}>{goal ? goal.name : "No Goal Set"}</Text>
+            <View style={globalStyles.view.container}>
+                <Text style={globalStyles.text.heading}>Goal</Text>
+                <Text style={globalStyles.text.item}>{goal ? goal.name : "No Goal Set"}</Text>
             </View>
-            <View style={styles.itemContainer}>
-                <Text style={styles.heading}>Description</Text>
-                <Text style={styles.itemText}>{task.description}</Text>
+            <View style={globalStyles.view.container}>
+                <Text style={globalStyles.text.heading}>Description</Text>
+                <Text style={globalStyles.text.item}>{task.description}</Text>
             </View>
-            <View style={styles.itemContainer}>
+            <View>
                 <TouchableOpacity style={globalStyles.buttons.fullWidth(globalStyles.colors.active)}>
                     <Text style={globalStyles.text.button}>Start Task</Text>
                 </TouchableOpacity>
             </View>
-            <View style={styles.itemContainer}>
+            <View>
                 <TouchableOpacity 
                     style={globalStyles.buttons.fullWidth(globalStyles.colors.main)}
                     onPress={() => editCurrentTask()}
@@ -107,7 +107,7 @@ const TaskView: React.FC<Props> = ({ navigation, route }) => {
                     <Text style={globalStyles.text.button}>Edit Task</Text>
                 </TouchableOpacity>
             </View>
-            <View style={styles.itemContainer}>
+            <View>
                 <TouchableOpacity 
                     style={globalStyles.buttons.fullWidth(globalStyles.colors.overdue)}
                     onPress={() => deleteCurrentTask()}
@@ -123,16 +123,6 @@ const styles = StyleSheet.create({
     container: {
         height: "100%",
         margin: 10
-    },
-    heading: {
-        fontWeight: "500",
-        fontSize: 24
-    },
-    itemContainer: {
-        marginTop: 10
-    },
-    itemText: {
-        fontSize: 20
     }
 })
 

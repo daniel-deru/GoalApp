@@ -3,7 +3,7 @@ import {
   SafeAreaView,
   View,
   Text, 
-  TouchableHighlight, 
+  TouchableOpacity, 
   StyleSheet 
 } from "react-native"
 
@@ -32,9 +32,9 @@ const Goals: React.FC<Props> = ({ navigation }) => {
         {goals.length <= 0 && <Text style={styles.text} >Start Adding Goals</Text>}
         {goals.length > 0 && <List goals={goals} navigation={navigation}/>}
         
-        <TouchableHighlight style={styles.button} onPress={() => navigation.navigate("Add Goal")}>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Add Goal")}>
             <Icon style={{textAlign: "center"}} name="plus" size={30} color="white"/>
-        </TouchableHighlight>
+        </TouchableOpacity>
     </SafeAreaView>
   )
 }

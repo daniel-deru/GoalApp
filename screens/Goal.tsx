@@ -1,7 +1,6 @@
 import React, { useEffect, useState} from 'react'
 import { Text, View, StyleSheet, ScrollView, TouchableOpacity } from "react-native"
 import { GoalInterface } from "../store/slices/goalSlice"
-import  Icon  from 'react-native-vector-icons/AntDesign'
 import { 
   NavigationScreenProp, 
   NavigationState, 
@@ -24,55 +23,51 @@ const Goal: React.FC<Props> = ({ navigation, route }): JSX.Element => {
       return true
     }
 
+    const editGoal = (): boolean => navigation.navigate("Add Goal", goalItem)
+
     useEffect(() => {
       setGoalItem(route.params)
     }, [route.params])
 
     return (
       <ScrollView style={styles.container}>
-          <View>
-              <TouchableOpacity onPress={() => navigation.navigate("Add Goal", goalItem)}>
-                <Icon
-                  name='edit'
-                  size={35}
-                  style={styles.icon}
-                />
-              </TouchableOpacity>
+          <View style={globalStyles.view.container}>
+            <Text style={globalStyles.text.heading}>Goal Name</Text>
+            <Text style={globalStyles.text.item}>{goalItem.name}</Text>
           </View>
-          <View style={styles.item}>
-            <Text style={styles.heading}>Goal Name</Text>
-            <Text>{goalItem.name}</Text>
+          <View style={globalStyles.view.container}>
+            <Text style={globalStyles.text.heading}>Status</Text>
+            <Text style={globalStyles.text.item}>{goalItem.status}</Text>
           </View>
-          <View style={styles.item}>
-            <Text style={styles.heading}>Status</Text>
-            <Text>{goalItem.status}</Text>
-          </View>
-          <View style={styles.item}>
-            <Text style={styles.heading}>Deadline</Text>
-            <Text>
+          <View style={globalStyles.view.container}>
+            <Text style={globalStyles.text.heading}>Deadline</Text>
+            <Text  style={globalStyles.text.item}>
               {new Date(goalItem.deadline).toDateString()}
             </Text>
           </View>
-          <View style={styles.item}>
-            <Text style={styles.heading}>Difficulty</Text>
-            <Text>{goalItem.name}</Text>
+          <View style={globalStyles.view.container}>
+            <Text style={globalStyles.text.heading}>Difficulty</Text>
+            <Text style={globalStyles.text.item}>{goalItem.difficulty}</Text>
           </View>
-          <View style={styles.item}>
-            <Text style={styles.heading}>Reward</Text>
-            <Text>{goalItem.reward}</Text>
+          <View style={globalStyles.view.container}>
+            <Text style={globalStyles.text.heading}>Reward</Text>
+            <Text style={globalStyles.text.item}>{goalItem.reward}</Text>
           </View>
-          <View style={styles.item}>
-            <Text style={styles.heading}>Description</Text>
-            <Text>{goalItem.description}</Text>
+          <View style={globalStyles.view.container}>
+            <Text style={globalStyles.text.heading}>Description</Text>
+            <Text style={globalStyles.text.item}>{goalItem.description}</Text>
           </View>
           <TouchableOpacity 
-            style={[styles.touchable, styles.showTasksButton, styles.item]}
+            style={[globalStyles.buttons.fullWidth()]}
             onPress={showTasks}
           >
-            <Text style={styles.buttonText}>Show Tasks</Text>
+            <Text style={globalStyles.text.button}>Show Tasks</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.touchable, styles.cancelTaskButton,  styles.item]}>
-            <Text style={styles.buttonText}>Cancel Goal</Text>
+          <TouchableOpacity style={[globalStyles.buttons.fullWidth()]} onPress={editGoal}>
+            <Text style={globalStyles.text.button}>Edit Goal</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={[globalStyles.buttons.fullWidth(globalStyles.colors.overdue)]}>
+            <Text style={globalStyles.text.button}>Cancel Goal</Text>
           </TouchableOpacity>
       </ScrollView>
     )
@@ -81,32 +76,6 @@ const Goal: React.FC<Props> = ({ navigation, route }): JSX.Element => {
 const styles = StyleSheet.create({
   container: {
     margin: 20
-  },
-  icon: {
-    color: globalStyles.colors.main,
-    textAlign: 'right'
-  },
-  heading: {
-    fontSize: 20,
-    fontWeight: "500"
-  },
-  item: {
-    marginTop: 20
-  },
-  buttonText: {
-    color: 'white',
-    fontSize: 20,
-    textAlign: 'center'
-  },
-  touchable: {
-    padding: 15,
-    borderRadius: 5
-  },
-  showTasksButton: {
-    backgroundColor: globalStyles.colors.main,
-  },
-  cancelTaskButton: {
-    backgroundColor: globalStyles.colors.overdue
   }
 })
 

@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, TouchableHighlight, StyleSheet } from "react-native"
+import { View, Text, StyleSheet } from "react-native"
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { DrawerNavigationProp } from "@react-navigation/drawer"
@@ -68,7 +68,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     width: "100%",
-    // height: 120,
     alignItems: "center",
     backgroundColor: globalStyle.colors.main,
     color: "white",

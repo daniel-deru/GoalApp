@@ -6,6 +6,7 @@ import AddGoal from '../screens/AddGoal'
 import GoalScreen from '../screens/Goal'
 import Tasks from '../screens/Tasks'
 import Task from '../screens/Task'
+import TaskView from '../screens/TaskView'
 
 import Header from '../components/Header'
 
@@ -61,6 +62,14 @@ const GoalStack: React.FC = (): JSX.Element => {
           component={Task}
           options={{
             header: ({navigation}) => headerTitle("Task", navigation, true)
+          }}
+        />
+
+        <Stack.Screen
+          name='View Task'
+          component={TaskView}
+          options={{
+            header: ({navigation}) => headerTitle("View Task", navigation, true)
           }}
         />
     </Stack.Navigator>

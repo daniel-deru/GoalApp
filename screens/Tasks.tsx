@@ -26,8 +26,7 @@ const Tasks: React.FC<Props> = ({navigation, route}): JSX.Element => {
     })
     setTasks(currentTasks)
   }
-  console.log("these are the tasks")
-  console.log(tasks)
+
   useEffect(() => {
     getCurrentGoalTasks()
   }, [goalId, allTasks])
