@@ -7,12 +7,7 @@ import {
   StyleSheet 
 } from "react-native"
 
-import { 
-  NavigationScreenProp, 
-  NavigationState, 
-  NavigationParams 
-} from "react-navigation"
-
+import { NavigationScreenProp, NavigationState, NavigationParams } from "react-navigation"
 import Icon from 'react-native-vector-icons/FontAwesome'
 import globalStyles from '../globalStyles'
 import { useAppSelector } from "../store/hooks"

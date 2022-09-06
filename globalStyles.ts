@@ -20,7 +20,8 @@ interface GlobalStyle {
         textInput: object
     },
     view: {
-        container: object
+        container: object,
+        screenContainer: object
     }
 }
 
@@ -70,6 +71,11 @@ const globalStyle: GlobalStyle = {
         container: {
             marginTop: 10
         },
+        screenContainer: {
+            paddingHorizontal: 10,
+            paddingVertical: 20,
+            height: "100%"
+        }
     }
 }
 

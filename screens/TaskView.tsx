@@ -49,15 +49,15 @@ const TaskView: React.FC<Props> = ({ navigation, route }) => {
         navigation.goBack()
     }
 
-    const editCurrentTask = () => {
-        navigation.navigate("Task", task)
-    }
+    const editCurrentTask = (): boolean => navigation.navigate("Task", task)
 
-    const getGoal = () => {
+    const getGoal = (): GoalInterface | null => {
         const currentGoal = goals.filter((goal: GoalInterface) => goal.id === task.goal_id)
         if(currentGoal.length < 1) return null
         return currentGoal[0]
     }
+
+    const showTimer = (): boolean => navigation.navigate("Task Timer", task)
 
     useEffect(() => {
         setTask(route.params.task)
@@ -95,7 +95,10 @@ const TaskView: React.FC<Props> = ({ navigation, route }) => {
                 <Text style={globalStyles.text.item}>{task.description}</Text>
             </View>
             <View>
-                <TouchableOpacity style={globalStyles.buttons.fullWidth(globalStyles.colors.active)}>
+                <TouchableOpacity 
+                    style={globalStyles.buttons.fullWidth(globalStyles.colors.active)}
+                    onPress={showTimer}
+                >
                     <Text style={globalStyles.text.button}>Start Task</Text>
                 </TouchableOpacity>
             </View>
