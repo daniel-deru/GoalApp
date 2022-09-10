@@ -10,12 +10,9 @@ import {
 import { GoalInterface } from '../store/slices/goalSlice'
 import statusses, {StatusItem, StatusInterface} from "../utils/properties/status"
 import globalStyles from '../globalStyles'
+import { GoalScreens } from "../stacks/stacks"
 
-import { 
-    NavigationScreenProp, 
-    NavigationState, 
-    NavigationParams 
-  } from "react-navigation"
+import { NavigationScreenProp, NavigationState, NavigationParams} from "react-navigation"
 
 interface Props {
     goals: GoalInterface[],
@@ -33,7 +30,7 @@ const List: React.FC<Props> = ({goals, navigation}): JSX.Element => {
   }
 
 const showScreen = (goal: GoalInterface): void => {
-    navigation.navigate("Goal", goal)
+    navigation.navigate(GoalScreens.View, goal)
 }
 
   return (

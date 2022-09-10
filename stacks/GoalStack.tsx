@@ -1,5 +1,6 @@
 import React from 'react'
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
+import {TaskScreens, GoalScreens} from "./stacks"
 
 import Goals from '../screens/Goals'
 import AddGoal from '../screens/AddGoal'
@@ -7,6 +8,7 @@ import GoalScreen from '../screens/Goal'
 import Tasks from '../screens/Tasks'
 import Task from '../screens/Task'
 import TaskView from '../screens/TaskView'
+import Timer from '../screens/Timer'
 
 import Header from '../components/Header'
 
@@ -29,11 +31,11 @@ const GoalStack: React.FC = (): JSX.Element => {
       }}
     >
         <Stack.Screen 
-          name='Goals Stack' 
+          name={GoalScreens.Goals}
           component={Goals}
         />
         <Stack.Screen 
-          name='Add Goal' 
+          name={GoalScreens.Goal}
           component={AddGoal} 
           options={{
             header: ({navigation}) => headerTitle("Add Goal", navigation, true)
@@ -41,7 +43,7 @@ const GoalStack: React.FC = (): JSX.Element => {
         />
 
         <Stack.Screen 
-          name='Goal'
+          name={GoalScreens.View}
           component={GoalScreen}
           options={{
             header: ({navigation}) => headerTitle("Goal",navigation, true)
@@ -49,7 +51,7 @@ const GoalStack: React.FC = (): JSX.Element => {
         />
 
         <Stack.Screen 
-          name='Tasks'
+          name={TaskScreens.TaskList}
           component={Tasks}
           options={{
             header: ({navigation}) => headerTitle("Tasks", navigation, true)
@@ -58,7 +60,7 @@ const GoalStack: React.FC = (): JSX.Element => {
         />
 
         <Stack.Screen
-          name='Task'
+          name={TaskScreens.Task}
           component={Task}
           options={{
             header: ({navigation}) => headerTitle("Task", navigation, true)
@@ -66,10 +68,18 @@ const GoalStack: React.FC = (): JSX.Element => {
         />
 
         <Stack.Screen
-          name='View Task'
+          name={TaskScreens.View}
           component={TaskView}
           options={{
             header: ({navigation}) => headerTitle("View Task", navigation, true)
+          }}
+        />
+
+        <Stack.Screen 
+          name={TaskScreens.Timer}
+          component={Timer}
+          options={{
+            header: ({navigation}) => headerTitle("Task Timer", navigation, true)
           }}
         />
     </Stack.Navigator>

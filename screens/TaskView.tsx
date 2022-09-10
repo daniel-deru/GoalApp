@@ -3,10 +3,11 @@ import { View, ScrollView, Text, TouchableOpacity, StyleSheet} from 'react-nativ
 import { NavigationScreenProp, NavigationState, NavigationParams } from "react-navigation"
 import {RouteProp} from "@react-navigation/native"
 import {useAppDispatch, useAppSelector} from "../store/hooks"
-import {Task, deleteTask} from "../store/slices/taskSlice"
+import {Task, deleteTask, updateTask} from "../store/slices/taskSlice"
 import globalStyles from "../globalStyles"
 import { DurationFormInterface, getDuration} from "../utils/helpers/duration"
 import { GoalInterface } from '../store/slices/goalSlice'
+import { TaskScreens } from "../stacks/stacks"
 
 interface Props {
     navigation: NavigationScreenProp<NavigationState, NavigationParams>,
@@ -49,7 +50,7 @@ const TaskView: React.FC<Props> = ({ navigation, route }) => {
         navigation.goBack()
     }
 
-    const editCurrentTask = (): boolean => navigation.navigate("Task", task)
+    const editCurrentTask = (): boolean => navigation.navigate(TaskScreens.Task, task)
 
     const getGoal = (): GoalInterface | null => {
         const currentGoal = goals.filter((goal: GoalInterface) => goal.id === task.goal_id)
@@ -57,11 +58,15 @@ const TaskView: React.FC<Props> = ({ navigation, route }) => {
         return currentGoal[0]
     }
 
-    const showTimer = (): boolean => navigation.navigate("Task Timer", task)
+    const showTimer = (): boolean => navigation.navigate(TaskScreens.Timer, task)
 
     useEffect(() => {
         setTask(route.params.task)
         setGoal(getGoal())
+
+        return () => {
+            dispatch(updateTask(task))
+        }
     }, [route.params])
 
     return (

@@ -1,12 +1,5 @@
 import React, { useEffect, useState } from 'react'
-
-import { 
-    StyleSheet,         Text, 
-    TextInput, 
-    SafeAreaView,       View, 
-    ScrollView,         TouchableOpacity,
-} from "react-native"
-
+import { StyleSheet, Text, TextInput, SafeAreaView, View, ScrollView, TouchableOpacity,} from "react-native"
 import { Formik } from "formik"
 import 'react-native-get-random-values'
 import {v4 as uuidv4 } from "uuid"
@@ -18,6 +11,7 @@ import {useAppDispatch} from "../store/hooks"
 import { StatusEnums } from "../utils/properties/status"
 import { difficultyEnum } from "../utils/properties/difficulty"
 import DateModal from "../components/form_parts/DateModal"
+import { GoalScreens } from "../stacks/stacks"
 
 interface Props {
     navigation: NavigationScreenProp<NavigationParams, NavigationState> ,
@@ -56,7 +50,7 @@ const AddGoal: React.FC<Props> = ({ navigation, route }): JSX.Element => {
         // if there is a goal update the goal
         if(goal){
             dispatch(updateGoal(newGoal)) 
-            navigation.navigate("Goal", newGoal)
+            navigation.navigate(GoalScreens.View, newGoal)
         }
         // If no goal create a new goal
         else{

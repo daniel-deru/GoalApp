@@ -7,6 +7,7 @@ export interface Task {
     name: string,
     goal_id: string | undefined,
     duration: number,
+    time_left: number,
     date: number,
     status: TaskEnum,
     description: string,

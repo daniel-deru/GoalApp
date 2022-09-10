@@ -13,6 +13,7 @@ import globalStyles from '../globalStyles'
 import { NavigationScreenProp, NavigationState, NavigationParams } from "react-navigation"
 import { Task } from "../store/slices/taskSlice"
 import { RouteProp } from "@react-navigation/native"
+import { TaskScreens } from "../stacks/stacks"
 
 interface Props {
     tasks: Task[],
@@ -33,7 +34,7 @@ const TaskList: React.FC<Props> = ({tasks, navigation, goal}): JSX.Element => {
   }
 
   const showScreen = (task: Task): void => {
-      navigation.navigate("View Task", {task})
+      navigation.navigate(TaskScreens.View, {task})
   }
 
   const filterTasks = (): void => {

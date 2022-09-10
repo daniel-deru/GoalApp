@@ -1,14 +1,10 @@
 import React, { useEffect, useState} from 'react'
 import { Text, View, StyleSheet, ScrollView, TouchableOpacity } from "react-native"
 import { GoalInterface } from "../store/slices/goalSlice"
-import { 
-  NavigationScreenProp, 
-  NavigationState, 
-  NavigationParams
-} from "react-navigation"
-
+import { NavigationScreenProp, NavigationState, NavigationParams } from "react-navigation"
 import {RouteProp} from "@react-navigation/native"
 import globalStyles from '../globalStyles'
+import { GoalScreens, TaskScreens } from "../stacks/stacks"
 
 interface Props {
     navigation: NavigationScreenProp<NavigationState, NavigationParams>,
@@ -19,11 +15,11 @@ const Goal: React.FC<Props> = ({ navigation, route }): JSX.Element => {
     const [goalItem, setGoalItem] = useState<GoalInterface>(route.params)
 
     const showTasks = (): boolean => {
-      navigation.navigate("Tasks", {goal_id: goalItem.id})
+      navigation.navigate(TaskScreens.TaskList, {goal_id: goalItem.id})
       return true
     }
 
-    const editGoal = (): boolean => navigation.navigate("Add Goal", goalItem)
+    const editGoal = (): boolean => navigation.navigate(GoalScreens.Goal, goalItem)
 
     useEffect(() => {
       setGoalItem(route.params)

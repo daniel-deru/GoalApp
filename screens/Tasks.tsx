@@ -8,6 +8,7 @@ import {type RootState} from "../store/store"
 import { Task } from "../store/slices/taskSlice"
 import globalStyles from "../globalStyles"
 import TaskList from "../components/TaskList"
+import { TaskScreens } from "../stacks/stacks"
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState, NavigationParams>,
@@ -21,6 +22,7 @@ const Tasks: React.FC<Props> = ({navigation, route}): JSX.Element => {
 
   const allTasks: Task[] = useAppSelector((state: RootState): Array<Task> => state.tasks)
   const getCurrentGoalTasks = (): void => {
+    console.log(allTasks)
     const currentTasks: Task[] = allTasks.filter((task: Task) => {
       return goalId ? goalId === task.goal_id : true
     })
@@ -36,7 +38,7 @@ const Tasks: React.FC<Props> = ({navigation, route}): JSX.Element => {
         {tasks.length >= 1 && <TaskList tasks={tasks} navigation={navigation} goal={goalId}/>}
         <TouchableOpacity 
           style={styles.addButton}
-          onPress={() => navigation.navigate("Task", {goal: goalId})}
+          onPress={() => navigation.navigate(TaskScreens.Task, {goal: goalId})}
         > 
           <Icon 
             style={{textAlign: "center"}} 

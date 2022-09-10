@@ -19,6 +19,7 @@ import NameField from "../components/form_parts/NameField"
 import DescriptionField from "../components/form_parts/DescriptionField"
 import globalStyle from '../globalStyles'
 import {DurationEnum, DurationFormInterface, getDuration} from "../utils/helpers/duration"
+import { TaskScreens } from "../stacks/stacks"
 
 interface FormData {
     name: string,
@@ -84,6 +85,7 @@ const Task: React.FC<Props> = ({route, navigation}): JSX.Element => {
             difficulty,                
             description,
             duration: seconds,
+            time_left: task?.time_left || seconds,
             goal_id: goal?.id || "",
             date: date.getTime(),
             status: TaskEnum.INCOMPLETE,
@@ -94,7 +96,7 @@ const Task: React.FC<Props> = ({route, navigation}): JSX.Element => {
         }
         else {
             dispatch(updateTask(submitTask))
-            navigation.navigate("View Task", submitTask)
+            navigation.navigate(TaskScreens.View, submitTask)
         }
 
     }

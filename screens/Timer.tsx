@@ -6,6 +6,8 @@ import { RouteProp } from "@react-navigation/native"
 import { Task } from "../store/slices/taskSlice"
 import { useAppDispatch } from "../store/hooks"
 import { updateTask } from "../store/slices/taskSlice"
+import { TaskEnum, TaskStatusInterface, taskStatusses } from "../utils/properties/status"
+import { TaskScreens } from "../stacks/stacks"
 
 interface Props {
     navigation: NavigationScreenProp<NavigationState, NavigationParams>,
@@ -17,7 +19,7 @@ const { floor } = Math
 
 const Timer: React.FC<Props> = ({ navigation, route }): JSX.Element => {
     const [task, setTask] = useState<Task>(route.params)
-    const [time, setTime] = useState<number>(task.duration)
+    const [time, setTime] = useState<number>(task.time_left)
     const [timerActive, setTimerActive] = useState<boolean>(false)
 
     const dispatch = useAppDispatch()
@@ -51,15 +53,34 @@ const Timer: React.FC<Props> = ({ navigation, route }): JSX.Element => {
         }
     }
 
-    const updateTask = () => {
-        
+    const updateCurrentTask = () => {
+        dispatch(updateTask({...task, time_left: time}))
+    }
+
+    const completeTask = (): void => {
+        setTimerActive(false)
+        const newTask: Task = {
+            ...task,
+            status: TaskEnum.COMPLETE, 
+            time_left: time
+        }
+        setTask(newTask)
+        // dispatch(updateTask(newTask))
+
+        navigation.navigate(TaskScreens.View, {task: newTask})
+    }
+
+    const restartTask = (): void => {
+        setTimerActive(false)
+        setTask({...task, status: TaskEnum.INCOMPLETE})
+        setTime(task.duration)
     }
 
     useEffect(() => {
        timerCallback()
-
        return () => {
             clearInterval(tick.current)
+            updateCurrentTask()
        }
     }, [timerActive])
     return (
@@ -79,10 +100,16 @@ const Timer: React.FC<Props> = ({ navigation, route }): JSX.Element => {
                 >
                     <Text style={text.button}>{timerActive ? "Pause" : "Start"} Timer</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={buttons.fullWidth(colors.main)}>
+                <TouchableOpacity 
+                    style={buttons.fullWidth(colors.main)}
+                    onPress={completeTask}
+                >
                     <Text style={text.button}>Complete Task</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={buttons.fullWidth(colors.main)}>
+                <TouchableOpacity 
+                    style={buttons.fullWidth(colors.main)}
+                    onPress={restartTask}
+                >
                     <Text style={text.button}>Restart Task</Text>
                 </TouchableOpacity>
             </View>
