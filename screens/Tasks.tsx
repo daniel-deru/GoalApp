@@ -22,7 +22,6 @@ const Tasks: React.FC<Props> = ({navigation, route}): JSX.Element => {
 
   const allTasks: Task[] = useAppSelector((state: RootState): Array<Task> => state.tasks)
   const getCurrentGoalTasks = (): void => {
-    console.log(allTasks)
     const currentTasks: Task[] = allTasks.filter((task: Task) => {
       return goalId ? goalId === task.goal_id : true
     })

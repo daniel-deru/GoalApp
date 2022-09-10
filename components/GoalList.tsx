@@ -1,26 +1,20 @@
-import React from 'react'
-import {
-  Text, 
-  View, 
-  TouchableWithoutFeedback, 
-  StyleSheet,
-  StyleProp,
-  ViewStyle
-} from "react-native"
+import React, { useState } from 'react'
+import { Text, View, TouchableWithoutFeedback, StyleSheet, StyleProp, ViewStyle } from "react-native"
 import { GoalInterface } from '../store/slices/goalSlice'
 import statusses, {StatusItem, StatusInterface} from "../utils/properties/status"
 import globalStyles from '../globalStyles'
 import { GoalScreens } from "../stacks/stacks"
-
+import { useAppSelector } from "../store/hooks"
 import { NavigationScreenProp, NavigationState, NavigationParams} from "react-navigation"
 
 interface Props {
-    goals: GoalInterface[],
     navigation: NavigationScreenProp<NavigationState, NavigationParams>
 }
 
-const List: React.FC<Props> = ({goals, navigation}): JSX.Element => {
-
+const GoalList: React.FC<Props> = ({ navigation }): JSX.Element => {
+  const goals = useAppSelector((state) => state.goals)
+  const [goalList] = useState<GoalInterface[]>(Object.values(goals))
+  console.log(goalList)
   const difficultyStyle = (goal: GoalInterface): StyleProp<ViewStyle> => {
     const status: StatusItem = statusses[goal.status as keyof StatusInterface<StatusItem>]
     return {
@@ -30,12 +24,12 @@ const List: React.FC<Props> = ({goals, navigation}): JSX.Element => {
   }
 
 const showScreen = (goal: GoalInterface): void => {
-    navigation.navigate(GoalScreens.View, goal)
+    navigation.navigate<{id: string}>(GoalScreens.View, {id: goal.id})
 }
 
   return (
         <View>
-            {goals.map((goal, index) => (
+            {goalList.map((goal, index) => (
                 <TouchableWithoutFeedback onPress={() => showScreen(goal)} key={index}>
                   <View style={[styles.container]}>
                       <View style={difficultyStyle(goal)}></View>
@@ -72,4 +66,4 @@ const styles = StyleSheet.create({
 
 
 
-export default List
+export default GoalList

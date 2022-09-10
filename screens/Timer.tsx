@@ -8,6 +8,7 @@ import { useAppDispatch } from "../store/hooks"
 import { updateTask } from "../store/slices/taskSlice"
 import { TaskEnum, TaskStatusInterface, taskStatusses } from "../utils/properties/status"
 import { TaskScreens } from "../stacks/stacks"
+import { useInterval } from "../utils/hooks/useInterval"
 
 interface Props {
     navigation: NavigationScreenProp<NavigationState, NavigationParams>,
@@ -15,7 +16,7 @@ interface Props {
 }
 
 const { view, buttons, text, colors } = globalStyle
-const { floor } = Math
+const { floor, round } = Math
 
 const Timer: React.FC<Props> = ({ navigation, route }): JSX.Element => {
     const [task, setTask] = useState<Task>(route.params)
@@ -31,8 +32,8 @@ const Timer: React.FC<Props> = ({ navigation, route }): JSX.Element => {
         const daysTime: number = time / (60 * 60 * 24)
         const hoursTime: number = (daysTime % 1) * 24
         const minutesTime: number = (hoursTime % 1) * 60
-        const secondsTime: number = (minutesTime % 1) * 60
-        
+        const secondsTime: number = round((minutesTime % 1) * 60)
+
         const days: string = pad(daysTime)
         const hours: string = pad(hoursTime)
         const minutes: string = pad(minutesTime)
@@ -44,14 +45,12 @@ const Timer: React.FC<Props> = ({ navigation, route }): JSX.Element => {
     // Make the display data pretty by rounding and adding 0 if it is a single digit
     const pad = (time: number): string => time < 10 ? `0${floor(time)}` : `${floor(time)}`
 
-    const timerCallback = (): void => {
+    useInterval(() => {
         if(timerActive){
-            tick.current = setInterval(() => setTime((prevTime: number) => --prevTime), 1000)
+            setTime((prevTime: number) => --prevTime)
+            // console.log(time)
         }
-        else {
-            clearInterval(tick.current)
-        }
-    }
+    }, 1000)
 
     const updateCurrentTask = () => {
         dispatch(updateTask({...task, time_left: time}))
@@ -77,9 +76,10 @@ const Timer: React.FC<Props> = ({ navigation, route }): JSX.Element => {
     }
 
     useEffect(() => {
-       timerCallback()
+    //    timerCallback()
        return () => {
-            clearInterval(tick.current)
+            // clearInterval(tick.current)
+            console.log("This is the task timer", task.time_left)
             updateCurrentTask()
        }
     }, [timerActive])

@@ -77,7 +77,6 @@ const Task: React.FC<Props> = ({route, navigation}): JSX.Element => {
 
     const submit = (values: FormData) => {
         const seconds: number = getSeconds(duration)
-        // console.log(seconds)
         const { name, description } = values
         const submitTask: TaskInterface = {
             id: task?.id || uuidv4(),
@@ -127,8 +126,8 @@ const Task: React.FC<Props> = ({route, navigation}): JSX.Element => {
     }, [])
 
     return (
-        <SafeAreaView>
-            <ScrollView style={styles.container}>
+        <SafeAreaView style={styles.container}>
+            <ScrollView >
                 <DateModal 
                     visibility={visibility}
                     setVisibility={setVisibility}
@@ -232,10 +231,9 @@ const Task: React.FC<Props> = ({route, navigation}): JSX.Element => {
 
 const styles = StyleSheet.create({
     container: {
-        padding: 10,
-        fontSize: 20,
+        padding: 15,
         height: "100%",
-        paddingBottom: 20
+        marginBottom: 30
     },
     fieldContainer: {
         marginTop: 10

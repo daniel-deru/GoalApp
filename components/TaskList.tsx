@@ -1,13 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import {
-  Text, 
-  View, 
-  TouchableWithoutFeedback, 
-  StyleSheet,
-  StyleProp,
-  ViewStyle
-} from "react-native"
-import { GoalInterface } from '../store/slices/goalSlice'
+import {Text, View, TouchableWithoutFeedback, StyleSheet, StyleProp, ViewStyle } from "react-native"
 import statusses, {StatusItem, StatusInterface, taskStatusses} from "../utils/properties/status"
 import globalStyles from '../globalStyles'
 import { NavigationScreenProp, NavigationState, NavigationParams } from "react-navigation"

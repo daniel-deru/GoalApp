@@ -3,8 +3,8 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import {TaskScreens, GoalScreens} from "./stacks"
 
 import Goals from '../screens/Goals'
-import AddGoal from '../screens/AddGoal'
-import GoalScreen from '../screens/Goal'
+import Goal from '../screens/Goal'
+import GoalScreen from '../screens/GoalView'
 import Tasks from '../screens/Tasks'
 import Task from '../screens/Task'
 import TaskView from '../screens/TaskView'
@@ -36,7 +36,7 @@ const GoalStack: React.FC = (): JSX.Element => {
         />
         <Stack.Screen 
           name={GoalScreens.Goal}
-          component={AddGoal} 
+          component={Goal} 
           options={{
             header: ({navigation}) => headerTitle("Add Goal", navigation, true)
           }}

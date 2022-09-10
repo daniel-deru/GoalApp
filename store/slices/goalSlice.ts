@@ -14,22 +14,28 @@ export interface GoalInterface {
     difficulty: difficultyEnum,
     type: 'GoalInterface'
 }
-const initialState: Array<GoalInterface> = []
+
+interface Goals { 
+    [id: string]: GoalInterface
+}
+
+const initialState: Goals = {}
 
 const goalSlice = createSlice({
     name: "goals",
     initialState,
     reducers: {
-        setNewGoal: (state: GoalInterface[], action: PayloadAction<GoalInterface>): Array<GoalInterface> => {
-            return state = [...state, action.payload]
+        updateGoals: (state: Goals, action: PayloadAction<GoalInterface>): Goals => {
+            const newGoal: GoalInterface = action.payload
+            return {...state, [newGoal.id]: newGoal}
         },
-        updateGoal: (state: GoalInterface[], action: PayloadAction<GoalInterface>): Array<GoalInterface> => {
-            const updatedGoal: GoalInterface = action.payload
-            const otherGoals = state.filter(goal => goal.id === updatedGoal.id)
-            return [...otherGoals, updatedGoal]
-        }
+        // updateGoal: (state: GoalInterface[], action: PayloadAction<GoalInterface>): Array<GoalInterface> => {
+        //     const updatedGoal: GoalInterface = action.payload
+        //     return [...state, updatedGoal]
+        // }
     }
 })
 
-export const { setNewGoal, updateGoal } = goalSlice.actions
+// export const { setNewGoal, updateGoal } = goalSlice.actions
+export const { updateGoals } = goalSlice.actions
 export default goalSlice.reducer
