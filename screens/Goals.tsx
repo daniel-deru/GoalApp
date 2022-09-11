@@ -5,9 +5,9 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 import globalStyles from '../globalStyles'
 import { useAppSelector } from "../store/hooks"
 import { GoalScreens } from "../stacks/stacks"
-
 import GoalList from "../components/GoalList"
 import { GoalInterface } from '../store/slices/goalSlice'
+import { useIsFocused } from "@react-navigation/native"
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState, NavigationParams> 
@@ -15,18 +15,18 @@ interface Props {
 
 const Goals: React.FC<Props> = ({ navigation }) => {
   const goals = useAppSelector(state => state.goals)
+  const isFocussed = useIsFocused()
 
-  const [goalList, setGoalList] = useState<GoalInterface[]>(Object.values(goals))
-  console.log("This is the goal list in Goals", Object.values(goals))
-
+  const [goalList, setGoalList] = useState<GoalInterface[]>([])
+  
   useEffect(() => {
-    // This is for when the user finished adding a goal and returns to the goal
     setGoalList(Object.values(goals))
-  }, [goals])
+  }, [isFocussed])
+
   return (
     <SafeAreaView style={styles.container}>
         {goalList.length <= 0 && <Text style={styles.text} >Start Adding Goals</Text>}
-        {goalList.length > 0 && <GoalList navigation={navigation}/>}
+        {goalList.length > 0 && <GoalList goals={goalList} navigation={navigation}/>}
         
         <TouchableOpacity style={styles.button} onPress={() => navigation.navigate(GoalScreens.Goal)}>
             <Icon style={{textAlign: "center"}} name="plus" size={30} color="white"/>

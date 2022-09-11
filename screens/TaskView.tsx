@@ -18,6 +18,7 @@ const TaskView: React.FC<Props> = ({ navigation, route }) => {
     const [task, setTask] = useState<Task>(route.params.task)
     const [goal, setGoal] = useState<GoalInterface | undefined | null>()
     const goals = useAppSelector((state) => state.goals)
+    // const tasks = useAppSelector((state) => state.tasks)
 
     const dispatch = useAppDispatch()
 
@@ -50,10 +51,10 @@ const TaskView: React.FC<Props> = ({ navigation, route }) => {
         navigation.goBack()
     }
 
-    const editCurrentTask = (): boolean => navigation.navigate(TaskScreens.Task, task)
+    const editCurrentTask = (): boolean => navigation.navigate(TaskScreens.Task, {task})
 
     const getGoal = (): GoalInterface | null => {
-        const currentGoal = goals.filter((goal: GoalInterface) => goal.id === task.goal_id)
+        const currentGoal = Object.values(goals).filter((goal: GoalInterface) => goal.id === task.goal_id)
         if(currentGoal.length < 1) return null
         return currentGoal[0]
     }
@@ -66,7 +67,7 @@ const TaskView: React.FC<Props> = ({ navigation, route }) => {
 
         return () => {
             dispatch(updateTask(task))
-            console.log("This is the task view", task.time_left)
+
         }
     }, [route.params.task])
 

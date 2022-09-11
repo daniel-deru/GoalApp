@@ -4,9 +4,12 @@ import statusses, {StatusItem, StatusInterface, taskStatusses} from "../utils/pr
 import globalStyles from '../globalStyles'
 import { NavigationScreenProp, NavigationState, NavigationParams } from "react-navigation"
 import { Task } from "../store/slices/taskSlice"
-import { RouteProp } from "@react-navigation/native"
+import { RouteProp, useIsFocused } from "@react-navigation/native"
 import { TaskScreens } from "../stacks/stacks"
-
+import { useAppSelector } from "../store/hooks"
+import { RootState } from "../store/store"
+import { Tasks } from "../store/slices/taskSlice"
+ 
 interface Props {
     tasks: Task[],
     navigation: NavigationScreenProp<NavigationState, NavigationParams>,
@@ -14,7 +17,8 @@ interface Props {
 }
 
 const TaskList: React.FC<Props> = ({tasks, navigation, goal}): JSX.Element => {
-
+  const isFocussed = useIsFocused()
+  // const tasks = useAppSelector((state: RootState): Tasks => state.tasks)
   const [currentTasks, setCurrentTasks] = useState<Array<Task>>(tasks)
 
   const difficultyStyle = (task: Task): StyleProp<ViewStyle> => {
@@ -37,7 +41,8 @@ const TaskList: React.FC<Props> = ({tasks, navigation, goal}): JSX.Element => {
   
   useEffect(() => {
     filterTasks()
-  }, [goal, tasks])
+
+  }, [goal, tasks, isFocussed])
 
   return (
         <View>

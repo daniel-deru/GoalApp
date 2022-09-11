@@ -53,11 +53,12 @@ const Goal: React.FC<Props> = ({ navigation, route }): JSX.Element => {
         dispatch(updateGoals(newGoal))
         
         if(goal){ // Go to the view screen
-            navigation.navigate(GoalScreens.View, {id: goal.id})
+            
+            navigation.navigate(GoalScreens.View, {goal: newGoal})
         }
 
         else{ // Go back to the goal list
-            navigation.goBack()
+            navigation.navigate(GoalScreens.Goals)
         }  
     }
 
@@ -80,11 +81,12 @@ const Goal: React.FC<Props> = ({ navigation, route }): JSX.Element => {
     }
 
     useEffect(() => {
+        
         if(goalId){
             setGoal(goals[goalId])
             setCurrentDate(new Date(goals[goalId].deadline))
         } 
-    }, [])
+    }, [goalId])
 
   return (
     <SafeAreaView style={styles.mainContainer}>

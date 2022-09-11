@@ -8,7 +8,7 @@ import DateModal from "../components/form_parts/DateModal"
 import { difficulties, FormDifficulty } from "../utils/forms/difficulty"
 import { createDuration, Duration } from "../utils/forms/duration"
 import {useAppDispatch, useAppSelector } from "../store/hooks"
-import { setNewTask, updateTask, Task as TaskInterface } from "../store/slices/taskSlice"
+import { updateTask, Task as TaskInterface } from "../store/slices/taskSlice"
 import { GoalInterface } from "../store/slices/goalSlice"
 import 'react-native-get-random-values'
 import { v4 as uuidv4 } from "uuid"
@@ -57,7 +57,7 @@ const Task: React.FC<Props> = ({route, navigation}): JSX.Element => {
     const initialGoal = () => {
         let goal = null
 
-        const currentGoal = goals.filter((goal: GoalInterface) => {
+        const currentGoal = Object.values(goals).filter((goal: GoalInterface) => {
             return task ? task.goal_id === goal.id : goal.id === route.params.goal
         })
         
@@ -89,13 +89,14 @@ const Task: React.FC<Props> = ({route, navigation}): JSX.Element => {
             date: date.getTime(),
             status: TaskEnum.INCOMPLETE,
         }
+
+        dispatch(updateTask(submitTask))
+
         if(!task){
-            dispatch(setNewTask(submitTask))
             navigation.goBack()
         }
         else {
-            dispatch(updateTask(submitTask))
-            navigation.navigate(TaskScreens.View, submitTask)
+            navigation.navigate(TaskScreens.View, {task: submitTask})
         }
 
     }
@@ -206,7 +207,7 @@ const Task: React.FC<Props> = ({route, navigation}): JSX.Element => {
                             <View style={styles.fieldContainer}>
                                 <Text style={styles.fieldHeader}>Goal</Text>
                                 <Dropdown 
-                                    data={goals}
+                                    data={Object.values(goals)}
                                     onChange={(item: GoalInterface) => setGoal(item)}
                                     labelField="name"
                                     valueField='id'

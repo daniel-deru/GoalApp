@@ -9,13 +9,13 @@ import { useAppSelector } from "../store/hooks"
 
 interface Props {
     navigation: NavigationScreenProp<NavigationState, NavigationParams>,
-    route: RouteProp<{params: {id: string}}, 'params'>
+    route: RouteProp<{params: {goal: GoalInterface}}, 'params'>
 }
 
 const GoalView: React.FC<Props> = ({ navigation, route }): JSX.Element => {
     const goals = useAppSelector((state) => state.goals)
     
-    const [goalId, setGoalId] = useState<string>(route.params.id)
+    const [goalId, setGoalId] = useState<string>(route.params.goal.id)
     const [goalItem, setGoalItem] = useState<GoalInterface>(goals[goalId])
 
     const showTasks = (): boolean => {
@@ -27,7 +27,7 @@ const GoalView: React.FC<Props> = ({ navigation, route }): JSX.Element => {
 
     useEffect(() => {
       setGoalItem(goals[goalId])
-    }, [goalId])
+    }, [route.params.goal])
 
     return (
       <ScrollView style={styles.container}>

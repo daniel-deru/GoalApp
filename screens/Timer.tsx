@@ -48,7 +48,7 @@ const Timer: React.FC<Props> = ({ navigation, route }): JSX.Element => {
     useInterval(() => {
         if(timerActive){
             setTime((prevTime: number) => --prevTime)
-            // console.log(time)
+
         }
     }, 1000)
 
@@ -79,7 +79,7 @@ const Timer: React.FC<Props> = ({ navigation, route }): JSX.Element => {
     //    timerCallback()
        return () => {
             // clearInterval(tick.current)
-            console.log("This is the task timer", task.time_left)
+
             updateCurrentTask()
        }
     }, [timerActive])
