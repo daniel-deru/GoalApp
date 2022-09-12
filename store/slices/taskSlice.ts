@@ -24,7 +24,7 @@ const taskSlice = createSlice({
     reducers: {
         updateTask: (state: Tasks, action: PayloadAction<Task>): Tasks => {
             const task: Task = action.payload
-            return { [task.id]: task, ...state }
+            return { ...state, [task.id]: task }
         },
         deleteTask: (state: Tasks, action: PayloadAction<Task>): Tasks => {
             let tasks: Tasks = state

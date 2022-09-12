@@ -18,7 +18,6 @@ const TaskView: React.FC<Props> = ({ navigation, route }) => {
     const [task, setTask] = useState<Task>(route.params.task)
     const [goal, setGoal] = useState<GoalInterface | undefined | null>()
     const goals = useAppSelector((state) => state.goals)
-    // const tasks = useAppSelector((state) => state.tasks)
 
     const dispatch = useAppDispatch()
 
@@ -66,7 +65,7 @@ const TaskView: React.FC<Props> = ({ navigation, route }) => {
         setGoal(getGoal())
 
         return () => {
-            dispatch(updateTask(task))
+            // dispatch(updateTask(task))
 
         }
     }, [route.params.task])

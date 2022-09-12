@@ -31,8 +31,6 @@ const Tasks: React.FC<Props> = ({navigation, route}): JSX.Element => {
 
   useEffect(() => {
     getCurrentGoalTasks()
-    // console.log(allTasks)
-    // console.log(isFocussed)
   }, [isFocussed])
   return (
     <SafeAreaView style={styles.container}>

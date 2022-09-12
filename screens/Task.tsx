@@ -91,7 +91,6 @@ const Task: React.FC<Props> = ({route, navigation}): JSX.Element => {
         }
 
         dispatch(updateTask(submitTask))
-
         if(!task){
             navigation.goBack()
         }
