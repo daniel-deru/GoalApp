@@ -6,7 +6,6 @@ import Tasks from '../screens/Tasks'
 import Task from '../screens/Task'
 import TaskView from '../screens/TaskView'
 import Header from '../components/Header'
-import Timer from '../screens/Timer'
 
 const {Task: TaskScreen, View, Timer: TaskTimer, TaskList } = TaskScreens
 
@@ -43,14 +42,6 @@ const TaskStack: React.FC = (): JSX.Element => {
           component={TaskView}
           options={{
             header: ({navigation}) => headerTitle("View Task", navigation, true)
-          }}
-        />
-
-        <Stack.Screen 
-          name={TaskTimer}
-          component={Timer}
-          options={{
-            header: ({navigation}) => headerTitle("Task Timer", navigation, true)
           }}
         />
     </Stack.Navigator>

@@ -8,7 +8,6 @@ import GoalScreen from '../screens/GoalView'
 import Tasks from '../screens/Tasks'
 import Task from '../screens/Task'
 import TaskView from '../screens/TaskView'
-import Timer from '../screens/Timer'
 
 import Header from '../components/Header'
 
@@ -72,14 +71,6 @@ const GoalStack: React.FC = (): JSX.Element => {
           component={TaskView}
           options={{
             header: ({navigation}) => headerTitle("View Task", navigation, true)
-          }}
-        />
-
-        <Stack.Screen 
-          name={TaskScreens.Timer}
-          component={Timer}
-          options={{
-            header: ({navigation}) => headerTitle("Task Timer", navigation, true)
           }}
         />
     </Stack.Navigator>

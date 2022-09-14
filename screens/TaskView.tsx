@@ -5,7 +5,6 @@ import {RouteProp} from "@react-navigation/native"
 import {useAppDispatch, useAppSelector} from "../store/hooks"
 import {Task, deleteTask, updateTask} from "../store/slices/taskSlice"
 import globalStyles from "../globalStyles"
-import { DurationFormInterface, getDuration} from "../utils/helpers/duration"
 import { GoalInterface } from '../store/slices/goalSlice'
 import { TaskScreens } from "../stacks/stacks"
 
@@ -21,30 +20,6 @@ const TaskView: React.FC<Props> = ({ navigation, route }) => {
 
     const dispatch = useAppDispatch()
 
-    // Take a float and get the integer value
-    const int = (float: number): number => Math.floor(float)
-
-    // Add 's' if it should be plural
-    const add_s = (value: number): string => value > 1 ? 's' : ''
-
-    // Add value to array if it is more than 0
-    const add_value = (value: number, desc: string, list: string[]) => {
-        if(value >= 1) list.push(`${int(value)} ${desc}${add_s(value)}`)
-    }
-
-    // get the display string for the duration
-    const displayDuration = (duration: number): string => {
-        let durationArray: string[] = []
-        const durationObj: DurationFormInterface = getDuration(duration)
-
-        add_value(durationObj.days, 'day', durationArray)
-        add_value(durationObj.hours, 'hour', durationArray)
-        add_value(durationObj.minutes, 'minute', durationArray)
-
-        return durationArray.join(", ")
-
-    }
-
     const deleteCurrentTask = (): void => {
         dispatch(deleteTask(task))
         navigation.goBack()
@@ -58,7 +33,7 @@ const TaskView: React.FC<Props> = ({ navigation, route }) => {
         return currentGoal[0]
     }
 
-    const showTimer = (): boolean => navigation.navigate(TaskScreens.Timer, task)
+   
 
     useEffect(() => {
         setTask(route.params.task)
@@ -66,7 +41,6 @@ const TaskView: React.FC<Props> = ({ navigation, route }) => {
 
         return () => {
             // dispatch(updateTask(task))
-
         }
     }, [route.params.task])
 
@@ -80,10 +54,6 @@ const TaskView: React.FC<Props> = ({ navigation, route }) => {
                 <View style={globalStyles.view.container}>
                     <Text style={globalStyles.text.heading}>Date</Text>
                     <Text style={globalStyles.text.item}>{new Date(task.date).toDateString()}</Text>
-                </View>
-                <View style={globalStyles.view.container}>
-                    <Text style={globalStyles.text.heading}>Duration</Text>
-                    <Text style={globalStyles.text.item}>{displayDuration(task.duration)}</Text>
                 </View>
                 <View style={globalStyles.view.container}>
                     <Text style={globalStyles.text.heading}>Status</Text>
@@ -100,14 +70,6 @@ const TaskView: React.FC<Props> = ({ navigation, route }) => {
                 <View style={globalStyles.view.container}>
                     <Text style={globalStyles.text.heading}>Description</Text>
                     <Text style={globalStyles.text.item}>{task.description}</Text>
-                </View>
-                <View>
-                    <TouchableOpacity 
-                        style={globalStyles.buttons.fullWidth(globalStyles.colors.active)}
-                        onPress={showTimer}
-                    >
-                        <Text style={globalStyles.text.button}>Start Task</Text>
-                    </TouchableOpacity>
                 </View>
                 <View>
                     <TouchableOpacity 
@@ -137,7 +99,6 @@ const styles = StyleSheet.create({
     container: {
         padding: 15,
         height: "99%",
-        // marginBottom: 30,
     }
 })
 
