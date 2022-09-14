@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { View, Text, SafeAreaView, TouchableOpacity, StyleSheet } from "react-native"
+import { View, Text, SafeAreaView, TouchableOpacity, StyleSheet, Dimensions } from "react-native"
 import globalStyle from '../globalStyles'
 import { NavigationScreenProp, NavigationState, NavigationParams } from "react-navigation"
 import { RouteProp } from "@react-navigation/native"
@@ -18,13 +18,14 @@ interface Props {
 const { view, buttons, text, colors } = globalStyle
 const { floor, round } = Math
 
+const width = Dimensions.get("screen").width
 const Timer: React.FC<Props> = ({ navigation, route }): JSX.Element => {
     const [task, setTask] = useState<Task>(route.params)
     const [time, setTime] = useState<number>(task.time_left)
     const [timerActive, setTimerActive] = useState<boolean>(false)
 
+
     const dispatch = useAppDispatch()
-    const tick = useRef<NodeJS.Timer>()
     const buttonColor = timerActive ? colors.overdue : colors.active
 
     const displayTime = (): string => {
@@ -52,8 +53,8 @@ const Timer: React.FC<Props> = ({ navigation, route }): JSX.Element => {
         }
     }, 1000)
 
-    const updateCurrentTask = () => {
-        dispatch(updateTask({...task, time_left: time}))
+    const updateCurrentTask = (task: Task) => {
+        dispatch(updateTask(task))
     }
 
     const completeTask = (): void => {
@@ -64,25 +65,20 @@ const Timer: React.FC<Props> = ({ navigation, route }): JSX.Element => {
             time_left: time
         }
         setTask(newTask)
-        // dispatch(updateTask(newTask))
+        updateCurrentTask(newTask)
 
         navigation.navigate(TaskScreens.View, {task: newTask})
     }
 
     const restartTask = (): void => {
+        const newTask: Task = {...task, status: TaskEnum.INCOMPLETE}
+
         setTimerActive(false)
-        setTask({...task, status: TaskEnum.INCOMPLETE})
+        setTask(newTask)
+        updateCurrentTask(newTask)
         setTime(task.duration)
     }
 
-    useEffect(() => {
-    //    timerCallback()
-       return () => {
-            // clearInterval(tick.current)
-
-            updateCurrentTask()
-       }
-    }, [timerActive])
     return (
         <SafeAreaView style={[view.screenContainer, styles.container]}>
             <View>
@@ -92,26 +88,37 @@ const Timer: React.FC<Props> = ({ navigation, route }): JSX.Element => {
             <View>
                 <Text style={[styles.center, {fontSize: 42, fontWeight: "900"}]}>{displayTime()}</Text>
             </View>
-            <View>
-                <TouchableOpacity
-                    activeOpacity={1}
-                    style={buttons.fullWidth(buttonColor)}
-                    onPress={() => setTimerActive(!timerActive)}
-                >
-                    <Text style={text.button}>{timerActive ? "Pause" : "Start"} Timer</Text>
-                </TouchableOpacity>
-                <TouchableOpacity 
-                    style={buttons.fullWidth(colors.main)}
-                    onPress={completeTask}
-                >
-                    <Text style={text.button}>Complete Task</Text>
-                </TouchableOpacity>
-                <TouchableOpacity 
-                    style={buttons.fullWidth(colors.main)}
-                    onPress={restartTask}
-                >
-                    <Text style={text.button}>Restart Task</Text>
-                </TouchableOpacity>
+            <View style={styles.btnContainer}>
+                <View style={styles.btnContainerCol}>
+                    <TouchableOpacity 
+                        style={[buttons.fullWidth(buttonColor), styles.btn]}
+                        onPress={completeTask}
+                    >
+                        <Text style={[text.button, styles.text]}>Complete Task</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity 
+                        style={[buttons.fullWidth(buttonColor), styles.btn]}
+                        onPress={restartTask}
+                    >
+                        <Text style={[text.button, styles.text]}>Restart Task</Text>
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.btnContainerCol}>
+                    <TouchableOpacity
+                        activeOpacity={1}
+                        style={[buttons.fullWidth(buttonColor), styles.btn]}
+                        onPress={() => setTimerActive(!timerActive)}
+                    >
+                        <Text style={[text.button, styles.text]}>{timerActive ? "Pause" : "Start"} Timer</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        activeOpacity={1}
+                        style={[buttons.fullWidth(buttonColor), styles.btn]}
+                        // onPress={() => setTimerActive(!timerActive)}
+                    >
+                        <Text style={[text.button, styles.text]}>Save</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
         </SafeAreaView>
     )
@@ -124,6 +131,20 @@ const styles = StyleSheet.create({
     },
     center: {
         textAlign: "center"
+    },
+    btnContainerCol: {
+
+    },
+    btnContainer: {
+        flexDirection: "row",
+        justifyContent: "space-evenly"
+
+    },
+    btn: {
+        width: "100%"
+    },
+    text: {
+        width: (width - 100) / 2
     }
 })
 
