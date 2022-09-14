@@ -1,18 +1,13 @@
 import React, {useEffect, useState, SetStateAction, Dispatch} from 'react'
-import {  
-    View,
-    Text,
-    Modal,
-    TouchableOpacity,
-    StyleSheet,
-    Alert
-} from "react-native"
+import { View, Text, Modal, TouchableOpacity, StyleSheet, Alert } from "react-native"
 import { Dropdown } from 'react-native-element-dropdown'
 import globalStyles from '../../globalStyles'
 import { generateYears, DateFieldInterface, months, getDays } from "../../utils/forms/dates"
 
 // Get all the years from current year + 10 years
 const years: DateFieldInterface[] = generateYears()
+
+const {text, buttons, colors, inputs} = globalStyles
 
 interface Props {
     visibility: boolean,
@@ -38,57 +33,58 @@ const DateModal: React.FC<Props> = ({visibility, setVisibility, setDate, date}) 
     }
     useEffect(() => {
         setDays(getDays(year, month))
+        console.log(year, month, day)
     }, [month, year, date])
     return (
         <Modal visible={visibility}>
             <View style={styles.fieldContainer}>
-                <Text style={styles.textHeader}>Year</Text>
+                <Text style={text.heading}>Year</Text>
                 <Dropdown 
                     data={years}
                     labelField="label"
                     valueField='value'
                     placeholder='Select Year'
-                    style={[styles.input]}
+                    style={[inputs.textInput]}
                     placeholderStyle={styles.fieldTextSmall}
                     onChange={item => setYear(item.value)}
-                    // value={year}
+                    value={year}
                 />
             </View>
             <View style={styles.fieldContainer}>
-                <Text style={styles.textHeader}>Month</Text>
+                <Text style={text.heading}>Month</Text>
                 <Dropdown 
                     data={months}
                     labelField="label"
                     valueField='value'
                     placeholder='Select Month'
-                    style={[styles.input]}
+                    style={[inputs.textInput]}
                     placeholderStyle={styles.fieldTextSmall}
                     onChange={item => setMonth(item.value)}
-                    // value={month}
+                    value={month}
                 />
             </View>
             <View style={styles.fieldContainer}>
-                <Text style={styles.textHeader}>Day</Text>
+                <Text style={text.heading}>Day</Text>
                 <Dropdown 
                     data={days}
                     labelField="label"
                     valueField='value'
                     placeholder='Select Day'
-                    style={[styles.input]}
+                    style={[inputs.textInput]}
                     placeholderStyle={styles.fieldTextSmall}
                     onChange={item => setDay(item.value)}
-                    // value={day}
+                    value={day}
                 />
             </View>
             <View style={styles.fieldContainer}>
-                <TouchableOpacity style={styles.dateButton} onPress={submitDate}>
-                    <Text style={styles.dateText}>Done</Text>
+                <TouchableOpacity style={buttons.fullWidth(colors.main)} onPress={submitDate}>
+                    <Text style={globalStyles.text.button}>Done</Text>
                 </TouchableOpacity>
                 <TouchableOpacity 
-                    style={[styles.dateButton, {backgroundColor: globalStyles.colors.overdue}]} 
+                    style={[buttons.fullWidth(colors.overdue)]} 
                     onPress={() => setVisibility(false)}
                 >
-                    <Text style={[styles.dateText]}>Cancel</Text>
+                    <Text style={[text.button]}>Cancel</Text>
                 </TouchableOpacity>
             </View>
         </Modal>
@@ -96,33 +92,12 @@ const DateModal: React.FC<Props> = ({visibility, setVisibility, setDate, date}) 
 }
 
 const styles = StyleSheet.create({
-    textHeader: {
-        paddingBottom: 5,
-        fontSize: 20
-    },
     fieldContainer: {
         padding: 10,
         marginTop: 10
     },
-    input: {
-        backgroundColor: globalStyles.colors.mainFaded,
-        padding: 10,
-        fontSize: 16,
-        borderRadius: 7
-    },
     fieldTextSmall: {
         fontSize: 12
-    },
-    dateButton: {
-        backgroundColor: globalStyles.colors.main,
-        borderRadius: 10,
-        padding: 10,
-        marginTop: 10
-    },
-    dateText: {
-        fontSize: 24,
-        color: "white",
-        textAlign: "center"
     },
 })
 

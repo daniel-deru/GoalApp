@@ -33,7 +33,7 @@ const Task: React.FC<Props> = ({route, navigation}): JSX.Element => {
 
     const [task, setTask] = useState<TaskInterface | undefined>(route.params.task)
     const [visibility, setVisibility] = useState<boolean>(false)
-    const [date, setDate] = useState<Date>(new Date())
+    const [date, setDate] = useState<Date>(task ? new Date(task.date) : new Date())
     const [difficulty, setDifficulty] = useState<difficultyEnum>(difficultyEnum.easy)
     const [goal, setGoal] = useState<GoalInterface | undefined | null>()
 
