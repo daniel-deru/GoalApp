@@ -25,9 +25,9 @@ const DateModal: React.FC<Props> = ({visibility, setVisibility, setDate, date}) 
     const submitDate = (): void => {
         const inputDate: Date = new Date(year, month-1, day)
         const currentDate: number = Date.now()
-        // Create a five minute difference for consistency when comparing two unix timestamps
-        const fiveMinDiff = 5 * 60 * 1000
-        if(inputDate.getTime() + fiveMinDiff <= currentDate) return Alert.alert("Invalid Date Selected", "Cannot select date before today")
+        // Create a two minute difference for consistency when comparing two unix timestamps
+        const diff = 2 * 60 * 1000
+        if(inputDate.getTime() + diff <= currentDate) return Alert.alert("Invalid Date Selected", "Cannot select date before today")
         setDate(inputDate)
         setVisibility(false)
     }
@@ -77,11 +77,11 @@ const DateModal: React.FC<Props> = ({visibility, setVisibility, setDate, date}) 
                 />
             </View>
             <View style={styles.fieldContainer}>
-                <TouchableOpacity style={buttons.fullWidth(colors.main)} onPress={submitDate}>
+                <TouchableOpacity style={buttons.fullWidth(colors.blue)} onPress={submitDate}>
                     <Text style={globalStyles.text.button}>Done</Text>
                 </TouchableOpacity>
                 <TouchableOpacity 
-                    style={[buttons.fullWidth(colors.overdue)]} 
+                    style={[buttons.fullWidth(colors.red)]} 
                     onPress={() => setVisibility(false)}
                 >
                     <Text style={[text.button]}>Cancel</Text>

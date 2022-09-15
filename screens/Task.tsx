@@ -11,7 +11,7 @@ import { updateTask, Task as TaskInterface } from "../store/slices/taskSlice"
 import { GoalInterface } from "../store/slices/goalSlice"
 import 'react-native-get-random-values'
 import { v4 as uuidv4 } from "uuid"
-import { TaskEnum } from "../utils/properties/status"
+import statusses from "../utils/properties/status"
 import {NavigationScreenProp, NavigationState, NavigationParams } from "react-navigation"
 import {RouteProp} from "@react-navigation/native"
 import NameField from "../components/form_parts/NameField"
@@ -28,6 +28,8 @@ interface Props {
     navigation: NavigationScreenProp<NavigationState, NavigationParams>,
     route: RouteProp<{params: {task: TaskInterface | undefined, goal: string | undefined}}, 'params'>
 }
+
+const  {  buttons, text, inputs, colors } = globalStyle
 
 const Task: React.FC<Props> = ({route, navigation}): JSX.Element => {
 
@@ -63,7 +65,7 @@ const Task: React.FC<Props> = ({route, navigation}): JSX.Element => {
             description,
             goal_id: goal?.id || "",
             date: date.getTime(),
-            status: TaskEnum.INCOMPLETE,
+            status: statusses.incomplete.name,
         }
 
         dispatch(updateTask(submitTask))
@@ -109,8 +111,8 @@ const Task: React.FC<Props> = ({route, navigation}): JSX.Element => {
                                 <Text style={styles.fieldHeader}>Date</Text>
                                 <View>
                                     <Text>{date.toDateString()}</Text>
-                                    <TouchableOpacity style={globalStyles.buttons.fullWidth()} onPress={() => setVisibility(true)}>
-                                        <Text style={globalStyles.text.button}>Set Date</Text>
+                                    <TouchableOpacity style={buttons.fullWidth()} onPress={() => setVisibility(true)}>
+                                        <Text style={text.button}>Set Date</Text>
                                     </TouchableOpacity>
                                 </View>
                             </View>
@@ -121,7 +123,7 @@ const Task: React.FC<Props> = ({route, navigation}): JSX.Element => {
                                     onChange={(item: FormDifficulty) => setDifficulty(item.value)}
                                     labelField="label"
                                     valueField='value'
-                                    style={globalStyle.inputs.textInput}
+                                    style={inputs.textInput}
                                     placeholder="Select Difficulty"
                                     value={difficulty}
                                 />
@@ -133,15 +135,15 @@ const Task: React.FC<Props> = ({route, navigation}): JSX.Element => {
                                     onChange={(item: GoalInterface) => setGoal(item)}
                                     labelField="name"
                                     valueField='id'
-                                    style={globalStyle.inputs.textInput}
+                                    style={inputs.textInput}
                                     placeholder="Select Goal"
                                     value={goal ? goal.id : null}
                                 />
                             </View>
                             <DescriptionField value={values.description} handleChange={handleChange}/>
                             <View>
-                                <TouchableOpacity style={[globalStyles.buttons.fullWidth(), {marginBottom: 20}]} onPress={(e: any) => handleSubmit(e)}>
-                                    <Text style={globalStyles.text.button}>Save</Text>
+                                <TouchableOpacity style={[buttons.fullWidth(), {marginBottom: 20}]} onPress={(e: any) => handleSubmit(e)}>
+                                    <Text style={text.button}>Save</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -174,7 +176,7 @@ const styles = StyleSheet.create({
         margin: 5
     },
     textInput: {
-        backgroundColor:  globalStyle.colors.mainFaded,
+        backgroundColor: colors.blueFaded,
         fontSize: 16,
         padding: 10,
         borderRadius: 7

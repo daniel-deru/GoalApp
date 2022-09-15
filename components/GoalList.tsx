@@ -13,6 +13,8 @@ interface Props {
     goals: Array<GoalInterface>
 }
 
+const { colors } = globalStyles
+
 const GoalList: React.FC<Props> = ({ navigation, goals }): JSX.Element => {
   // const goals = useAppSelector((state) => state.goals)
   const [goalList, setGoalList] = useState<GoalInterface[]>([])
@@ -28,10 +30,6 @@ const GoalList: React.FC<Props> = ({ navigation, goals }): JSX.Element => {
   const showScreen = (goal: GoalInterface): void => {
       navigation.navigate<{goal: GoalInterface}>(GoalScreens.View, {goal})
   }
-
-  // useEffect(() => {
-  //   setGoalList(Object.values(goals))
-  // }, [goals])
 
   return (
         <View>
@@ -54,7 +52,7 @@ const styles = StyleSheet.create({
       flexDirection: "row",
       justifyContent: "space-between",
       borderWidth: 1,
-      borderColor: globalStyles.colors.main,
+      borderColor: colors.blue,
       borderRadius: 10,
       padding: 15,
       paddingVertical: 20,

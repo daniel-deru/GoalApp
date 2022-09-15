@@ -13,6 +13,8 @@ interface Props {
   navigation: NavigationScreenProp<NavigationState, NavigationParams> 
 }
 
+const { colors } = globalStyles
+
 const Goals: React.FC<Props> = ({ navigation }) => {
   const goals = useAppSelector(state => state.goals)
   const isFocussed = useIsFocused()
@@ -40,7 +42,7 @@ let styles = StyleSheet.create({
     height: "100%"
   },
   text: {
-    color: globalStyles.colors.main,
+    color: colors.blue,
     fontSize: 30,
     textAlign: "center",
     paddingTop: 20
@@ -49,7 +51,7 @@ let styles = StyleSheet.create({
     position: "absolute",
     bottom: 30,
     right: 30,
-    backgroundColor: globalStyles.colors.main,
+    backgroundColor: colors.blue,
     padding: 10,
     borderRadius: 100,
     width: 50,

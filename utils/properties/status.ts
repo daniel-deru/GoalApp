@@ -1,10 +1,13 @@
+import globalStyle from "../../globalStyles"
+
+const { colors } = globalStyle
 export enum StatusEnums {
     COMPLETE = "complete",
-    ACTIVE = "active",
+    INCOMPLETE = "incomplete",
     OVERDUE = "overdue"
 }
 
-const { COMPLETE, ACTIVE, OVERDUE } = StatusEnums
+const { COMPLETE, INCOMPLETE, OVERDUE } = StatusEnums
 
 export interface StatusItem {
     name: string,
@@ -12,42 +15,27 @@ export interface StatusItem {
 }
 export interface StatusInterface<T> {
     complete: T,
-    active: T,
+    incomplete: T
     overdue: T
-}
-
-export enum TaskEnum {
-    COMPLETE = 'complete',
-    INCOMPLETE = 'incomplete',
-    OVERDUE = 'overdue',
-    ACTIVE = 'active'
 }
 
 const statusses: StatusInterface<StatusItem> = {
     complete: {
         name: COMPLETE,
-        color: "#0061D2"
+        color: colors.green
     },
-    active: {
-        name: ACTIVE,
-        color: "#04CE00"
+    incomplete: {
+        name: INCOMPLETE,
+        color: colors.blue
     },
     overdue: {
         name: OVERDUE,
-        color: "#D20000"
+        color: colors.red
     }
 }
 
 export interface TaskStatusInterface extends StatusInterface<StatusItem> {
     incomplete: StatusItem
-}
-
-export const taskStatusses = {
-    ...statusses,
-    incomplete: {
-        name: TaskEnum.INCOMPLETE,
-        color: "#A3A3A3"
-    }
 }
 
 export default statusses

@@ -1,6 +1,8 @@
-import React, { ChangeEvent} from 'react'
+import React from 'react'
 import { View, Text, TextInput, StyleSheet} from "react-native"
 import globalStyles from "../../globalStyles"
+
+const { inputs } = globalStyles
 
 interface Props {
     value: string,
@@ -12,7 +14,7 @@ const NameField: React.FC<Props> = ({handleChange, value}) => {
     <View style={styles.fieldContainer}>
         <Text style={styles.fieldHeader}>Description</Text>
         <TextInput 
-            style={[styles.input, {textAlignVertical: "top"}]}
+            style={[inputs.textInput, {textAlignVertical: "top"}]}
             multiline={true}
             numberOfLines={7}
             onChangeText={handleChange("description")}
@@ -23,12 +25,6 @@ const NameField: React.FC<Props> = ({handleChange, value}) => {
 }
 
 const styles = StyleSheet.create({
-    input: {
-        backgroundColor: globalStyles.colors.mainFaded,
-        fontSize: 16,
-        padding: 10,
-        borderRadius: 5
-    },
     fieldContainer: {
         marginTop: 10
     },

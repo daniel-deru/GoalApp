@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import {Text, View, TouchableWithoutFeedback, StyleSheet, StyleProp, ViewStyle } from "react-native"
-import statusses, {StatusItem, StatusInterface, taskStatusses} from "../utils/properties/status"
+import statusses, {StatusItem, StatusInterface} from "../utils/properties/status"
 import globalStyles from '../globalStyles'
 import { NavigationScreenProp, NavigationState, NavigationParams } from "react-navigation"
 import { Task } from "../store/slices/taskSlice"
@@ -16,13 +16,15 @@ interface Props {
     goal: string | null
 }
 
+const { colors } = globalStyles
+
 const TaskList: React.FC<Props> = ({tasks, navigation, goal}): JSX.Element => {
   const isFocussed = useIsFocused()
   // const tasks = useAppSelector((state: RootState): Tasks => state.tasks)
   const [currentTasks, setCurrentTasks] = useState<Array<Task>>(tasks)
 
   const difficultyStyle = (task: Task): StyleProp<ViewStyle> => {
-    const status: StatusItem = taskStatusses[task.status as keyof StatusInterface<StatusItem>]
+    const status: StatusItem = statusses[task.status as keyof StatusInterface<StatusItem>]
     return {
         ...styles.difficulty, 
         backgroundColor: status.color
@@ -65,7 +67,7 @@ const styles = StyleSheet.create({
       flexDirection: "row",
       justifyContent: "space-between",
       borderWidth: 1,
-      borderColor: globalStyles.colors.main,
+      borderColor: colors.blue,
       borderRadius: 10,
       padding: 15,
       paddingVertical: 20,

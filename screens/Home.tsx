@@ -1,9 +1,10 @@
 import axios from 'axios'
 import React, {useEffect, useState, useCallback} from 'react'
 import { Text, StyleSheet, View, Image, SafeAreaView } from "react-native"
-
 import globalStyle from '../globalStyles'
+
 const quoteAPI: string = "https://zenquotes.io/api/quotes"
+const { colors } = globalStyle 
 
 interface Quote {
   author: string,
@@ -27,16 +28,14 @@ const Home: React.FC = (): JSX.Element => {
     setQuote({author: randomQuote.a, quote: randomQuote.q})
   }
 
-  
-
   useEffect(() => {
     getQuote()
   }, [])
   return (
     <SafeAreaView style={styles.container}>
         <View >
-            <Text style={[styles.text, styles.header]}>Quote of the day</Text>
-            <Text style={styles.text}>{quote.quote}</Text>
+            <Text style={[styles.text]}>Quote of the day</Text>
+            <Text style={[styles.text, styles.header]}>{quote.quote}</Text>
             <Text style={[styles.text, styles.author]}>{quote.author}</Text>
         </View>
         <View>
@@ -51,10 +50,10 @@ let styles = StyleSheet.create({
       justifyContent: "space-evenly",
       height: "100%",
       alignItems: "center",
-      color: globalStyle.colors.main
+      padding: 15
     },
     text: {
-      color: globalStyle.colors.main,
+      color: colors.blue,
       textAlign: "center"
     },
     header: {

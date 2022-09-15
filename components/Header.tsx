@@ -6,6 +6,8 @@ import { DrawerNavigationProp } from "@react-navigation/drawer"
 import { CompositeNavigationProp } from "@react-navigation/core"
 import globalStyle from '../globalStyles'
 
+const { colors } = globalStyle
+
 export type StackParamList = {
   Goals: undefined,
   AddGoal: undefined,
@@ -69,7 +71,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     width: "100%",
     alignItems: "center",
-    backgroundColor: globalStyle.colors.main,
+    backgroundColor: colors.blue,
     color: "white",
     paddingTop: 60,
     paddingBottom: 20,

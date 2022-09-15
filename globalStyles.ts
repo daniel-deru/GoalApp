@@ -2,11 +2,10 @@ import statusses from "./utils/properties/status"
 
 interface GlobalStyle {
     colors: {
-        main: string,
-        mainFaded: string,
-        complete: string,
-        active: string,
-        overdue: string
+        blue: string,
+        blueFaded: string,
+        green: string,
+        red: string
     },
     buttons: {
         fullWidth: (color?: string) => object
@@ -27,14 +26,13 @@ interface GlobalStyle {
 
 const globalStyle: GlobalStyle = {
     colors: {
-        main: "#0774C3",
-        mainFaded: "#0774C310",
-        complete: statusses.complete.color,
-        active: statusses.active.color,
-        overdue: statusses.overdue.color
+        blue: "#0774C3",
+        blueFaded: "#0774C310",
+        green: "#04CE00",
+        red: "#D20000"
     },
     buttons: {
-        fullWidth: (color: string = globalStyle.colors.main) => {
+        fullWidth: (color: string = globalStyle.colors.blue) => {
             return {
                 backgroundColor: color,
                 paddingHorizontal: 10,

@@ -12,6 +12,8 @@ interface Props {
     route: RouteProp<{params: {goal: GoalInterface}}, 'params'>
 }
 
+const { text, view, buttons, colors} = globalStyles
+
 const GoalView: React.FC<Props> = ({ navigation, route }): JSX.Element => {
     const goals = useAppSelector((state) => state.goals)
     
@@ -32,51 +34,51 @@ const GoalView: React.FC<Props> = ({ navigation, route }): JSX.Element => {
     return (
       <ScrollView style={styles.container}>
 
-          <View style={globalStyles.view.container}>
-            <Text style={globalStyles.text.heading}>Goal Name</Text>
-            <Text style={globalStyles.text.item}>{goalItem.name}</Text>
+          <View style={view.container}>
+            <Text style={text.heading}>Goal Name</Text>
+            <Text style={text.item}>{goalItem.name}</Text>
           </View>
 
-          <View style={globalStyles.view.container}>
-            <Text style={globalStyles.text.heading}>Status</Text>
-            <Text style={globalStyles.text.item}>{goalItem.status}</Text>
+          <View style={view.container}>
+            <Text style={text.heading}>Status</Text>
+            <Text style={text.item}>{goalItem.status}</Text>
           </View>
 
-          <View style={globalStyles.view.container}>
-            <Text style={globalStyles.text.heading}>Deadline</Text>
-            <Text  style={globalStyles.text.item}>
+          <View style={view.container}>
+            <Text style={text.heading}>Deadline</Text>
+            <Text  style={text.item}>
               {new Date(goalItem.deadline).toDateString()}
             </Text>
           </View>
 
-          <View style={globalStyles.view.container}>
-            <Text style={globalStyles.text.heading}>Difficulty</Text>
-            <Text style={globalStyles.text.item}>{goalItem.difficulty}</Text>
+          <View style={view.container}>
+            <Text style={text.heading}>Difficulty</Text>
+            <Text style={text.item}>{goalItem.difficulty}</Text>
           </View>
 
-          <View style={globalStyles.view.container}>
-            <Text style={globalStyles.text.heading}>Reward</Text>
-            <Text style={globalStyles.text.item}>{goalItem.reward}</Text>
+          <View style={view.container}>
+            <Text style={text.heading}>Reward</Text>
+            <Text style={text.item}>{goalItem.reward}</Text>
           </View>
 
-          <View style={globalStyles.view.container}>
-            <Text style={globalStyles.text.heading}>Description</Text>
-            <Text style={globalStyles.text.item}>{goalItem.description}</Text>
+          <View style={view.container}>
+            <Text style={text.heading}>Description</Text>
+            <Text style={text.item}>{goalItem.description}</Text>
           </View>
 
           <TouchableOpacity 
-            style={[globalStyles.buttons.fullWidth()]}
+            style={[buttons.fullWidth()]}
             onPress={showTasks}
           >
-            <Text style={globalStyles.text.button}>Show Tasks</Text>
+            <Text style={text.button}>Show Tasks</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={[globalStyles.buttons.fullWidth()]} onPress={editGoal}>
-            <Text style={globalStyles.text.button}>Edit Goal</Text>
+          <TouchableOpacity style={[buttons.fullWidth()]} onPress={editGoal}>
+            <Text style={text.button}>Edit Goal</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={[globalStyles.buttons.fullWidth(globalStyles.colors.overdue)]}>
-            <Text style={globalStyles.text.button}>Cancel Goal</Text>
+          <TouchableOpacity style={[buttons.fullWidth(colors.red)]}>
+            <Text style={text.button}>Cancel Goal</Text>
           </TouchableOpacity>
 
       </ScrollView>

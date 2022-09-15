@@ -25,6 +25,7 @@ interface FormInterface {
     description: string
 }
 
+const { inputs, text, buttons } = globalStyles
 
 const Goal: React.FC<Props> = ({ navigation, route }): JSX.Element => {
     const goals = useAppSelector((state) => state.goals)
@@ -45,7 +46,7 @@ const Goal: React.FC<Props> = ({ navigation, route }): JSX.Element => {
             description,
             reward,
             deadline,
-            status: goal?.status || StatusEnums.ACTIVE,
+            status: goal?.status || StatusEnums.COMPLETE,
             difficulty: goal?.difficulty || difficultyEnum.easy,
             type: 'GoalInterface',
         }
@@ -106,7 +107,7 @@ const Goal: React.FC<Props> = ({ navigation, route }): JSX.Element => {
                         <View style={styles.fieldContainer}>
                             <Text style={styles.textHeader}>Goal Name</Text>
                             <TextInput 
-                                style={globalStyles.inputs.textInput} 
+                                style={inputs.textInput} 
                                 value={values.name}
                                 onChangeText={handleChange('name')}
                                 onBlur={handleBlur('name')}
@@ -115,14 +116,14 @@ const Goal: React.FC<Props> = ({ navigation, route }): JSX.Element => {
                         <View style={styles.fieldContainer}>
                             <Text style={styles.textHeader}>Deadline</Text>
                             <Text style={[styles.dateInput]}>{currentDate.toDateString()}</Text>
-                            <TouchableOpacity style={globalStyles.buttons.fullWidth()} onPress={() => setDateVisibility(true)}>
-                                <Text style={globalStyles.text.button}>Set Deadline</Text>
+                            <TouchableOpacity style={buttons.fullWidth()} onPress={() => setDateVisibility(true)}>
+                                <Text style={text.button}>Set Deadline</Text>
                             </TouchableOpacity>
                         </View>
                         <View style={styles.fieldContainer}>
                             <Text style={styles.textHeader}>Reward</Text>
                             <TextInput 
-                                style={globalStyles.inputs.textInput} 
+                                style={inputs.textInput} 
                                 value={values.reward}
                                 onChangeText={handleChange('reward')}
                                 onBlur={handleBlur('reward')}
@@ -131,7 +132,7 @@ const Goal: React.FC<Props> = ({ navigation, route }): JSX.Element => {
                         <View style={[styles.fieldContainer]}>
                             <Text style={styles.textHeader}>Description</Text>
                             <TextInput 
-                                style={[globalStyles.inputs.textInput, {textAlignVertical: "top"}]} 
+                                style={[inputs.textInput, {textAlignVertical: "top"}]} 
                                 multiline={true}
                                 numberOfLines={7}
                                 value={values.description}
@@ -140,8 +141,8 @@ const Goal: React.FC<Props> = ({ navigation, route }): JSX.Element => {
                                 />
                         </View>
                         <View>
-                            <TouchableOpacity style={globalStyles.buttons.fullWidth()} onPress={(e: any) => handleSubmit(e)}>
-                                <Text style={globalStyles.text.button}>{goal ? "Update": "Save"}</Text>
+                            <TouchableOpacity style={buttons.fullWidth()} onPress={(e: any) => handleSubmit(e)}>
+                                <Text style={text.button}>{goal ? "Update": "Save"}</Text>
                             </TouchableOpacity>
                         </View>
                     </View>

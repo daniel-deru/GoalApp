@@ -7,6 +7,8 @@ interface Props {
     handleChange: any
 }
 
+const { inputs } = globalStyles
+
 const NameField: React.FC<Props> = ({handleChange, value}) => {
   return (
     <View style={styles.fieldContainer}>
@@ -14,19 +16,13 @@ const NameField: React.FC<Props> = ({handleChange, value}) => {
         <TextInput 
             onChangeText={handleChange('name')}
             value={value}
-            style={styles.input}
+            style={inputs.textInput}
         />
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-    input: {
-        backgroundColor: globalStyles.colors.mainFaded,
-        fontSize: 16,
-        padding: 10,
-        borderRadius: 5
-    },
     fieldContainer: {
         marginTop: 10
     },

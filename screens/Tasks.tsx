@@ -15,6 +15,8 @@ interface Props {
   route: RouteProp<{params: {goal_id: string | null}}, 'params'>
 }
 
+const { colors } = globalStyles
+
 const Tasks: React.FC<Props> = ({navigation, route}): JSX.Element => {
   const goalId = route.params?.goal_id
   const isFocussed = useIsFocused()
@@ -57,13 +59,13 @@ const styles = StyleSheet.create({
     height: "100%"
   },
   fillerText: {
-    color: globalStyles.colors.main,
+    color: colors.blue,
     fontSize: 30,
     textAlign: "center",
     marginTop: 20
   },
   addButton: {
-    backgroundColor: globalStyles.colors.main,
+    backgroundColor: colors.blue,
     width: 50,
     height: 50,
     borderRadius: 200,
