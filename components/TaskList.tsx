@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import {Text, View, TouchableWithoutFeedback, StyleSheet, StyleProp, ViewStyle } from "react-native"
-import statusses, {StatusItem, StatusInterface} from "../utils/properties/status"
+import statusses, {StatusItem, StatusInterface, StatusEnums} from "../utils/properties/status"
 import globalStyles from '../globalStyles'
 import { NavigationScreenProp, NavigationState, NavigationParams } from "react-navigation"
-import { Task } from "../store/slices/taskSlice"
+import { Task, updateTask } from "../store/slices/taskSlice"
 import { RouteProp, useIsFocused } from "@react-navigation/native"
 import { TaskScreens } from "../stacks/stacks"
-import { useAppSelector } from "../store/hooks"
+import { useAppDispatch, useAppSelector } from "../store/hooks"
 import { RootState } from "../store/store"
 import { Tasks } from "../store/slices/taskSlice"
  
@@ -23,8 +23,19 @@ const TaskList: React.FC<Props> = ({tasks, navigation, goal}): JSX.Element => {
   // const tasks = useAppSelector((state: RootState): Tasks => state.tasks)
   const [currentTasks, setCurrentTasks] = useState<Array<Task>>(tasks)
 
+  const dispatch = useAppDispatch()
+
   const difficultyStyle = (task: Task): StyleProp<ViewStyle> => {
+
+    const currentDate = new Date().getTime()
+    const taskDate = new Date(task.date).getTime()
+
+    if(currentDate > taskDate && task.status !== StatusEnums.COMPLETE) {
+      task = {...task, status: StatusEnums.OVERDUE }
+      // dispatch(updateTask(task))
+    }
     const status: StatusItem = statusses[task.status as keyof StatusInterface<StatusItem>]
+
     return {
         ...styles.difficulty, 
         backgroundColor: status.color

@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { Text, View, TouchableWithoutFeedback, StyleSheet, StyleProp, ViewStyle } from "react-native"
-import { GoalInterface } from '../store/slices/goalSlice'
-import statusses, {StatusItem, StatusInterface} from "../utils/properties/status"
+import { GoalInterface, updateGoals } from '../store/slices/goalSlice'
+import statusses, {StatusItem, StatusInterface, StatusEnums} from "../utils/properties/status"
 import globalStyles from '../globalStyles'
 import { GoalScreens } from "../stacks/stacks"
-import { useAppSelector } from "../store/hooks"
 import { NavigationScreenProp, NavigationState, NavigationParams} from "react-navigation"
-import { useIsFocused } from "@react-navigation/native"
+import { useAppDispatch } from '../store/hooks'
 
 interface Props {
     navigation: NavigationScreenProp<NavigationState, NavigationParams>
@@ -16,11 +15,20 @@ interface Props {
 const { colors } = globalStyles
 
 const GoalList: React.FC<Props> = ({ navigation, goals }): JSX.Element => {
-  // const goals = useAppSelector((state) => state.goals)
-  const [goalList, setGoalList] = useState<GoalInterface[]>([])
-  const isFocussed = useIsFocused()
+
+  const dispatch = useAppDispatch()
+
   const difficultyStyle = (goal: GoalInterface): StyleProp<ViewStyle> => {
+
+    const currentDate = new Date().getTime()
+    const goalDate = new Date(goal.deadline).getTime()
+
+    if(currentDate > goalDate && goal.status !== StatusEnums.COMPLETE) {
+      goal = {...goal, status: StatusEnums.OVERDUE }
+      // dispatch(updateGoals(goal))
+    }
     const status: StatusItem = statusses[goal.status as keyof StatusInterface<StatusItem>]
+
     return {
         ...styles.difficulty, 
         backgroundColor: status.color
