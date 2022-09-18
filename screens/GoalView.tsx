@@ -1,5 +1,5 @@
 import React, { useEffect, useState} from 'react'
-import { Text, View, StyleSheet, ScrollView, TouchableOpacity } from "react-native"
+import { Text, View, StyleSheet, ScrollView, TouchableOpacity, Alert } from "react-native"
 import { GoalInterface } from "../store/slices/goalSlice"
 import { NavigationScreenProp, NavigationState, NavigationParams } from "react-navigation"
 import {RouteProp, useIsFocused} from "@react-navigation/native"

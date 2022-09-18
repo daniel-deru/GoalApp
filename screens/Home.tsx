@@ -2,6 +2,7 @@ import axios from 'axios'
 import React, {useEffect, useState, useCallback} from 'react'
 import { Text, StyleSheet, View, Image, SafeAreaView } from "react-native"
 import globalStyle from '../globalStyles'
+import Model from '../database/db'
 
 const quoteAPI: string = "https://zenquotes.io/api/quotes"
 const { colors } = globalStyle 
@@ -28,9 +29,17 @@ const Home: React.FC = (): JSX.Element => {
     setQuote({author: randomQuote.a, quote: randomQuote.q})
   }
 
+  const getDataCallback = async () => {
+    const model = await Model()
+    // model.getData('goals')
+  }
+
+  const getData = useCallback(getDataCallback, [])
+
   useEffect(() => {
     getQuote()
-  }, [])
+    getData()
+  }, [getData])
   return (
     <SafeAreaView style={styles.container}>
         <View >
