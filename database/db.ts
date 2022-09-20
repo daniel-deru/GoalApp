@@ -1,56 +1,57 @@
-import { enablePromise, openDatabase, ResultSet, SQLiteDatabase } from "react-native-sqlite-storage"
+import {WebSQLDatabase, openDatabase, SQLResultSet} from "expo-sqlite"
 
-enablePromise(true)
 
-interface DBInterface {
-    createTables: () => Promise<void>
-}
+class Model {
+    private db: undefined | WebSQLDatabase;
 
-class DB implements DBInterface {
-    private connection: SQLiteDatabase
-
-    constructor(connection: SQLiteDatabase){
-        this.connection = connection
+    constructor(){
+        this.db = openDatabase("goals.db")
+        this.createTables()
+       
     }
 
-    async createTables(): Promise<void>{
-        const goalTableQuery: string = `
-            CREATE TABLE IF NOT EXISTS goals (
-                id TEXT PRIMARY KEY,
-                goals TEXT
-            )
-        `
+    private createTables(): void{
+        if(!this.db) return
 
-        const taskTableQuery: string = `
-            CREATE TABLE IF NOT EXISTS tasks (
-                id TEXT PRIMARY KEY,
-                tasks TEXT
-            )
-        `
-
-        await this.connection.executeSql(goalTableQuery)
-        await this.connection.executeSql(taskTableQuery)
+        this.createTable("goals")
+        this.createTable("tasks")
     }
 
-    async getData(table: string){
-        const getQuery: string = `
-            SELECT * FROM ${table}
-        `
-        const [result]: [ResultSet] = await this.connection.executeSql(getQuery)
-        console.log(result)
+    private createTable(tableName: string): void {
+        if(!this.db) return
+       
+        this.db.transaction(tx => {
+            
+            tx.executeSql(`
+                CREATE TABLE IF NOT EXISTS ${tableName} (
+                    id TEXT DEFAULT ${tableName} PRIMARY KEY,
+                    ${tableName} TEXT
+                )
+            `, [], (_, result: SQLResultSet) => {
+                console.log("Creating tables 3")
+                // console.log(result)
+            }, (tx, error) => {
+                // console.log(error)
+                return true
+            })
+        })
+    }
+
+    public read(table: string){
+        if(!this.db) return
         
-    }
-}
 
-async function Model(): Promise<DB> {
-    // Create db connecttion
-    const connection: SQLiteDatabase = await openDatabase({name: "goals.db", location: "default"})
-    // Create db instance
-    const db: DB = new DB(connection)
-    // Create the tables
-    await db.createTables()
-    //  return the db instance
-    return db
+        this.db.transaction((tx => {
+            
+            tx.executeSql(`SELECT * FROM ${table}`, [], (tx, result: SQLResultSet) => {
+                const { rows: { _array: data } }: SQLResultSet = result
+                console.log(data)
+            }, (_, error) => {
+                console.log(error)
+                return false
+            })
+        }))
+    }
 }
 
 export default Model
