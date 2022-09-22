@@ -1,13 +1,27 @@
 import {WebSQLDatabase, openDatabase, SQLResultSet} from "expo-sqlite"
 
+interface Result {
+    data: any,
+    error: any
+}
+
 
 class Model {
     private db: undefined | WebSQLDatabase;
+    private _result: Result = {data: null, error: null};
 
     constructor(){
         this.db = openDatabase("goals.db")
         this.createTables()
        
+    }
+
+    get result(): Result {
+        return this._result
+    }
+
+    set result(result: Result){
+        this._result = result
     }
 
     private createTables(): void{
@@ -43,14 +57,20 @@ class Model {
 
         this.db.transaction((tx => {
             
-            tx.executeSql(`SELECT * FROM ${table}`, [], (tx, result: SQLResultSet) => {
-                const { rows: { _array: data } }: SQLResultSet = result
-                console.log(data)
-            }, (_, error) => {
+            tx.executeSql(
+                `SELECT * FROM ${table}`,
+                 [], 
+                 (tx, result: SQLResultSet) => this.trCallback(result),
+             (_, error) => {
                 console.log(error)
                 return false
             })
         }))
+    }
+
+    private trCallback(result: SQLResultSet){
+        const { rows: { _array: data} }: SQLResultSet = result
+        this.result = {...this.result, data}
     }
 }
 
