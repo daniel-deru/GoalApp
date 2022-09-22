@@ -31,7 +31,7 @@ const Home: React.FC = (): JSX.Element => {
 
   const getDataCallback = () => {
     const model = new Model()
-    model.read("goals")
+    model.read("goals").result
   }
 
   const getData = useCallback(getDataCallback, [])

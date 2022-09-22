@@ -1,11 +1,13 @@
-import React from "react"
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useEffect } from "react"
+import { StyleSheet, Text, View } from 'react-native'
 import { NavigationContainer } from "@react-navigation/native"
 import { createDrawerNavigator } from "@react-navigation/drawer"
 
+import Model from "./database/db"
+
 import HomeStack from './stacks/HomeStack'
 import GoalStack from './stacks/GoalStack'
-import TaskStack from "./stacks/TaskStack";
+import TaskStack from "./stacks/TaskStack"
 
 import store from "./store/store"
 import { Provider } from "react-redux"
@@ -13,6 +15,11 @@ import { Provider } from "react-redux"
 const Drawer = createDrawerNavigator()
 
 export default function App() {
+
+
+  useEffect(() => {
+    new  Model().createTables()
+  }, [])
   return (
     <Provider store={store}>
       <NavigationContainer>

@@ -1,10 +1,17 @@
-import {WebSQLDatabase, openDatabase, SQLResultSet} from "expo-sqlite"
+import {
+    WebSQLDatabase, 
+    openDatabase, 
+    SQLResultSet, 
+    SQLError, 
+    SQLTransaction, 
+    SQLStatementCallback, 
+    SQLStatementErrorCallback
+} from "expo-sqlite"
 
 interface Result {
     data: any,
     error: any
 }
-
 
 class Model {
     private db: undefined | WebSQLDatabase;
@@ -12,8 +19,6 @@ class Model {
 
     constructor(){
         this.db = openDatabase("goals.db")
-        this.createTables()
-       
     }
 
     get result(): Result {
@@ -24,7 +29,7 @@ class Model {
         this._result = result
     }
 
-    private createTables(): void{
+    public createTables(): void{
         if(!this.db) return
 
         this.createTable("goals")
@@ -34,43 +39,46 @@ class Model {
     private createTable(tableName: string): void {
         if(!this.db) return
        
-        this.db.transaction(tx => {
-            
-            tx.executeSql(`
-                CREATE TABLE IF NOT EXISTS ${tableName} (
-                    id TEXT DEFAULT ${tableName} PRIMARY KEY,
-                    ${tableName} TEXT
-                )
-            `, [], (_, result: SQLResultSet) => {
-                console.log("Creating tables 3")
-                // console.log(result)
-            }, (tx, error) => {
-                // console.log(error)
-                return true
-            })
+        this.db.transaction((tx: SQLTransaction) => {
+            const query: string = 
+            `CREATE TABLE IF NOT EXISTS ${tableName} (
+                id TEXT DEFAULT ${tableName} PRIMARY KEY,
+                ${tableName} TEXT
+            )`
+
+            this.execute(tx, query)
         })
     }
 
-    public read(table: string){
-        if(!this.db) return
+    public read(table: string): Model {
+        if(!this.db){
+            this.result = {data: null, error: "No Database"}
+            return this
+        }
         
-
-        this.db.transaction((tx => {
-            
-            tx.executeSql(
-                `SELECT * FROM ${table}`,
-                 [], 
-                 (tx, result: SQLResultSet) => this.trCallback(result),
-             (_, error) => {
-                console.log(error)
-                return false
-            })
+        this.db.transaction(((tx: SQLTransaction) => {
+            this.execute(tx, `SELECT * FROM ${table}`)
         }))
+
+        return this
+    }
+
+    private execute(tx: SQLTransaction, query: string, args: Array<string> = []){
+
+        const resultCallback: SQLStatementCallback = (_, result: SQLResultSet) => this.trCallback(result)
+        const errorCallback: SQLStatementErrorCallback =  (_, error) => this.stErrCallback(error)
+
+        tx.executeSql(query, args, resultCallback, errorCallback)
     }
 
     private trCallback(result: SQLResultSet){
         const { rows: { _array: data} }: SQLResultSet = result
         this.result = {...this.result, data}
+    }
+
+    private stErrCallback(error: SQLError){
+        console.log(error.message)
+        return false
     }
 }
 
