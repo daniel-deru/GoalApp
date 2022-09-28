@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction} from "@reduxjs/toolkit"
-import { TaskEnum } from "../../utils/properties/status"
+import { StatusEnums } from "../../utils/properties/status"
 import { difficultyEnum } from "../../utils/properties/difficulty"
 
 export interface Task {
@@ -7,7 +7,7 @@ export interface Task {
     name: string,
     goal_id: string | undefined,
     date: number,
-    status: TaskEnum,
+    status: StatusEnums,
     description: string,
     difficulty: difficultyEnum
 }

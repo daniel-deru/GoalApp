@@ -11,7 +11,7 @@ import { updateTask, Task as TaskInterface } from "../store/slices/taskSlice"
 import { GoalInterface } from "../store/slices/goalSlice"
 import 'react-native-get-random-values'
 import { v4 as uuidv4 } from "uuid"
-import statusses from "../utils/properties/status"
+import statusses, { StatusEnums } from "../utils/properties/status"
 import {NavigationScreenProp, NavigationState, NavigationParams } from "react-navigation"
 import {RouteProp} from "@react-navigation/native"
 import NameField from "../components/form_parts/NameField"
@@ -65,7 +65,7 @@ const Task: React.FC<Props> = ({route, navigation}): JSX.Element => {
             description,
             goal_id: goal?.id || "",
             date: date.getTime(),
-            status: statusses.incomplete.name,
+            status: StatusEnums.INCOMPLETE,
         }
 
         dispatch(updateTask(submitTask))

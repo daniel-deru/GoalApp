@@ -7,7 +7,7 @@ import {Task, deleteTask, updateTask} from "../store/slices/taskSlice"
 import globalStyles from "../globalStyles"
 import { GoalInterface } from '../store/slices/goalSlice'
 import { TaskScreens } from "../stacks/stacks"
-import statusses from "../utils/properties/status"
+import statusses, { StatusEnums } from "../utils/properties/status"
 
 interface Props {
     navigation: NavigationScreenProp<NavigationState, NavigationParams>,
@@ -37,7 +37,7 @@ const TaskView: React.FC<Props> = ({ navigation, route }) => {
     }
 
    const completeTask = () => {
-        dispatch(updateTask({...task, status: statusses.complete.name}))
+        dispatch(updateTask({...task, status: StatusEnums.COMPLETE}))
         navigation.goBack()
    }
 

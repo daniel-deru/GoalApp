@@ -28,11 +28,7 @@ const goalSlice = createSlice({
         updateGoals: (state: Goals, action: PayloadAction<GoalInterface>): Goals => {
             const newGoal: GoalInterface = action.payload
             return {...state, [newGoal.id]: newGoal}
-        },
-        // updateGoal: (state: GoalInterface[], action: PayloadAction<GoalInterface>): Array<GoalInterface> => {
-        //     const updatedGoal: GoalInterface = action.payload
-        //     return [...state, updatedGoal]
-        // }
+        }
     }
 })
 

@@ -29,9 +29,10 @@ const Home: React.FC = (): JSX.Element => {
     setQuote({author: randomQuote.a, quote: randomQuote.q})
   }
 
-  const getDataCallback = () => {
+  const getDataCallback = async () => {
     const model = new Model()
-    model.read("goals").result
+    const result = await model.read("goals")
+    console.log(result._array)
   }
 
   const getData = useCallback(getDataCallback, [])
@@ -39,9 +40,6 @@ const Home: React.FC = (): JSX.Element => {
   useEffect(() => {
     getQuote()
     getData()
-    // console.log("hello")
-    const model = new Model()
-    // model.read("goals")
   }, [getData])
   return (
     <SafeAreaView style={styles.container}>

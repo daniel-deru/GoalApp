@@ -5,7 +5,9 @@ import {
     SQLError, 
     SQLTransaction, 
     SQLStatementCallback, 
-    SQLStatementErrorCallback
+    SQLStatementErrorCallback,
+    ResultSet,
+    SQLResultSetRowList
 } from "expo-sqlite"
 
 interface Result {
@@ -13,20 +15,13 @@ interface Result {
     error: any
 }
 
+type SQLResult = SQLError | SQLResultSet
+
 class Model {
     private db: undefined | WebSQLDatabase;
-    private _result: Result = {data: null, error: null};
 
     constructor(){
         this.db = openDatabase("goals.db")
-    }
-
-    get result(): Result {
-        return this._result
-    }
-
-    set result(result: Result){
-        this._result = result
     }
 
     public createTables(): void{
@@ -36,49 +31,56 @@ class Model {
         this.createTable("tasks")
     }
 
-    private createTable(tableName: string): void {
-        if(!this.db) return
-       
-        this.db.transaction((tx: SQLTransaction) => {
-            const query: string = 
-            `CREATE TABLE IF NOT EXISTS ${tableName} (
-                id TEXT DEFAULT ${tableName} PRIMARY KEY,
-                ${tableName} TEXT
-            )`
+    private async createTable(tableName: string): Promise<any> {
 
-            this.execute(tx, query)
-        })
-    }
-
-    public read(table: string): Model {
-        if(!this.db){
-            this.result = {data: null, error: "No Database"}
-            return this
-        }
+        const query: string = 
+        `CREATE TABLE IF NOT EXISTS ${tableName} (
+            id TEXT DEFAULT ${tableName} PRIMARY KEY,
+            ${tableName} TEXT
+        )`
         
-        this.db.transaction(((tx: SQLTransaction) => {
-            this.execute(tx, `SELECT * FROM ${table}`)
-        }))
-
-        return this
+        await this.execute(query)
     }
 
-    private execute(tx: SQLTransaction, query: string, args: Array<string> = []){
+    public async createInitialData(table: string): Promise<{success: boolean, message?: string}> {
+        const currentData = await this.read(table)
+        if(currentData._array.length > 0) return {success: false, message: "Data already created"}
 
-        const resultCallback: SQLStatementCallback = (_, result: SQLResultSet) => this.trCallback(result)
-        const errorCallback: SQLStatementErrorCallback =  (_, error) => this.stErrCallback(error)
+        const query = `INSERT INTO ${table} (id, ${table}) VALUES(?, ?)`
 
-        tx.executeSql(query, args, resultCallback, errorCallback)
+        const result = await this.execute(query, [table, JSON.stringify({})])
+        
+        if("message" in result) throw new Error(result.message)
+
+        return {success: true}
     }
 
-    private trCallback(result: SQLResultSet){
-        const { rows: { _array: data} }: SQLResultSet = result
-        this.result = {...this.result, data}
+    public async read(table: string): Promise<SQLResultSetRowList> {
+
+        const query = `SELECT * FROM ${table}`
+        const result: SQLResult = await this.execute(query)
+
+        if("message" in result) throw new Error(result.message)
+        
+        return result.rows
+
     }
 
-    private stErrCallback(error: SQLError){
-        console.log(error.message)
-        return false
+    private async execute(query: string, args: Array<string> = []): Promise<SQLResult>{
+        return new Promise((resolve, reject) => {
+            if(!this.db) return reject("No database instance")
+            this.db.transaction((tx: SQLTransaction) => {
+                tx.executeSql(
+                    query, 
+                    args, 
+                    (_, result: SQLResultSet) => resolve(result), 
+                    (_, error: SQLError) =>  {
+                        reject(error)
+                        return true
+                    }
+                )
+            })
+        })      
     }
 }
 
