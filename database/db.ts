@@ -55,6 +55,16 @@ class Model {
         return {success: true}
     }
 
+    public async update(table: string, data: object): Promise<boolean> {
+        const query = `UPDATE ${table} SET (${table}) = ? WHERE id = ?`
+
+        const result = await this.execute(query, [JSON.stringify(data), table])
+
+        if("message" in result) throw new Error(result.message)
+
+        return true
+    }
+
     public async read(table: string): Promise<SQLResultSetRowList> {
 
         const query = `SELECT * FROM ${table}`

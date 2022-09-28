@@ -39,8 +39,8 @@ const Home: React.FC = (): JSX.Element => {
 
   useEffect(() => {
     getQuote()
-    getData()
-  }, [getData])
+    // getData()
+  }, [])
   return (
     <SafeAreaView style={styles.container}>
         <View >

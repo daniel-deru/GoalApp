@@ -14,12 +14,13 @@ import { Provider } from "react-redux"
 
 const Drawer = createDrawerNavigator()
 
+const model = new Model()
+model.createTables()
+model.createInitialData("goals")
+model.createInitialData("tasks")
+
 export default function App() {
 
-
-  useEffect(() => {
-    new  Model().createTables()
-  }, [])
   return (
     <Provider store={store}>
       <NavigationContainer>
