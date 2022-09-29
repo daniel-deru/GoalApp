@@ -35,7 +35,8 @@ const goalSlice = createSlice({
             return updatedState
         },
         fetchGoals: (state: Goals, action: PayloadAction<Goals>): Goals => {
-            return {...state, ...action.payload}
+            
+            return action.payload
         }
     }
 })

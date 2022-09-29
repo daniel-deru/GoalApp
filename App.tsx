@@ -24,24 +24,9 @@ model.createInitialData("tasks")
 
 export default function App() {
 
-  const dispatch = useAppDispatch()
-
-  const setDataCallback = async () => {
-    const model = new Model()
-
-    const tasks = await model.read("tasks")
-    const goals = await model.read("goals")
-
-    dispatch(fetchTasks(JSON.parse(tasks._array[0])))
-    dispatch(fetchGoals(JSON.parse(goals._array[0])))
-
-  }
-
-  const setData = useCallback(setDataCallback, [])
-
   useEffect(() => {
-    setData()
-  }, [setData])
+    // setData()
+  }, [])
 
   return (
     <Provider store={store}>

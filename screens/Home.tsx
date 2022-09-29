@@ -1,6 +1,9 @@
 import axios from 'axios'
 import React, {useEffect, useState, useCallback} from 'react'
 import { Text, StyleSheet, View, Image, SafeAreaView } from "react-native"
+import { useAppDispatch } from '../store/hooks'
+import { fetchGoals } from '../store/slices/goalSlice'
+import { fetchTasks } from '../store/slices/taskSlice'
 import globalStyle from '../globalStyles'
 import Model from '../database/db'
 
@@ -29,18 +32,29 @@ const Home: React.FC = (): JSX.Element => {
     setQuote({author: randomQuote.a, quote: randomQuote.q})
   }
 
-  const getDataCallback = async () => {
+  const dispatch = useAppDispatch()
+
+  const setDataCallback = async () => {
     const model = new Model()
-    const result = await model.read("goals")
-    console.log(result._array)
+
+    const tasks = await model.read("tasks")
+    const goals = await model.read("goals")
+    
+    const tasksJSON = tasks._array[0].tasks
+    const goalsJSON = goals._array[0].goals
+   
+    dispatch(fetchTasks(JSON.parse(JSON.parse(tasksJSON))))
+    dispatch(fetchGoals(JSON.parse(JSON.parse(goalsJSON))))
+    
+
   }
 
-  const getData = useCallback(getDataCallback, [])
+  const setData = useCallback(setDataCallback, [])
 
   useEffect(() => {
     getQuote()
-    // getData()
-  }, [])
+    setData()
+  }, [setData])
   return (
     <SafeAreaView style={styles.container}>
         <View >

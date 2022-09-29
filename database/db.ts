@@ -58,7 +58,7 @@ class Model {
     public async update(table: string, data: string): Promise<boolean> {
         const query = `UPDATE ${table} SET (${table}) = ? WHERE id = ?`
 
-        const result = await this.execute(query, [JSON.stringify(data), table])
+        const result = await this.execute(query, [data, table])
 
         if("message" in result) throw new Error(result.message)
 

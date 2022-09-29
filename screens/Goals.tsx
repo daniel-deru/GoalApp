@@ -17,11 +17,13 @@ const { colors } = globalStyles
 
 const Goals: React.FC<Props> = ({ navigation }) => {
   const goals = useAppSelector(state => state.goals)
+
   const isFocussed = useIsFocused()
 
   const [goalList, setGoalList] = useState<GoalInterface[]>([])
   
   useEffect(() => {
+    // console.log(Object.values(goals))
     setGoalList(Object.values(goals))
   }, [isFocussed])
 

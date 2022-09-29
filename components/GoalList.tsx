@@ -31,7 +31,7 @@ const GoalList: React.FC<Props> = ({ navigation, goals }): JSX.Element => {
 
     return {
         ...styles.difficulty, 
-        backgroundColor: status.color
+        backgroundColor: "#512fff"
     }
   }
 

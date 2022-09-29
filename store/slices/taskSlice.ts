@@ -42,7 +42,7 @@ const taskSlice = createSlice({
             return tasks
         },
         fetchTasks: (state: Tasks, action: PayloadAction<Tasks>): Tasks => {
-            return {...state, ...action.payload}
+            return action.payload
         }
     }
 })
