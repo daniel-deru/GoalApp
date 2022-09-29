@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction} from "@reduxjs/toolkit"
 import { StatusEnums } from "../../utils/properties/status"
 import { difficultyEnum } from "../../utils/properties/difficulty"
+import Model from "../../database/db"
 
 export interface Task {
     id: string,
@@ -14,6 +15,8 @@ export interface Task {
 
 export type Tasks = {[id: string]: Task}
 
+const model = new Model()
+
 const initialState: Tasks = {}
 
 const taskSlice = createSlice({
@@ -22,16 +25,27 @@ const taskSlice = createSlice({
     reducers: {
         updateTask: (state: Tasks, action: PayloadAction<Task>): Tasks => {
             const task: Task = action.payload
-            return { ...state, [task.id]: task }
+            const updatedTasks = { ...state, [task.id]: task }
+
+            model.update("tasks", JSON.stringify(updatedTasks))
+
+            return updatedTasks
         },
         deleteTask: (state: Tasks, action: PayloadAction<Task>): Tasks => {
             let tasks: Tasks = state
             let task: Task = action.payload
+
             delete tasks[task.id]
+
+            model.update("tasks", JSON.stringify(tasks))
+
             return tasks
+        },
+        fetchTasks: (state: Tasks, action: PayloadAction<Tasks>): Tasks => {
+            return {...state, ...action.payload}
         }
     }
 })
 
-export const { updateTask, deleteTask } = taskSlice.actions
+export const { updateTask, deleteTask, fetchTasks } = taskSlice.actions
 export default taskSlice.reducer

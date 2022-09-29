@@ -55,7 +55,7 @@ class Model {
         return {success: true}
     }
 
-    public async update(table: string, data: object): Promise<boolean> {
+    public async update(table: string, data: string): Promise<boolean> {
         const query = `UPDATE ${table} SET (${table}) = ? WHERE id = ?`
 
         const result = await this.execute(query, [JSON.stringify(data), table])
