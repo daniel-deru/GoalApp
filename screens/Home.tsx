@@ -54,10 +54,11 @@ const Home: React.FC = (): JSX.Element => {
   useEffect(() => {
     getQuote()
     setData()
-  }, [])
-
-  if(!quote?.author && !dataFetched) return <Spinner />
-  else return (
+  }, [setData])
+  
+  // if(true) return <Spinner />
+  if(!quote?.author || !dataFetched) return <Spinner />
+  return (
     <SafeAreaView style={styles.container}>
         <View >
             <Text style={[styles.text]}>Quote of the day</Text>
