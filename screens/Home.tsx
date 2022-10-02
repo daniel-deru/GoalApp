@@ -7,6 +7,8 @@ import { fetchTasks } from '../store/slices/taskSlice'
 import globalStyle from '../globalStyles'
 import Model from '../database/db'
 
+import Spinner from './Spinner'
+
 const quoteAPI: string = "https://zenquotes.io/api/quotes"
 const { colors } = globalStyle 
 
@@ -17,10 +19,8 @@ interface Quote {
 
 
 const Home: React.FC = (): JSX.Element => {
-  const [quote, setQuote] = useState<Quote>({
-    author: "The Author",
-    quote: "This is a super insightful quote that will change your life"
-  })
+  const [quote, setQuote] = useState<Quote | undefined>()
+  const [dataFetched, setDataFetched] = useState<boolean>(false)
 
   const getQuote = async () => {
     const { random, floor } = Math
@@ -46,7 +46,7 @@ const Home: React.FC = (): JSX.Element => {
     dispatch(fetchTasks(JSON.parse(tasksJSON)))
     dispatch(fetchGoals(JSON.parse(goalsJSON)))
     
-
+    setDataFetched(true)
   }
 
   const setData = useCallback(setDataCallback, [])
@@ -55,12 +55,14 @@ const Home: React.FC = (): JSX.Element => {
     getQuote()
     setData()
   }, [])
-  return (
+
+  if(!quote?.author && !dataFetched) return <Spinner />
+  else return (
     <SafeAreaView style={styles.container}>
         <View >
             <Text style={[styles.text]}>Quote of the day</Text>
-            <Text style={[styles.text, styles.header]}>{quote.quote}</Text>
-            <Text style={[styles.text, styles.author]}>{quote.author}</Text>
+            <Text style={[styles.text, styles.header]}>{quote?.quote}</Text>
+            <Text style={[styles.text, styles.author]}>{quote?.author}</Text>
         </View>
         <View>
             <Image source={require("../assets/home.png")}/>

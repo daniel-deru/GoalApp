@@ -5,7 +5,8 @@ import { NavigationScreenProp, NavigationState, NavigationParams } from "react-n
 import {RouteProp, useIsFocused} from "@react-navigation/native"
 import globalStyles from '../globalStyles'
 import { GoalScreens, TaskScreens } from "../stacks/stacks"
-import { useAppSelector } from "../store/hooks"
+import { useAppSelector, useAppDispatch } from "../store/hooks"
+import {deleteGoal} from "../store/slices/goalSlice"
 import { RootState } from "../store/store"
 import { Task } from "../store/slices/taskSlice"
 import { StatusEnums } from '../utils/properties/status'
@@ -23,6 +24,7 @@ const GoalView: React.FC<Props> = ({ navigation, route }): JSX.Element => {
     const [completedTasks, setCompletedTasks] = useState<number>(0)
 
     const goals = useAppSelector((state: RootState) => state.goals)
+    const dispatch = useAppDispatch()
 
     const [goalId, setGoalId] = useState<string>(route.params.goal.id)
     const [goalItem, setGoalItem] = useState<GoalInterface>(goals[goalId])
@@ -52,6 +54,11 @@ const GoalView: React.FC<Props> = ({ navigation, route }): JSX.Element => {
     }
 
     const editGoal = (): boolean => navigation.navigate(GoalScreens.Goal, {id: goalId})
+
+    const deleteGoalHandler = () => {
+        dispatch(deleteGoal(goalItem))
+        navigation.goBack()
+    }
 
     useEffect(() => {
       setGoalItem(goals[goalId])
@@ -111,8 +118,11 @@ const GoalView: React.FC<Props> = ({ navigation, route }): JSX.Element => {
             <Text style={text.button}>Edit Goal</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={[buttons.fullWidth(colors.red)]}>
-            <Text style={text.button}>Cancel Goal</Text>
+          <TouchableOpacity 
+            style={[buttons.fullWidth(colors.red)]}
+            onPress={() => deleteGoalHandler()}
+          >
+            <Text style={text.button}>Delete Goal</Text>
           </TouchableOpacity>
 
       </ScrollView>
