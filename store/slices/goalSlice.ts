@@ -35,8 +35,17 @@ const goalSlice = createSlice({
             return updatedState
         },
         fetchGoals: (state: Goals, action: PayloadAction<Goals>): Goals => {
-            
             return action.payload
+        },
+        deleteGoal: (state: Goals, action: PayloadAction<GoalInterface>): Goals => {
+            let goals: Goals = state
+            let goal: GoalInterface = action.payload
+
+            delete goals[goal.id]
+
+            model.update("goals", JSON.stringify(goals))
+
+            return goals
         }
     }
 })

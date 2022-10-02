@@ -39,12 +39,12 @@ const Home: React.FC = (): JSX.Element => {
 
     const tasks = await model.read("tasks")
     const goals = await model.read("goals")
-    
+
     const tasksJSON = tasks._array[0].tasks
     const goalsJSON = goals._array[0].goals
    
-    dispatch(fetchTasks(JSON.parse(JSON.parse(tasksJSON))))
-    dispatch(fetchGoals(JSON.parse(JSON.parse(goalsJSON))))
+    dispatch(fetchTasks(JSON.parse(tasksJSON)))
+    dispatch(fetchGoals(JSON.parse(goalsJSON)))
     
 
   }
@@ -54,7 +54,7 @@ const Home: React.FC = (): JSX.Element => {
   useEffect(() => {
     getQuote()
     setData()
-  }, [setData])
+  }, [])
   return (
     <SafeAreaView style={styles.container}>
         <View >

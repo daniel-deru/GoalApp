@@ -76,6 +76,15 @@ class Model {
 
     }
 
+    public async clearTable(table: string): Promise<boolean>{
+        const query = `UPDATE ${table} SET ${table} = ? WHERE id = ?`
+        const result = await this.execute(query, [JSON.stringify({}), table])
+
+        if("message" in result) throw new Error(result.message)
+
+        return true
+    }
+
     private async execute(query: string, args: Array<string> = []): Promise<SQLResult>{
         return new Promise((resolve, reject) => {
             if(!this.db) return reject("No database instance")
