@@ -39,7 +39,8 @@ const Home: React.FC = (): JSX.Element => {
 
     const tasks = await model.read("tasks")
     const goals = await model.read("goals")
-
+    console.log(tasks)
+    console.log(goals)
     const tasksJSON = tasks._array[0].tasks
     const goalsJSON = goals._array[0].goals
    

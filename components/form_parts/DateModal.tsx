@@ -33,7 +33,6 @@ const DateModal: React.FC<Props> = ({visibility, setVisibility, setDate, date}) 
     }
     useEffect(() => {
         setDays(getDays(year, month))
-        console.log(year, month, day)
     }, [month, year, date])
     return (
         <Modal visible={visibility}>
