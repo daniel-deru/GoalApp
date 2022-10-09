@@ -24,14 +24,18 @@ class Model {
         this.db = openDatabase("goals.db")
     }
 
-    public createTables(): void{
-        if(!this.db) return
+    public async createTables(): Promise<boolean>{
+        if(!this.db) return false
 
-        this.createTable("goals")
-        this.createTable("tasks")
+        const goals = await this.createTable("goals")
+        const tasks = await this.createTable("tasks")
+
+        if(!goals.success && !tasks.success) return false
+
+        return true
     }
 
-    private async createTable(tableName: string): Promise<any> {
+    private async createTable(tableName: string): Promise<{success: boolean}> {
 
         const query: string = 
         `CREATE TABLE IF NOT EXISTS ${tableName} (
@@ -39,12 +43,15 @@ class Model {
             ${tableName} TEXT
         )`
         
-        await this.execute(query)
+        const result = await this.execute(query)
+        if("message" in result) throw new Error(result.message)
+
+        return {success: true}
     }
 
     public async createInitialData(table: string): Promise<{success: boolean, message?: string}> {
         const currentData = await this.read(table)
-        if(currentData._array.length > 0) return {success: false, message: "Data already created"}
+        if(currentData._array.length > 0) return {success: true, message: "Data already created"}
 
         const query = `INSERT INTO ${table} (id, ${table}) VALUES(?, ?)`
 
