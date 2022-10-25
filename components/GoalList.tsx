@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from 'react'
-import { Text, View, TouchableWithoutFeedback, StyleSheet, StyleProp, ViewStyle } from "react-native"
+import { 
+  Text, 
+  View, 
+  TouchableWithoutFeedback, 
+  StyleSheet, 
+  StyleProp, 
+  ViewStyle,
+  ScrollView
+} from "react-native"
 import { GoalInterface, updateGoals } from '../store/slices/goalSlice'
 import statusses, {StatusItem, StatusInterface, StatusEnums} from "../utils/properties/status"
 import globalStyles from '../globalStyles'
@@ -40,7 +48,7 @@ const GoalList: React.FC<Props> = ({ navigation, goals }): JSX.Element => {
   }
 
   return (
-        <View>
+        <ScrollView>
             {goals.map((goal, index) => (
                 <TouchableWithoutFeedback onPress={() => showScreen(goal)} key={index}>
                   <View style={[styles.container]}>
@@ -50,7 +58,7 @@ const GoalList: React.FC<Props> = ({ navigation, goals }): JSX.Element => {
                   </View>
                 </TouchableWithoutFeedback>
             ))}
-        </View>
+        </ScrollView>
   )
 }
 

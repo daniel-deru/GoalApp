@@ -11,7 +11,6 @@ import Model from "./database/db"
 import HomeStack from './stacks/HomeStack'
 import GoalStack from './stacks/GoalStack'
 import TaskStack from "./stacks/TaskStack"
-import Spinner from "./screens/Spinner"
 
 import store from "./store/store"
 import { Provider } from "react-redux"
@@ -19,12 +18,10 @@ import { Provider } from "react-redux"
 const Drawer = createDrawerNavigator()
 
 const model = new Model()
-// https://expo.dev/accounts/danieljacobusderu/projects/GoalKeep/builds/0bf7fb17-b616-437f-8453-fe39ca5a0bd8
+// https://expo.dev/accounts/danieljacobusderu/projects/GoalKeep/builds/1243a219-36bf-4e8f-99ec-a3bd635f56e0
 
 export default function App() {
   const [hasInitialData, setHasInitialData] = useState<boolean>(false)
-
-
 
   const initialStateCallback = async () => {
     const tables_created = await model.createTables()
@@ -43,7 +40,7 @@ export default function App() {
     initialState()
   }, [initialState])
 
-  if(!hasInitialData) return <Spinner />
+  if(!hasInitialData)  return <></>
   else return (
     <Provider store={store}>
       <NavigationContainer>
@@ -61,12 +58,3 @@ export default function App() {
     </Provider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

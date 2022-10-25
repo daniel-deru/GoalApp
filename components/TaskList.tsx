@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from 'react'
-import {Text, View, TouchableWithoutFeedback, StyleSheet, StyleProp, ViewStyle } from "react-native"
+import {
+  Text, 
+  View, 
+  TouchableWithoutFeedback, 
+  StyleSheet, 
+  StyleProp, 
+  ViewStyle,
+  ScrollView
+} from "react-native"
 import statusses, {StatusItem, StatusInterface, StatusEnums} from "../utils/properties/status"
 import globalStyles from '../globalStyles'
 import { NavigationScreenProp, NavigationState, NavigationParams } from "react-navigation"
@@ -54,16 +62,18 @@ const TaskList: React.FC<Props> = ({tasks, navigation, goal}): JSX.Element => {
   
   useEffect(() => {
     filterTasks()
-
+    
   }, [goal, tasks, isFocussed])
 
   return (
-        <View>
+        <View
+          
+        >
             {currentTasks.map((task, index) => (
                 <TouchableWithoutFeedback onPress={() => showScreen(task)} key={index}>
                   <View style={[styles.container]}>
                       <View style={difficultyStyle(task)}></View>
-                      <Text>{task.name}</Text>
+                      <Text style={{maxWidth: "60%"}}>{task.name}</Text>
                       <Text>{new Date(task.date).toLocaleDateString()}</Text>
                   </View>
                 </TouchableWithoutFeedback>

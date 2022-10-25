@@ -20,7 +20,6 @@ interface Quote {
 
 const Home: React.FC = (): JSX.Element => {
   const [quote, setQuote] = useState<Quote | undefined>()
-  const [dataFetched, setDataFetched] = useState<boolean>(false)
 
   const getQuote = async () => {
     const { random, floor } = Math
@@ -28,37 +27,41 @@ const Home: React.FC = (): JSX.Element => {
     const quotes = requestQuote.data
     const randomQuoteIndex = floor(random() * quotes.length)
     const randomQuote = quotes[randomQuoteIndex]
-
-    setQuote({author: randomQuote.a, quote: randomQuote.q})
+    
+    return randomQuote
   }
 
   const dispatch = useAppDispatch()
 
-  const setDataCallback = async () => {
+  const getData = async () => {
     const model = new Model()
 
     const tasks = await model.read("tasks")
     const goals = await model.read("goals")
-    console.log(tasks)
-    console.log(goals)
+
     const tasksJSON = tasks._array[0].tasks
     const goalsJSON = goals._array[0].goals
    
     dispatch(fetchTasks(JSON.parse(tasksJSON)))
     dispatch(fetchGoals(JSON.parse(goalsJSON)))
     
-    setDataFetched(true)
+    return true
   }
 
-  const setData = useCallback(setDataCallback, [])
+  const finishedAsyncQueryCallback = async () => {
+    const result = await getData()
+    const quote = await getQuote()
+
+    if(result && quote?.a) setQuote({author: quote.a, quote: quote.q})
+  }
+
+  const finishedAsyncQuery = useCallback(finishedAsyncQueryCallback, [])
 
   useEffect(() => {
-    getQuote()
-    setData()
-  }, [setData])
+    finishedAsyncQuery()
+  }, [finishedAsyncQuery])
   
-  // if(true) return <Spinner />
-  if(!quote?.author || !dataFetched) return <Spinner />
+  if(!quote?.author) return <Spinner />
   return (
     <SafeAreaView style={styles.container}>
         <View >
