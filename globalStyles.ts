@@ -62,7 +62,8 @@ const globalStyle: GlobalStyle = {
             backgroundColor: "#0774C310",
             fontSize: 16,
             padding: 10,
-            borderRadius: 7
+            borderRadius: 7,
+            width: "100%"
         }
     },
     view: {
