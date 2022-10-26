@@ -23,6 +23,7 @@ const DateModal: React.FC<Props> = ({visibility, setVisibility, setDate, date}) 
     const [year, setYear] = useState<number>(date.getFullYear())
     const [month, setMonth] = useState<number>(date.getMonth()+1)
     const [day, setDay] = useState<number>(date.getDate())
+    const [showDays, setShowDays] = useState<any>([])
 
     const submitDate = (): void => {
         const inputDate: Date = new Date(year, month-1, day)
@@ -36,32 +37,38 @@ const DateModal: React.FC<Props> = ({visibility, setVisibility, setDate, date}) 
 
     const constructCalendarArray = () => {
 
-        const daysInMonth = new Date(year, month-1, 0).getDate()
-        const daysInPrevMonth = new Date(year, month-2, 0).getDate()
-        const daysInNextMonth = new Date(year, month, 0).getDate()
-        // Get the day of the week
-        const firstDay = new Date(year, month-1, 1).getDay() 
-        const lastDay = new Date(year, month-1, daysInMonth).getDay()
-        let daysArr = new Array(daysInMonth).fill(0).map((day, index) => index+1)
-        console.log(daysInMonth)
-        console.log(new Date(year, month-1, daysInMonth).toDateString())
-        console.log(new Date(year, month-1, daysInMonth).getDay())
-        // console.log(firstDay)
+        const currentMonth = new Date(year, month, 0)
+        const prevMonth = new Date(year, month-1, 0)
+        const firstDay = new Date(year, month-1, 1).getDay() // go to prev month and add 1 day 
+
+        let daysArr = new Array(currentMonth.getDate())
+                            .fill(0)
+                            .map((day, index) => ({day: index+1, type: "current"}))
+  
         if(firstDay > 0){
+            const daysInPrevMonth = prevMonth.getDate()
+
             for(let i = daysInPrevMonth; i > daysInPrevMonth-firstDay; i--){
-               
-                daysArr.unshift(0)
+                daysArr.unshift({day: i, type: "notCurrent"})
             }
         }
-        
-        
-        if(lastDay < 6){
-            for(let i = 1; i < lastDay; i++){
-                daysArr.push(0)
+
+        if(daysArr.length < 42){
+            const totalAdded = 42 - daysArr.length
+
+            for(let i = 1; i <= totalAdded; i++){
+                daysArr.push({day: i, type: "notCurrent"})
             }
         }
-        // console.log(daysArr)
+
+        let matrix = []
+
+        for(let i = 0; i < 42; i+=7){
+            const week = daysArr.slice(i, i+7)
+            matrix.push(week)
+        }
         
+        setShowDays(matrix)
         
     }
 
@@ -103,30 +110,26 @@ const DateModal: React.FC<Props> = ({visibility, setVisibility, setDate, date}) 
                     />
                 </View>
             </View>
-            <View style={[
-                styles.containerHorizontal,
-                {
-                    justifyContent: "space-evenly",
-                    paddingVertical: 10
-                }
-                ]}>
-                {dayNames.map(day => (
-                    <Text>{day}</Text>
-                ))}
+            <View style={{paddingVertical: 10, marginHorizontal: 10}}>
+
+                <View style={styles.containerHorizontal}>
+                    {dayNames.map(day => (
+                        <Text style={styles.dayItem}>{day}</Text>
+                    ))}
+                </View>
+
+                <View>
+                    {showDays.length > 0 && showDays.map((week: object[]) => (
+                        <View style={styles.containerHorizontal}>
+                            { week.map((day: any) => (
+                                <Text style={styles.dayItem}>{day.day}</Text>
+                            )) }
+                        </View>
+                    ))}
+                </View>
+
             </View>
-            {/* <View style={styles.fieldContainer}>
-                <Text style={text.heading}>Day</Text>
-                <Dropdown 
-                    data={days}
-                    labelField="label"
-                    valueField='value'
-                    placeholder='Select Day'
-                    style={[inputs.textInput]}
-                    placeholderStyle={styles.fieldTextSmall}
-                    onChange={item => setDay(item.value)}
-                    value={day}
-                />
-            </View> */}
+            
             <View style={styles.fieldContainer}>
                 <TouchableOpacity style={buttons.fullWidth(colors.blue)} onPress={submitDate}>
                     <Text style={globalStyles.text.button}>Done</Text>
@@ -152,11 +155,16 @@ const styles = StyleSheet.create({
     },
     containerHorizontal: {
         flexDirection: "row",
+        justifyContent: "space-evenly"
     },
     dropDownContainer: {
         padding: 10,
         marginTop: 10,
         width: "50%"
+    },
+    dayItem: {
+        width: "12%",
+        textAlign: "center"
     }
 })
 
