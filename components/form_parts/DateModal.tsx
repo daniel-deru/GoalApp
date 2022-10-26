@@ -16,17 +16,22 @@ interface Props {
     date: Date
 }
 
+interface dayItem {
+    day: number,
+    type: "current" | "notCurrent"
+}
+
 const dayNames = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"]
 
 const DateModal: React.FC<Props> = ({visibility, setVisibility, setDate, date}) => {
     const [days, setDays] = useState<DateFieldInterface[]>([])
     const [year, setYear] = useState<number>(date.getFullYear())
     const [month, setMonth] = useState<number>(date.getMonth()+1)
-    const [day, setDay] = useState<number>(date.getDate())
-    const [showDays, setShowDays] = useState<any>([])
+    const [currentDay, setCurrentDay] = useState<number>(date.getDate())
+    const [showDays, setShowDays] = useState<Array<dayItem[]>>([])
 
     const submitDate = (): void => {
-        const inputDate: Date = new Date(year, month-1, day)
+        const inputDate: Date = new Date(year, month-1, currentDay)
         const currentDate: number = Date.now()
         // Create a two minute difference for consistency when comparing two unix timestamps
         const diff = 2 * 60 * 1000
@@ -41,7 +46,7 @@ const DateModal: React.FC<Props> = ({visibility, setVisibility, setDate, date}) 
         const prevMonth = new Date(year, month-1, 0)
         const firstDay = new Date(year, month-1, 1).getDay() // go to prev month and add 1 day 
 
-        let daysArr = new Array(currentMonth.getDate())
+        let daysArr: Array<dayItem> = new Array(currentMonth.getDate())
                             .fill(0)
                             .map((day, index) => ({day: index+1, type: "current"}))
   
@@ -64,12 +69,10 @@ const DateModal: React.FC<Props> = ({visibility, setVisibility, setDate, date}) 
         let matrix = []
 
         for(let i = 0; i < 42; i+=7){
-            const week = daysArr.slice(i, i+7)
+            const week: Array<dayItem> = daysArr.slice(i, i+7)
             matrix.push(week)
         }
-        
         setShowDays(matrix)
-        
     }
 
 
@@ -84,7 +87,6 @@ const DateModal: React.FC<Props> = ({visibility, setVisibility, setDate, date}) 
             </View>
             <View style={styles.containerHorizontal}>
                 <View style={styles.dropDownContainer}>
-                    {/* <Text style={text.heading}>Year</Text> */}
                     <Dropdown 
                         data={years}
                         labelField="label"
@@ -97,7 +99,6 @@ const DateModal: React.FC<Props> = ({visibility, setVisibility, setDate, date}) 
                     />
                 </View>
                 <View style={styles.dropDownContainer}>
-                    {/* <Text style={text.heading}>Month</Text> */}
                     <Dropdown 
                         data={months}
                         labelField="label"
@@ -112,17 +113,26 @@ const DateModal: React.FC<Props> = ({visibility, setVisibility, setDate, date}) 
             </View>
             <View style={{paddingVertical: 10, marginHorizontal: 10}}>
 
-                <View style={styles.containerHorizontal}>
+                <View style={styles.dayHeader}>
                     {dayNames.map(day => (
-                        <Text style={styles.dayItem}>{day}</Text>
+                        <Text style={styles.headerItem}>{day}</Text>
                     ))}
                 </View>
 
                 <View>
-                    {showDays.length > 0 && showDays.map((week: object[]) => (
+                    {showDays.length > 0 && showDays.map((week: dayItem[]) => (
                         <View style={styles.containerHorizontal}>
-                            { week.map((day: any) => (
-                                <Text style={styles.dayItem}>{day.day}</Text>
+                            { week.map((day: dayItem) => (
+                                <Text 
+                                    style={[
+                                        styles.dayItem, 
+                                        styles[day.type],
+                                        day.type == "current" && day.day == currentDay && styles.active
+                                    ]}
+                                    onPress={() => setCurrentDay(day.day)}
+                                    >
+                                        {day.day}
+                                    </Text>
                             )) }
                         </View>
                     ))}
@@ -164,7 +174,30 @@ const styles = StyleSheet.create({
     },
     dayItem: {
         width: "12%",
-        textAlign: "center"
+        textAlign: "center",
+        paddingVertical: 10
+    },
+    dayHeader: {
+        paddingVertical: 15,
+        flexDirection: "row",
+        justifyContent: "space-evenly"
+    },
+    headerItem: {
+        width: "12%",
+        textAlign: "center",
+        fontSize: 18,
+        fontWeight: "900",
+    },
+    current: {
+        fontWeight: "600"
+    },
+    notCurrent: {
+        color: "#999"
+    },
+    active: {
+        backgroundColor: colors.blue,
+        color: "white",
+        borderRadius: 10
     }
 })
 
