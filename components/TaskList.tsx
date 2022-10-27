@@ -66,9 +66,8 @@ const TaskList: React.FC<Props> = ({tasks, navigation, goal}): JSX.Element => {
   }, [goal, tasks, isFocussed])
 
   return (
-        <View
-          
-        >
+    <View style={{height: "85%"}}>
+        <ScrollView >
             {currentTasks.map((task, index) => (
                 <TouchableWithoutFeedback onPress={() => showScreen(task)} key={index}>
                   <View style={[styles.container]}>
@@ -78,7 +77,8 @@ const TaskList: React.FC<Props> = ({tasks, navigation, goal}): JSX.Element => {
                   </View>
                 </TouchableWithoutFeedback>
             ))}
-        </View>
+        </ScrollView>
+    </View>
   )
 }
 

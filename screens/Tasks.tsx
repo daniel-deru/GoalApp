@@ -37,11 +37,8 @@ const Tasks: React.FC<Props> = ({navigation, route}): JSX.Element => {
   return (
     <SafeAreaView style={styles.container}>
         {tasks.length < 1 && <Text style={styles.fillerText}>Start Adding Tasks</Text>}
-        <ScrollView
-          contentContainerStyle={{flexGrow: 1}}
-        >
-          {tasks.length >= 1 && <TaskList tasks={tasks} navigation={navigation} goal={goalId}/>}
-        </ScrollView>
+        {tasks.length >= 1 && <TaskList tasks={tasks} navigation={navigation} goal={goalId}/>}
+
         <TouchableOpacity 
           style={styles.addButton}
           onPress={() => navigation.navigate(TaskScreens.Task, {goal: goalId})}
@@ -78,6 +75,9 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 20,
     right: 20
+  },
+  taskList: {
+    height: "50%"
   }
 })
 

@@ -39,7 +39,7 @@ const GoalList: React.FC<Props> = ({ navigation, goals }): JSX.Element => {
 
     return {
         ...styles.difficulty, 
-        backgroundColor: "#512fff"
+        backgroundColor: status.color
     }
   }
 
@@ -48,6 +48,7 @@ const GoalList: React.FC<Props> = ({ navigation, goals }): JSX.Element => {
   }
 
   return (
+    <View style={{height: "85%"}}>
         <ScrollView>
             {goals.map((goal, index) => (
                 <TouchableWithoutFeedback onPress={() => showScreen(goal)} key={index}>
@@ -59,6 +60,7 @@ const GoalList: React.FC<Props> = ({ navigation, goals }): JSX.Element => {
                 </TouchableWithoutFeedback>
             ))}
         </ScrollView>
+    </View>
   )
 }
 
