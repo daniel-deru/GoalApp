@@ -32,6 +32,7 @@ const DateModal: React.FC<Props> = ({visibility, setVisibility, setDate, date}) 
 
     const submitDate = (): void => {
         const inputDate: Date = new Date(year, month-1, currentDay)
+
         const currentDate: number = Date.now()
         // Create a two minute difference for consistency when comparing two unix timestamps
         const diff = 2 * 60 * 1000

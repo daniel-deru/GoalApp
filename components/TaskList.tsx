@@ -59,7 +59,7 @@ const TaskList: React.FC<Props> = ({tasks, navigation, goal}): JSX.Element => {
     const filteredTasks = tasks.filter((task: Task) => task.goal_id === goal)
     setCurrentTasks(filteredTasks)
   }
-  
+
   useEffect(() => {
     filterTasks()
     

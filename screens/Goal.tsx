@@ -12,6 +12,7 @@ import { StatusEnums } from "../utils/properties/status"
 import { difficultyEnum } from "../utils/properties/difficulty"
 import DateModal from "../components/form_parts/DateModal"
 import { GoalScreens } from "../stacks/stacks"
+import NameField from "../components/form_parts/NameField"
 
 interface Props {
     navigation: NavigationScreenProp<NavigationParams, NavigationState> ,
@@ -38,6 +39,7 @@ const Goal: React.FC<Props> = ({ navigation, route }): JSX.Element => {
 
     const submitGoal = (values: FormInterface): void => {
         const {name, description, reward } = values
+        currentDate.setHours(23, 59, 59, 999)
         const deadline: number = currentDate.getTime()
 
         const newGoal: GoalInterface = {
@@ -46,7 +48,7 @@ const Goal: React.FC<Props> = ({ navigation, route }): JSX.Element => {
             description,
             reward,
             deadline,
-            status: goal?.status || StatusEnums.COMPLETE,
+            status: goal?.status || StatusEnums.INCOMPLETE,
             difficulty: goal?.difficulty || difficultyEnum.easy,
             type: 'GoalInterface',
         }
@@ -104,15 +106,7 @@ const Goal: React.FC<Props> = ({ navigation, route }): JSX.Element => {
             >
                 {({ handleBlur, handleSubmit, handleChange, values}) => (
                     <View>
-                        <View style={styles.fieldContainer}>
-                            <Text style={styles.textHeader}>Goal Name</Text>
-                            <TextInput 
-                                style={inputs.textInput} 
-                                value={values.name}
-                                onChangeText={handleChange('name')}
-                                onBlur={handleBlur('name')}
-                            />
-                        </View>
+                        <NameField value={values.name} handleChange={handleChange}/>
                         <View style={styles.fieldContainer}>
                             <Text style={styles.textHeader}>Deadline</Text>
                             <Text style={[styles.dateInput]}>{currentDate.toDateString()}</Text>

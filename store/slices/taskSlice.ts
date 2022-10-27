@@ -2,6 +2,7 @@ import { createSlice, PayloadAction} from "@reduxjs/toolkit"
 import { StatusEnums } from "../../utils/properties/status"
 import { difficultyEnum } from "../../utils/properties/difficulty"
 import Model from "../../database/db"
+import {GoalInterface} from "./goalSlice"
 
 export interface Task {
     id: string,
@@ -41,11 +42,25 @@ const taskSlice = createSlice({
 
             return tasks
         },
+        deleteTasks: (state: Tasks, action: PayloadAction<GoalInterface>): Tasks => {
+            let tasks: Tasks = state
+            const goalId = action.payload.id
+
+            for(let task in tasks){
+                let taskItem: Task = tasks[task]
+
+                if(taskItem.goal_id === goalId){
+                    delete tasks[taskItem.id]
+                }
+            }
+
+            return tasks
+        },
         fetchTasks: (state: Tasks, action: PayloadAction<Tasks>): Tasks => {
             return action.payload
         }
     }
 })
 
-export const { updateTask, deleteTask, fetchTasks } = taskSlice.actions
+export const { updateTask, deleteTask, fetchTasks, deleteTasks} = taskSlice.actions
 export default taskSlice.reducer

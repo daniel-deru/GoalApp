@@ -58,6 +58,8 @@ const Task: React.FC<Props> = ({route, navigation}): JSX.Element => {
 
     const submit = (values: FormData) => {
         const { name, description } = values
+        date.setHours(23, 59, 59, 999) // set to the end of the day
+
         const submitTask: TaskInterface = {
             id: task?.id || uuidv4(),
             name,

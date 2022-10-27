@@ -7,6 +7,7 @@ import globalStyles from '../globalStyles'
 import { GoalScreens, TaskScreens } from "../stacks/stacks"
 import { useAppSelector, useAppDispatch } from "../store/hooks"
 import {deleteGoal} from "../store/slices/goalSlice"
+import { deleteTasks } from "../store/slices/taskSlice"
 import { RootState } from "../store/store"
 import { Task } from "../store/slices/taskSlice"
 import { StatusEnums } from '../utils/properties/status'
@@ -57,6 +58,7 @@ const GoalView: React.FC<Props> = ({ navigation, route }): JSX.Element => {
 
     const deleteGoalHandler = () => {
         dispatch(deleteGoal(goalItem))
+        dispatch(deleteTasks(goalItem))
         navigation.goBack()
     }
 
