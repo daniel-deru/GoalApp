@@ -3,7 +3,6 @@ import {Text, SafeAreaView, Image, StyleSheet, Easing, Animated} from "react-nat
 import globalStyle from '../globalStyles'
 
 const {colors} = globalStyle
-let count = 0
 
 const Spinner: React.FC = (): JSX.Element => {
   const rotateValue = new Animated.Value(0)
@@ -15,11 +14,7 @@ const Spinner: React.FC = (): JSX.Element => {
       duration: 1000,
       useNativeDriver: false,
       easing: Easing.bounce
-    }).start(() => {
-      // console.log("spinner working: " + count)
-      count++
-      rotateHandler()
-    })
+    }).start(() => rotateHandler())
   }
 
   const rotateData = rotateValue.interpolate({

@@ -26,7 +26,6 @@ export default function App() {
     const tables_created = await model.createTables()
     const goals_created = await model.createInitialData("goals")
     const tasks_created = await model.createInitialData("tasks")
-    console.log(tables_created, goals_created, tasks_created)
 
     if(tables_created && goals_created.success && tasks_created.success){
       setHasInitialData(true)

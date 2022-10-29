@@ -49,6 +49,20 @@ const TaskView: React.FC<Props> = ({ navigation, route }) => {
 
     return (
         <SafeAreaView style={styles.container}>
+            <View style={styles.horizontalContainer}>
+                <TouchableOpacity 
+                        style={buttons.fullWidth(colors.green)}
+                        onPress={() => completeTask()}
+                >
+                    <Text style={text.button}>Complete Task</Text>
+                </TouchableOpacity>
+                <TouchableOpacity 
+                    style={buttons.fullWidth(colors.blue)}
+                    onPress={() => editCurrentTask()}
+                >
+                    <Text style={text.button}>Edit Task</Text>
+                </TouchableOpacity>
+            </View>
             <ScrollView >
                 <View style={view.container}>
                     <Text style={text.heading}>Name</Text>
@@ -74,30 +88,14 @@ const TaskView: React.FC<Props> = ({ navigation, route }) => {
                     <Text style={text.heading}>Description</Text>
                     <Text style={text.item}>{task.description}</Text>
                 </View>
-                <View>
-                    <TouchableOpacity 
-                        style={buttons.fullWidth(colors.green)}
-                        onPress={() => completeTask()}
-                    >
-                        <Text style={text.button}>Complete Task</Text>
-                    </TouchableOpacity>
-                </View>
-                <View>
-                    <TouchableOpacity 
-                        style={buttons.fullWidth(colors.blue)}
-                        onPress={() => editCurrentTask()}
-                    >
-                        <Text style={text.button}>Edit Task</Text>
-                    </TouchableOpacity>
-                </View>
-                <View>
-                    <TouchableOpacity 
-                        style={[buttons.fullWidth(colors.red), {marginBottom: 15}]}
-                        onPress={() => deleteCurrentTask()}
-                    >
-                        <Text style={text.button}>Delete Task</Text>
-                    </TouchableOpacity>
-                </View>
+
+                <TouchableOpacity 
+                    style={[buttons.fullWidth(colors.red), {marginBottom: 15}]}
+                    onPress={() => deleteCurrentTask()}
+                >
+                    <Text style={text.button}>Delete Task</Text>
+                </TouchableOpacity>
+
             </ScrollView>
         </SafeAreaView>
     )
@@ -107,6 +105,11 @@ const styles = StyleSheet.create({
     container: {
         padding: 15,
         height: "99%",
+    },
+    horizontalContainer: {
+        flexDirection: "row",
+        alignContent: "stretch",
+        justifyContent: "space-evenly"
     }
 })
 

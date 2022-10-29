@@ -26,7 +26,7 @@ const Tasks: React.FC<Props> = ({navigation, route}): JSX.Element => {
 
   const getCurrentGoalTasks = (): void => {
     let currentTasks: Task[] = Object.values(allTasks).filter((task: Task) => {
-      return goalId ? goalId === task.goal_id : true
+      return goalId ? goalId === task.goal_id : task.goal_id === ""
     })
 
     // sort the tasks according to date

@@ -1,5 +1,5 @@
 import React, { useEffect, useState} from 'react'
-import { Text, View, StyleSheet, ScrollView, TouchableOpacity, Alert } from "react-native"
+import { Text, View, StyleSheet, ScrollView, TouchableOpacity, Alert, SafeAreaView } from "react-native"
 import { GoalInterface } from "../store/slices/goalSlice"
 import { NavigationScreenProp, NavigationState, NavigationParams } from "react-navigation"
 import {RouteProp, useIsFocused} from "@react-navigation/native"
@@ -68,72 +68,75 @@ const GoalView: React.FC<Props> = ({ navigation, route }): JSX.Element => {
     }, [route.params.goal])
 
     return (
-      <ScrollView style={styles.container}>
-
-          <View style={view.container}>
-            <Text style={text.heading}>Goal Name</Text>
-            <Text style={text.item}>{goalItem.name}</Text>
-          </View>
-
-          <View style={view.container}>
-            <Text style={text.heading}>Status</Text>
-            <Text style={text.item}>{goalItem.status}</Text>
-          </View>
-
-          <View style={view.container}>
-            <Text style={text.heading}>Deadline</Text>
-            <Text  style={text.item}>
-              {new Date(goalItem.deadline).toDateString()}
-            </Text>
-          </View>
-
-          <View style={view.container}>
-            <Text style={text.heading}>Difficulty</Text>
-            <Text style={text.item}>{goalItem.difficulty}</Text>
-          </View>
-
-          <View style={view.container}>
-            <Text style={text.heading}>Reward</Text>
-            <Text style={text.item}>{goalItem.reward}</Text>
-          </View>
-
-          <View style={view.container}>
-            <Text style={text.heading}>Description</Text>
-            <Text style={text.item}>{goalItem.description}</Text>
-          </View>
-          { 
-          tasks.length > 0 &&
-          <View style={view.container}>
-            <Text style={text.heading}>Tasks</Text>
-            <Text style={text.item}>{completedTasks}/{tasks.length} Completed</Text>
-          </View>
-          }
-
+      <SafeAreaView style={styles.container}>
+        <View style={styles.horizontalContainer}>
           <TouchableOpacity 
-            style={[buttons.fullWidth()]}
-            onPress={showTasks}
-          >
-            <Text style={text.button}>Show Tasks</Text>
-          </TouchableOpacity>
+              style={[buttons.fullWidth()]}
+              onPress={showTasks}
+            >
+              <Text style={text.button}>Show Tasks</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={[buttons.fullWidth()]} onPress={editGoal}>
+              <Text style={text.button}>Edit Goal</Text>
+            </TouchableOpacity>
+        </View>
+        <ScrollView>
+            <View style={view.container}>
+              <Text style={text.heading}>Goal Name</Text>
+              <Text style={text.item}>{goalItem.name}</Text>
+            </View>
 
-          <TouchableOpacity style={[buttons.fullWidth()]} onPress={editGoal}>
-            <Text style={text.button}>Edit Goal</Text>
-          </TouchableOpacity>
+            <View style={view.container}>
+              <Text style={text.heading}>Status</Text>
+              <Text style={text.item}>{goalItem.status}</Text>
+            </View>
 
-          <TouchableOpacity 
-            style={[buttons.fullWidth(colors.red)]}
-            onPress={() => deleteGoalHandler()}
-          >
-            <Text style={text.button}>Delete Goal</Text>
-          </TouchableOpacity>
+            <View style={view.container}>
+              <Text style={text.heading}>Deadline</Text>
+              <Text  style={text.item}>
+                {new Date(goalItem.deadline).toDateString()}
+              </Text>
+            </View>
 
-      </ScrollView>
+            <View style={view.container}>
+              <Text style={text.heading}>Difficulty</Text>
+              <Text style={text.item}>{goalItem.difficulty}</Text>
+            </View>
+
+            <View style={view.container}>
+              <Text style={text.heading}>Reward</Text>
+              <Text style={text.item}>{goalItem.reward}</Text>
+            </View>
+
+            <View style={view.container}>
+              <Text style={text.heading}>Description</Text>
+              <Text style={text.item}>{goalItem.description}</Text>
+            </View>
+
+            { tasks.length > 0 &&
+              <View style={view.container}>
+                <Text style={text.heading}>Tasks</Text>
+                <Text style={text.item}>{completedTasks}/{tasks.length} Completed</Text>
+              </View> }
+              
+            <TouchableOpacity 
+              style={[buttons.fullWidth(colors.red)]}
+              onPress={() => deleteGoalHandler()}
+            >
+              <Text style={text.button}>Delete Goal</Text>
+            </TouchableOpacity>
+        </ScrollView>
+      </SafeAreaView>
+
     )
 }
 
 const styles = StyleSheet.create({
   container: {
     margin: 20
+  },
+  horizontalContainer: {
+    flexDirection: "row"
   }
 })
 
