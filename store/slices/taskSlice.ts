@@ -54,6 +54,8 @@ const taskSlice = createSlice({
                 }
             }
 
+            model.update("tasks", JSON.stringify(tasks))
+
             return tasks
         },
         fetchTasks: (state: Tasks, action: PayloadAction<Tasks>): Tasks => {

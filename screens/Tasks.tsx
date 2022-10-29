@@ -25,9 +25,13 @@ const Tasks: React.FC<Props> = ({navigation, route}): JSX.Element => {
   const allTasks: TasksType = useAppSelector((state: RootState): TasksType => state.tasks)
 
   const getCurrentGoalTasks = (): void => {
-    const currentTasks: Task[] = Object.values(allTasks).filter((task: Task) => {
+    let currentTasks: Task[] = Object.values(allTasks).filter((task: Task) => {
       return goalId ? goalId === task.goal_id : true
     })
+
+    // sort the tasks according to date
+    currentTasks = currentTasks.sort((a: Task, b: Task) => a.date - b.date)
+
     setTasks(currentTasks)
   }
 

@@ -18,7 +18,6 @@ import { Provider } from "react-redux"
 const Drawer = createDrawerNavigator()
 
 const model = new Model()
-// https://expo.dev/accounts/danieljacobusderu/projects/GoalKeep/builds/1243a219-36bf-4e8f-99ec-a3bd635f56e0
 
 export default function App() {
   const [hasInitialData, setHasInitialData] = useState<boolean>(false)

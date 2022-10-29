@@ -9,6 +9,11 @@ const years: DateFieldInterface[] = generateYears()
 
 const {text, buttons, colors, inputs} = globalStyles
 
+enum dayType {
+    current = "current",
+    notCurrent = "notCurrent"
+}
+
 interface Props {
     visibility: boolean,
     setVisibility: Dispatch<SetStateAction<boolean>>,
@@ -18,7 +23,7 @@ interface Props {
 
 interface dayItem {
     day: number,
-    type: "current" | "notCurrent"
+    type: dayType
 }
 
 const dayNames = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"]
@@ -32,11 +37,10 @@ const DateModal: React.FC<Props> = ({visibility, setVisibility, setDate, date}) 
 
     const submitDate = (): void => {
         const inputDate: Date = new Date(year, month-1, currentDay)
+        inputDate.setHours(23, 59, 59, 999)
+        const currentDate: number = Date.now() // Set the timestamp to use the last millisecond of the day
 
-        const currentDate: number = Date.now()
-        // Create a two minute difference for consistency when comparing two unix timestamps
-        const diff = 2 * 60 * 1000
-        if(inputDate.getTime() + diff <= currentDate) return Alert.alert("Invalid Date Selected", "Cannot select date before today")
+        if(inputDate.getTime() <= currentDate) return Alert.alert("Invalid Date Selected", "Cannot select date before today")
         setDate(inputDate)
         setVisibility(false)
     }
@@ -49,13 +53,13 @@ const DateModal: React.FC<Props> = ({visibility, setVisibility, setDate, date}) 
 
         let daysArr: Array<dayItem> = new Array(currentMonth.getDate())
                             .fill(0)
-                            .map((day, index) => ({day: index+1, type: "current"}))
+                            .map((day, index) => ({day: index+1, type: dayType.current}))
   
         if(firstDay > 0){
             const daysInPrevMonth = prevMonth.getDate()
 
             for(let i = daysInPrevMonth; i > daysInPrevMonth-firstDay; i--){
-                daysArr.unshift({day: i, type: "notCurrent"})
+                daysArr.unshift({day: i, type: dayType.notCurrent})
             }
         }
 
@@ -63,7 +67,7 @@ const DateModal: React.FC<Props> = ({visibility, setVisibility, setDate, date}) 
             const totalAdded = 42 - daysArr.length
 
             for(let i = 1; i <= totalAdded; i++){
-                daysArr.push({day: i, type: "notCurrent"})
+                daysArr.push({day: i, type: dayType.notCurrent})
             }
         }
 
@@ -116,25 +120,32 @@ const DateModal: React.FC<Props> = ({visibility, setVisibility, setDate, date}) 
 
                 <View style={styles.dayHeader}>
                     {dayNames.map(day => (
-                        <Text style={styles.headerItem}>{day}</Text>
+                        <Text key={day} style={styles.headerItem}>{day}</Text>
                     ))}
                 </View>
 
                 <View>
                     {showDays.length > 0 && showDays.map((week: dayItem[]) => (
-                        <View style={styles.containerHorizontal}>
-                            { week.map((day: dayItem) => (
-                                <Text 
+                        <View key={Math.random() * 1000000} style={styles.containerHorizontal}>
+                            { week.map(({day, type}: dayItem) => {
+                                
+                                const isCurrentMonth: boolean = type === dayType.current
+                                const isCurrentDay: boolean = day === currentDay
+                                const isActiveMonth = isCurrentDay && isCurrentMonth
+
+                                return (
+                                <Text
+                                    key={day}
                                     style={[
                                         styles.dayItem, 
-                                        styles[day.type],
-                                        day.type == "current" && day.day == currentDay && styles.active
+                                        styles[type],
+                                        isActiveMonth && styles.active
                                     ]}
-                                    onPress={() => setCurrentDay(day.day)}
+                                    onPress={() => isCurrentMonth && setCurrentDay(day)}
                                     >
-                                        {day.day}
-                                    </Text>
-                            )) }
+                                        {day}
+                                    </Text>)
+                            })}
                         </View>
                     ))}
                 </View>

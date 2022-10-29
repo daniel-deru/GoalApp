@@ -21,9 +21,17 @@ const Goals: React.FC<Props> = ({ navigation }) => {
   const isFocussed = useIsFocused()
 
   const [goalList, setGoalList] = useState<GoalInterface[]>([])
+
+  const setGoals = () => {
+    let goalItems = Object.values(goals).sort((a: GoalInterface, b: GoalInterface) => {
+      return a.deadline - b.deadline
+    })
+
+    setGoalList(goalItems)
+  }
   
   useEffect(() => {
-    setGoalList(Object.values(goals))
+    setGoals()
   }, [isFocussed])
 
   return (
