@@ -39,7 +39,6 @@ const globalStyle: GlobalStyle = {
                 paddingVertical: 15,
                 borderRadius: 5,
                 marginTop: 10,
-                flex: 1,
                 marginHorizontal: 5
             }
         }

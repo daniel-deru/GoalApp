@@ -51,19 +51,19 @@ const TaskView: React.FC<Props> = ({ navigation, route }) => {
         <SafeAreaView style={styles.container}>
             <View style={styles.horizontalContainer}>
                 <TouchableOpacity 
-                        style={buttons.fullWidth(colors.green)}
+                        style={[buttons.fullWidth(colors.green), {flex: 1}]}
                         onPress={() => completeTask()}
                 >
                     <Text style={text.button}>Complete Task</Text>
                 </TouchableOpacity>
                 <TouchableOpacity 
-                    style={buttons.fullWidth(colors.blue)}
+                    style={[buttons.fullWidth(colors.blue), {flex: 1}]}
                     onPress={() => editCurrentTask()}
                 >
                     <Text style={text.button}>Edit Task</Text>
                 </TouchableOpacity>
             </View>
-            <ScrollView >
+            <ScrollView>
                 <View style={view.container}>
                     <Text style={text.heading}>Name</Text>
                     <Text style={text.item}>{task.name}</Text>
